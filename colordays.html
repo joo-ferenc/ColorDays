@@ -116,7 +116,8 @@ button:disabled{opacity:.4;cursor:default}
 .previews{display:grid;gap:16px;margin-top:10px}
 figure{margin:0;text-align:center}figcaption{color:var(--muted);font-size:14px;margin-top:4px}
 .bottom-bar{position:fixed;left:0;right:0;bottom:0;z-index:4;display:flex;gap:8px;justify-content:center;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#F1F0F3;box-shadow:0 -1px 4px rgba(0,0,0,.06)}
-.bottom-bar .btn{flex:1;max-width:220px;padding:10px 8px;min-width:0}
+.bottom-bar .btn{flex:1;max-width:200px;padding:10px 8px;min-width:0}
+@media(max-width:420px){.hide-xs{display:none}}
 /* Editor */
 .editor .chips{margin-top:0}
 .ed-stage{background:#E9E5E0;border-radius:12px;padding:8px;display:grid;place-items:center}
@@ -170,7 +171,7 @@ const CATALOG = {"months":[["SNOWMAN","SNOWFLAKE","MITTEN","BEANIE","SLED","SKAT
 /* ColorDays Web 1.0 – Kern: Kalenderlogik, Feiertage, Katalog, Speicher.
    Gleiche Regeln wie die Android-App (CalendarEngine.kt, GermanHolidays.kt, TemplateCatalog.kt). */
 
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 const MONTHS = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 const MONTH_KEYS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
 const WD = ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
@@ -910,14 +911,56 @@ async function vectorPdf(pages, onProgress) {
   } finally { holder.remove(); }
 }
 
-function svgToJpeg(svg, W, H, dpi = 200) {
+/* Webschriften für Bilder: Ein SVG, das als Bild gezeichnet wird, darf keine externen Schriften laden.
+   Daher werden die Schriftdateien (nur Latin) einmal geladen und als data:-URL eingebettet.
+   Ohne Internet bzw. wo fetch gesperrt ist, wird eine Systemschrift verwendet. */
+const FONT_CSS_URL = 'https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700&family=Open+Sans:wght@400;700&family=Patrick+Hand&family=Quicksand:wght@400;700&display=swap';
+const FontEmbed = {
+  promise: null,
+  get() {
+    if (this.promise) return this.promise;
+    this.promise = (async () => {
+      try {
+        const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 8000);
+        const css = await (await fetch(FONT_CSS_URL, { signal: ctrl.signal })).text();
+        clearTimeout(t);
+        const blocks = css.split('/* ').filter(b => b.startsWith('latin */')).map(b => b.slice(9));
+        const out = [];
+        for (const b of blocks) {
+          const m = b.match(/url\((https:[^)]+)\)/); if (!m) continue;
+          const blob = await (await fetch(m[1])).blob();
+          const data = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
+          out.push(b.replace(m[1], data).replace(/unicode-range:[^;]+;/, ''));
+        }
+        return out.join('\n');
+      } catch (_) { return ''; }
+    })();
+    return this.promise;
+  },
+};
+
+/** Eine Seite als Bild. Auflösung bis 300 dpi, begrenzt auf ca. 16 Megapixel (Grenze mobiler Browser). */
+async function renderPageImage(svg, W, H, dpi = 300, type = 'image/jpeg') {
+  dpi = Math.min(dpi, Math.sqrt(16e6 / (W * H)) * 72);
+  const fonts = await FontEmbed.get();
+  if (fonts) svg = svg.replace(/^(<svg[^>]*>)/, `$1<defs><style>${fonts}</style></defs>`);
+  return svgToJpeg(svg, W, H, dpi, type);
+}
+
+function svgToJpeg(svg, W, H, dpi = 200, type = 'image/jpeg') {
   return new Promise((resolve, reject) => {
     const scale = dpi / 72, img = new Image();
     img.onload = () => {
       const c = document.createElement('canvas'); c.width = Math.round(W * scale); c.height = Math.round(H * scale);
       const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
       g.drawImage(img, 0, 0, c.width, c.height);
-      resolve({ data: c.toDataURL('image/jpeg', 0.9), pw: c.width, ph: c.height });
+      c.toBlob(blob => {
+        if (!blob) return reject(new Error('Bild zu groß'));
+        if (type !== 'image/jpeg') return resolve({ blob, pw: c.width, ph: c.height });
+        const fr = new FileReader();
+        fr.onload = () => resolve({ blob, data: fr.result, pw: c.width, ph: c.height });
+        fr.readAsDataURL(blob);
+      }, type, 0.92);
     };
     img.onerror = reject;
     img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
@@ -928,7 +971,7 @@ async function rasterPdf(pages, onProgress) {
   const imgs = [];
   for (let i = 0; i < pages.length; i++) {
     const { svg, W, H } = pages[i]({ pdf: false });
-    imgs.push({ ...(await svgToJpeg(svg, W, H)), W, H });
+    imgs.push({ ...(await renderPageImage(svg, W, H, 200)), W, H });
     onProgress && onProgress(i + 1, pages.length);
   }
   return jpegPdf(imgs);
@@ -988,6 +1031,24 @@ function printPages(p, months) {
   area.innerHTML = `<style>@page{size:${wmm}mm ${hmm}mm;margin:0}</style>` +
     pages.map((fn, i) => { const { svg } = i === 0 ? first : fn({ pdf: false }); return `<div class="print-page" style="width:${wmm}mm;height:${hmm}mm">${svg}</div>`; }).join('');
   setTimeout(() => window.print(), 300);
+}
+
+/** Jede Seite als eigene JPG-Datei speichern (Spez.-Erweiterung: Bildexport). */
+async function saveJpgs(p, months, onProgress) {
+  await Store.preload(p);
+  const list = p.type === 'YEAR_PLANNER' ? [null] : months.slice().sort((a, b) => a - b);
+  const base = pdfFileName(p, months).replace(/_(Jahr|Jahresplaner|Monat_\d+|\d+_Monate)\.pdf$/, '');
+  let saved = 0;
+  for (let i = 0; i < list.length; i++) {
+    const m = list[i];
+    const { svg, W, H } = m === null ? plannerSVG(p) : monthPageSVG(p, m);
+    onProgress && onProgress(i + 1, list.length);
+    const { blob } = await renderPageImage(svg, W, H, 300);
+    const name = m === null ? `${base}_Jahresplaner.jpg` : `${base}_${pad2(m)}_${MONTHS[m - 1].replace('ä', 'ae')}.jpg`;
+    await saveFile(name, blob);
+    saved++;
+  }
+  return saved;
 }
 
 function pdfFileName(p, months) {
@@ -1645,13 +1706,14 @@ Screens.export = {
         ${MONTHS.map((n, i) => `<button class="chip ${months.includes(i + 1) ? 'on' : ''}" data-act="mon" data-v="${i + 1}">${n}</button>`).join('')}</div>` : ''}
       <div class="label">Druckvorschau</div>
       ${pages.length ? `<p class="info">Papier: ${pr.paper} ${(col ? pr.orientation : 'LANDSCAPE') === 'LANDSCAPE' ? 'Querformat' : 'Hochformat'} (${wmm} × ${hmm} mm)<br>Seiten: ${pages.length}<br>Ränder: ca. 10 mm auf allen Seiten</p>
-        <p class="muted">Tippe auf eine Seite, um sie zu vergrößern.</p>` : '<p class="muted">Bitte mindestens einen Monat auswählen.</p>'}
+        <p class="muted">Tippe auf eine Seite, um sie zu vergrößern. „JPG“ speichert jede Seite als eigenes Bild (bis 300 dpi).</p>` : '<p class="muted">Bitte mindestens einen Monat auswählen.</p>'}
       <div class="previews">${pages.map((svg, i) => `<figure><button class="page-thumb big" data-act="zoom" data-i="${i}" aria-label="Seite ${i + 1} vergrößern">${svg}</button><figcaption>Seite ${i + 1}</figcaption></figure>`).join('')}</div>
       ${!printable ? '<p class="muted center">Zum Drucken: PDF speichern und die Datei drucken.</p>' : ''}
     </div>
-    <div class="bottom-bar"><button class="btn primary" data-act="pdf" ${pages.length ? '' : 'disabled'}>${icon('save', 18)} PDF speichern</button>
-      ${printable ? `<button class="btn tonal" data-act="print" ${pages.length ? '' : 'disabled'}>${icon('print', 18)} Drucken</button>` : ''}
-      ${printable && navigator.canShare ? `<button class="btn tonal" data-act="share" ${pages.length ? '' : 'disabled'}>${icon('share', 18)} Teilen</button>` : ''}</div>`;
+    <div class="bottom-bar"><button class="btn primary" data-act="pdf" ${pages.length ? '' : 'disabled'}>${icon('save', 18)} PDF</button>
+      <button class="btn primary" data-act="jpg" ${pages.length ? '' : 'disabled'}>${icon('image', 18)} JPG</button>
+      ${printable ? `<button class="btn tonal" data-act="print" ${pages.length ? '' : 'disabled'} aria-label="Drucken">${icon('print', 18)}<span class="hide-xs"> Drucken</span></button>` : ''}
+      ${printable && navigator.canShare ? `<button class="btn tonal" data-act="share" ${pages.length ? '' : 'disabled'} aria-label="Teilen">${icon('share', 18)}<span class="hide-xs"> Teilen</span></button>` : ''}</div>`;
   },
   mount(p) {
     if (p.autoPrint) { p.autoPrint = false; if (!inClaude()) setTimeout(() => Screens.export.on.print(null, p), 400); }
@@ -1675,6 +1737,18 @@ Screens.export = {
         UI.toast(e && e.code === 'unavailable' ? 'Speichern ist in dieser Ansicht nicht möglich.' : 'Das PDF konnte nicht erstellt oder gespeichert werden.');
       }
     },
+    jpg: async (el, p) => {
+      const pr = Store.get(p.id);
+      try {
+        const n = await saveJpgs(pr, p.months || [], (i, total) => UI.busy(true, `Bild ${i} von ${total} wird erstellt …`));
+        UI.busy(false);
+        UI.toast(n === 1 ? 'Bild wurde gespeichert.' : `${n} Bilder wurden gespeichert.`);
+      } catch (e) {
+        UI.busy(false);
+        if (e && e.code === 'declined') return;
+        UI.toast(e && e.code === 'unavailable' ? 'Speichern ist in dieser Ansicht nicht möglich.' : 'Das Bild konnte nicht gespeichert werden.');
+      }
+    },
     print: (el, p) => printPages(Store.get(p.id), p.months || []),
     share: async (el, p) => {
       const pr = Store.get(p.id);
@@ -1696,10 +1770,17 @@ function zoomViewer(p, index) {
   let i = index, z = null;
   const page = () => col ? monthPageSVG(pr, months[i]).svg : plannerSVG(pr).svg;
   const md = UI.modal(`<div class="zoom-top"><button class="icon-btn light" data-act="modal-close" aria-label="Schließen">${icon('close')}</button><span id="zt"></span>
-      <button class="icon-btn light" data-act="zi" aria-label="Vergrößern">${icon('zoomIn')}</button><button class="icon-btn light" data-act="zo" aria-label="Verkleinern">${icon('zoomOut')}</button><button class="icon-btn light" data-act="zr" aria-label="Ganze Seite">${icon('fit')}</button></div>
+      <button class="icon-btn light" data-act="zi" aria-label="Vergrößern">${icon('zoomIn')}</button><button class="icon-btn light" data-act="zo" aria-label="Verkleinern">${icon('zoomOut')}</button><button class="icon-btn light" data-act="zr" aria-label="Ganze Seite">${icon('fit')}</button><button class="icon-btn light" data-act="zj" aria-label="Diese Seite als JPG speichern" title="Als JPG speichern">${icon('image')}</button></div>
     <div class="zoom-view" id="zv"><div class="zoom-inner"></div></div>
     ${count > 1 ? '<div class="zoom-nav"><button class="btn tonal" data-act="zp">‹ Zurück</button><button class="btn tonal" data-act="zn">Weiter ›</button></div>' : ''}`, {
     zi: () => z.zoomIn(), zo: () => z.zoomOut(), zr: () => z.reset(),
+    zj: async () => {
+      try {
+        UI.busy(true, 'Bild wird erstellt …');
+        await saveJpgs(pr, col ? [months[i]] : []);
+        UI.busy(false); UI.toast('Bild wurde gespeichert.');
+      } catch (e) { UI.busy(false); if (!e || e.code !== 'declined') UI.toast('Das Bild konnte nicht gespeichert werden.'); }
+    },
     zp: () => { if (i > 0) { i--; show(); } }, zn: () => { if (i < count - 1) { i++; show(); } },
   }, { full: true, noFocus: true, sticky: true });
   md.el.classList.add('dark');
