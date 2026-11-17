@@ -160,6 +160,7 @@ figure{margin:0;text-align:center}figcaption{color:var(--muted);font-size:14px;m
   .print-page svg{width:100%;height:100%;display:block}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.lang-row{display:flex;justify-content:center;margin-top:20px}
 </style>
 </head>
 <body>
@@ -168,10 +169,269 @@ figure{margin:0;text-align:center}figcaption{color:var(--muted);font-size:14px;m
 const MOTIFS = {"SUN":{"l":"Sonne","p":[["o",50.0,50.0,18.0],["p","M50 8 L50 24 M50 76 L50 92 M8 50 L24 50 M76 50 L92 50 M21 21 L32 32 M68 68 L79 79 M79 21 L68 32 M21 79 L32 68"]]},"SNOWFLAKE":{"l":"Schneeflocke","p":[["p","M50 10 L50 90 M15 30 L85 70 M15 70 L85 30 M42 16 L50 24 L58 16 M42 84 L50 76 L58 84 M16 40 L26 36 L22 26 M84 60 L74 64 L78 74"]]},"SNOWMAN":{"l":"Schneemann","p":[["o",50.0,72.0,20.0],["o",50.0,38.0,14.0],["p","M36 26 L64 26 M42 26 L42 12 L58 12 L58 26 M50 40 L60 43 L50 45 M30 62 L14 52 M70 62 L86 52"],["o",45.0,35.0,1.5],["o",55.0,35.0,1.5],["o",50.0,66.0,2.0],["o",50.0,76.0,2.0]]},"HEART":{"l":"Herz","p":[["p","M50 85 C20 62 8 45 8 32 C8 18 20 10 32 10 C42 10 48 18 50 24 C52 18 58 10 68 10 C80 10 92 18 92 32 C92 45 80 62 50 85 Z"]]},"STAR":{"l":"Stern","p":[["p","M50 8 L61 38 L93 38 L67 57 L77 89 L50 70 L23 89 L33 57 L7 38 L39 38 Z"]]},"FIR":{"l":"Tannenbaum","p":[["p","M50 8 L28 40 L40 40 L20 68 L80 68 L60 40 L72 40 Z M44 68 L44 90 L56 90 L56 68"]]},"HOUSE":{"l":"Häuschen","p":[["p","M12 50 L50 16 L88 50 M22 42 L22 88 L78 88 L78 42 M42 88 L42 64 L58 64 L58 88 M60 46 L70 46 L70 56 L60 56 Z M66 26 L66 12 L74 12 L74 34"]]},"MITTEN":{"l":"Handschuh","p":[["p","M30 90 L30 45 C30 25 40 15 52 15 C66 15 72 28 72 45 L72 60 C80 52 90 56 84 66 L72 80 L72 90 Z M28 78 L74 78"]]},"BEANIE":{"l":"Mütze","p":[["p","M20 70 C20 40 35 25 50 25 C65 25 80 40 80 70 Z M16 70 L84 70 L84 84 L16 84 Z M35 70 L35 84 M50 70 L50 84 M65 70 L65 84"],["o",50.0,19.0,7.0]]},"SLED":{"l":"Schlitten","p":[["p","M18 56 L78 56 L78 44 L18 44 Z M26 56 L26 70 M70 56 L70 70 M10 70 L84 70 C94 70 94 58 86 58"]]},"SKATE":{"l":"Schlittschuh","p":[["p","M25 20 L50 20 L52 55 L80 62 C86 64 86 72 80 72 L25 72 Z M15 82 L86 82 C92 82 92 74 88 72 M35 72 L35 82 M70 72 L70 82 M30 32 L46 32 M30 42 L47 42"]]},"BOOT_RAIN":{"l":"Gummistiefel","p":[["p","M35 15 L60 15 L60 60 L85 70 C92 74 90 85 82 85 L30 85 Z"],["p","M33 26 L62 26"]]},"MUG":{"l":"Tasse","p":[["p","M22 35 L68 35 L64 85 L26 85 Z M68 45 C85 45 85 70 66 70 M38 26 C34 18 42 14 38 6 M52 26 C48 18 56 14 52 6"]]},"PENGUIN":{"l":"Pinguin","p":[["e",28.0,14.0,72.0,90.0],["e",38.0,34.0,62.0,86.0],["o",42.0,27.0,2.0],["o",58.0,27.0,2.0],["p","M45 33 L50 40 L55 33 Z M36 90 L30 96 M64 90 L70 96 M28 45 L18 64 M72 45 L82 64"]]},"BEAR":{"l":"Eisbär","p":[["o",50.0,56.0,28.0],["o",28.0,32.0,9.0],["o",72.0,32.0,9.0],["o",40.0,50.0,2.5],["o",60.0,50.0,2.5],["e",44.0,58.0,56.0,66.0],["p","M50 66 L50 72 M42 74 C46 78 54 78 58 74"]]},"BIRD":{"l":"Vogel","p":[["p","M20 55 C20 35 40 28 55 35 C60 22 75 22 80 32 L90 34 L80 40 C80 62 62 75 40 72 L15 80 L28 66 C22 62 20 58 20 55 Z M38 52 C48 46 58 50 62 58 M40 72 L38 84 M52 72 L54 84"],["o",70.0,31.0,2.0]]},"BIRDHOUSE":{"l":"Vogelhäuschen","p":[["p","M18 45 L50 15 L82 45 Z M28 45 L28 82 L72 82 L72 45 M38 70 L62 70 M50 82 L50 96 M36 96 L64 96"],["o",50.0,58.0,7.0]]},"MASK":{"l":"Faschingsmaske","p":[["p","M10 40 C25 30 40 34 50 42 C60 34 75 30 90 40 C90 60 72 66 60 60 C55 56 45 56 40 60 C28 66 10 60 10 40 Z M10 40 L4 30 M90 40 L96 30"],["e",22.0,40.0,40.0,52.0],["e",60.0,40.0,78.0,52.0]]},"BALLOON":{"l":"Luftballon","p":[["e",28.0,8.0,72.0,62.0],["p","M50 62 L45 70 L55 70 Z M50 70 C42 78 58 84 50 94 M38 22 C40 16 46 14 50 14"]]},"PARTY_HAT":{"l":"Partyhut","p":[["p","M50 12 L24 86 L76 86 Z M35 56 L62 44 M30 72 L70 58"],["o",50.0,9.0,6.0],["o",44.0,70.0,2.5],["o",58.0,34.0,2.5]]},"SNOWDROP":{"l":"Schneeglöckchen","p":[["p","M50 92 C50 62 52 42 60 26 M60 26 C48 30 42 46 48 60 C56 52 60 40 60 26 M60 26 C72 30 76 46 68 60 C62 52 60 40 60 26 M50 76 C40 70 30 72 24 80 M50 82 C60 72 70 72 76 80"]]},"TULIP":{"l":"Tulpe","p":[["p","M50 95 L50 52 M30 24 L38 34 L50 20 L62 34 L70 24 L70 44 C70 58 30 58 30 44 Z M50 80 C40 70 32 70 26 76 M50 74 C60 64 70 64 76 70"]]},"FLOWER":{"l":"Blume","p":[["o",50.0,38.0,8.0],["o",50.0,22.0,9.0],["o",66.0,38.0,9.0],["o",50.0,54.0,9.0],["o",34.0,38.0,9.0],["p","M50 63 L50 95 M50 82 C60 72 70 72 76 76 M50 88 C40 80 30 80 26 84"]]},"SUNFLOWER":{"l":"Sonnenblume","p":[["o",50.0,36.0,11.0],["o",50.0,36.0,22.0],["p","M50 14 L50 4 M50 58 L50 66 M28 36 L18 36 M72 36 L82 36 M34 20 L27 13 M66 20 L73 13 M34 52 L27 59 M66 52 L73 59 M50 66 L50 96 M50 82 C60 72 70 72 76 76"]]},"BEE":{"l":"Biene","p":[["e",28.0,40.0,72.0,70.0],["p","M42 41 L42 69 M56 41 L56 69 M28 55 L18 55"],["e",34.0,16.0,50.0,42.0],["e",50.0,16.0,66.0,42.0],["o",80.0,55.0,8.0],["o",83.0,52.0,1.5]]},"BUTTERFLY":{"l":"Schmetterling","p":[["p","M50 30 L50 80 M50 40 C40 15 12 15 15 38 C17 52 38 55 50 52 M50 40 C60 15 88 15 85 38 C83 52 62 55 50 52 M50 55 C38 58 22 70 32 82 C40 88 48 75 50 65 M50 55 C62 58 78 70 68 82 C60 88 52 75 50 65 M50 30 L42 18 M50 30 L58 18"]]},"RAINBOW":{"l":"Regenbogen","p":[["p","M8 76 C8 26 92 26 92 76 M20 76 C20 40 80 40 80 76 M32 76 C32 54 68 54 68 76 M4 76 C0 66 14 62 20 70 M80 70 C86 62 100 66 96 76"]]},"LADYBUG":{"l":"Marienkäfer","p":[["e",22.0,30.0,78.0,88.0],["p","M50 32 L50 88 M44 16 L38 6 M56 16 L62 6"],["o",50.0,24.0,10.0],["o",36.0,50.0,5.0],["o",64.0,50.0,5.0],["o",38.0,72.0,5.0],["o",62.0,72.0,5.0]]},"NEST":{"l":"Vogelnest","p":[["p","M12 55 C18 82 82 82 88 55 Z M18 64 L82 64 M22 72 L78 72"],["e",28.0,36.0,44.0,58.0],["e",42.0,30.0,58.0,56.0],["e",56.0,36.0,72.0,58.0]]},"BUNNY":{"l":"Hase","p":[["o",50.0,64.0,22.0],["e",32.0,8.0,46.0,48.0],["e",54.0,8.0,68.0,48.0],["o",42.0,60.0,2.5],["o",58.0,60.0,2.5],["p","M47 68 L53 68 L50 72 Z M50 72 L50 76 M44 78 C47 81 53 81 56 78 M30 68 L18 64 M30 72 L18 74 M70 68 L82 64 M70 72 L82 74"]]},"UMBRELLA":{"l":"Regenschirm","p":[["p","M10 50 C10 20 90 20 90 50 C80 42 70 42 63 50 C57 42 43 42 37 50 C30 42 20 42 10 50 Z M50 50 L50 82 C50 92 36 92 36 82 M50 24 L50 16"]]},"CLOUD":{"l":"Wolke","p":[["p","M25 70 C10 70 10 50 25 48 C25 30 50 25 58 40 C70 30 90 40 82 55 C95 58 92 72 80 72 Z"]]},"RAINCLOUD":{"l":"Regenwolke","p":[["p","M25 70 C10 70 10 50 25 48 C25 30 50 25 58 40 C70 30 90 40 82 55 C95 58 92 72 80 72 Z"],["p","M35 80 L30 92 M55 80 L50 92 M75 80 L70 92"]]},"EGG":{"l":"Osterei","p":[["e",26.0,8.0,74.0,92.0],["p","M28 44 L38 36 L50 44 L62 36 L72 44 M27 60 C40 66 60 66 73 60 M30 74 C42 78 58 78 70 74"]]},"CHICK":{"l":"Küken","p":[["o",50.0,50.0,24.0],["o",58.0,44.0,2.5],["p","M72 48 L84 52 L72 56 M24 64 L32 56 L40 64 L48 56 L56 64 L64 56 L72 64 L76 92 L24 92 Z"]]},"BASKET":{"l":"Körbchen","p":[["p","M15 50 L85 50 L75 88 L25 88 Z M25 50 C25 15 75 15 75 50 M20 62 L80 62 M22 75 L78 75"]]},"DUCK":{"l":"Ente","p":[["p","M25 60 C25 80 75 85 85 65 C88 55 80 50 70 55 L60 55 C60 35 50 28 42 28 C30 28 26 38 30 46 L18 48 L30 52 C26 54 25 57 25 60 Z M48 62 C56 58 64 62 66 68"],["o",42.0,38.0,2.0]]},"PUDDLE":{"l":"Pfütze","p":[["p","M14 70 C10 58 30 54 40 58 C50 50 76 52 84 60 C96 64 92 80 76 80 L26 80 C16 80 12 76 14 70 Z M40 66 C46 62 54 62 60 66 M50 40 L46 48 M62 36 L58 44"]]},"STRAWBERRY":{"l":"Erdbeere","p":[["p","M50 92 C25 75 18 50 25 38 C35 30 65 30 75 38 C82 50 75 75 50 92 Z M30 34 L40 20 L50 30 L60 20 L70 34 M50 30 L50 16"],["o",38.0,50.0,1.8],["o",54.0,48.0,1.8],["o",64.0,58.0,1.8],["o",44.0,64.0,1.8],["o",56.0,74.0,1.8]]},"CHERRY":{"l":"Kirschen","p":[["o",32.0,72.0,14.0],["o",68.0,72.0,14.0],["p","M32 58 C38 35 48 20 60 12 M68 58 C66 40 62 25 60 12 M60 12 C70 6 82 10 86 18 C76 22 66 20 60 12 Z"]]},"ICECREAM":{"l":"Eiswaffel","p":[["p","M30 46 L50 92 L70 46 Z M38 58 L62 58 M44 72 L56 72 M28 46 C20 46 22 30 32 30 C32 14 68 14 68 30 C78 30 80 46 72 46 Z"]]},"LEMONADE":{"l":"Limonade","p":[["p","M28 22 L72 22 L66 90 L34 90 Z M30 40 L70 40 M58 22 L70 4"],["o",42.0,56.0,3.0],["o",54.0,70.0,3.0]]},"BALL":{"l":"Wasserball","p":[["o",50.0,50.0,38.0],["p","M50 12 C35 30 35 70 50 88 M50 12 C65 30 65 70 50 88 M12 50 L88 50"]]},"PARASOL":{"l":"Sonnenschirm","p":[["p","M8 42 C8 14 92 14 92 42 Z M50 42 L50 92 M30 92 L70 92 M30 42 L50 14 L70 42"]]},"SANDCASTLE":{"l":"Sandburg","p":[["p","M15 90 L15 55 L25 55 L25 48 L33 48 L33 55 L42 55 L42 30 L58 30 L58 55 L67 55 L67 48 L75 48 L75 55 L85 55 L85 90 Z M44 90 L44 76 C44 66 56 66 56 76 L56 90 M50 30 L50 12 L62 16 L50 20"]]},"SHELL":{"l":"Muschel","p":[["p","M50 90 L15 45 C15 15 85 15 85 45 Z M50 90 L30 26 M50 90 L50 18 M50 90 L70 26 M42 90 L58 90"]]},"SUNGLASSES":{"l":"Sonnenbrille","p":[["p","M6 40 L94 40 M10 40 C10 64 42 64 42 40 M58 40 C58 64 90 64 90 40 M42 44 C46 40 54 40 58 44"]]},"SAILBOAT":{"l":"Segelboot","p":[["p","M50 10 L50 70 M50 14 L80 62 L50 62 M46 22 L22 62 L46 62 Z M14 72 L86 72 L74 88 L26 88 Z M8 94 C16 90 24 98 32 94 C40 90 48 98 56 94 C64 90 72 98 80 94"]]},"WATERMELON":{"l":"Melone","p":[["p","M8 38 C8 86 92 86 92 38 Z M18 38 C20 72 80 72 82 38"],["o",36.0,50.0,2.2],["o",50.0,56.0,2.2],["o",64.0,50.0,2.2],["o",44.0,44.0,2.2],["o",58.0,44.0,2.2]]},"DOLPHIN":{"l":"Delfin","p":[["p","M10 58 C22 32 58 26 80 44 L92 36 L88 54 L94 70 L80 64 C60 84 26 82 10 58 Z M44 32 L52 18 L60 34 M30 66 L38 76 L44 70"],["o",24.0,54.0,2.0]]},"TENT":{"l":"Zelt","p":[["p","M8 86 L50 14 L92 86 Z M50 14 L50 86 M38 86 L50 56 L62 86 M4 86 L96 86"]]},"BACKPACK":{"l":"Rucksack","p":[["p","M26 30 C26 18 74 18 74 30 L78 88 L22 88 Z M40 22 C40 8 60 8 60 22 M32 54 L68 54 L68 76 L32 76 Z M50 54 L50 62"]]},"APPLE":{"l":"Apfel","p":[["p","M50 30 C30 18 12 32 15 55 C18 80 35 92 50 85 C65 92 82 80 85 55 C88 32 70 18 50 30 Z M50 30 C50 20 52 14 56 8 M54 22 C62 10 76 12 78 16 C70 24 60 24 54 22 Z"]]},"SCHOOLBAG":{"l":"Schultasche","p":[["p","M18 32 L82 32 L82 88 L18 88 Z M30 32 C30 14 70 14 70 32 M18 52 L82 52 M44 52 L44 62 L56 62 L56 52"]]},"PENCIL":{"l":"Bleistift","p":[["p","M22 80 L70 22 L82 34 L34 92 Z M22 80 L16 96 L34 92 M64 29 L76 41"]]},"BOOK":{"l":"Buch","p":[["p","M10 25 C25 20 40 22 50 30 C60 22 75 20 90 25 L90 82 C75 77 60 79 50 86 C40 79 25 77 10 82 Z M50 30 L50 86 M18 36 L40 36 M18 46 L40 46 M60 36 L82 36 M60 46 L82 46"]]},"LEAF":{"l":"Blatt","p":[["p","M15 85 C15 40 45 15 88 12 C85 55 60 85 15 85 Z M15 85 L72 28 M40 60 L38 42 M52 48 L66 50 M30 70 L50 72"]]},"GRAPES":{"l":"Weintrauben","p":[["o",40.0,35.0,9.0],["o",58.0,35.0,9.0],["o",49.0,50.0,9.0],["o",31.0,50.0,9.0],["o",67.0,50.0,9.0],["o",40.0,65.0,9.0],["o",58.0,65.0,9.0],["o",49.0,80.0,9.0],["p","M49 26 L49 12 C58 8 66 12 70 18"]]},"SQUIRREL":{"l":"Eichhörnchen","p":[["p","M60 86 C46 86 40 72 45 60 C40 52 42 40 52 36 L54 24 L60 30 C70 32 72 46 66 56 C72 66 70 80 60 86 Z M46 80 C20 86 6 60 16 40 C24 26 42 30 40 46 C36 40 28 42 30 54 C32 66 40 70 46 70"],["o",58.0,42.0,2.0]]},"HEDGEHOG":{"l":"Igel","p":[["p","M15 72 C15 46 35 30 60 32 L90 64 C82 72 70 74 60 74 Z M22 52 L12 44 M28 42 L22 30 M38 35 L34 22 M50 32 L50 18 M62 33 L68 22 M30 74 L30 82 M56 74 L56 82"],["o",72.0,58.0,2.0],["o",90.0,64.0,2.5]]},"CHESTNUT":{"l":"Kastanie","p":[["p","M50 88 C25 88 15 70 18 55 C22 40 35 30 50 30 C65 30 78 40 82 55 C85 70 75 88 50 88 Z M22 60 C40 52 60 52 78 60 M50 30 L52 22"]]},"MUSHROOM":{"l":"Pilz","p":[["p","M10 50 C10 15 90 15 90 50 Z M38 50 L35 88 L65 88 L62 50"],["o",34.0,34.0,5.0],["o",58.0,28.0,6.0],["o",74.0,42.0,4.0]]},"TREE":{"l":"Laubbaum","p":[["p","M50 70 C20 74 8 50 22 36 C18 16 42 6 52 18 C66 6 88 18 80 36 C94 50 80 74 50 70 Z M50 70 L50 94 M50 82 L40 74 M50 78 L62 68 M40 94 L60 94"]]},"PUMPKIN":{"l":"Kürbis","p":[["e",16.0,30.0,84.0,90.0],["p","M50 30 C40 46 40 76 50 90 M50 30 C60 46 60 76 50 90 M30 34 C24 50 24 72 32 86 M70 34 C76 50 76 72 68 86 M50 30 L52 14 L60 16"]]},"FOX":{"l":"Fuchs","p":[["p","M15 15 L35 40 L65 40 L85 15 L80 50 C75 70 60 85 50 88 C40 85 25 70 20 50 Z M30 56 L50 72 L70 56"],["o",38.0,50.0,2.5],["o",62.0,50.0,2.5],["o",50.0,82.0,3.0]]},"OWL":{"l":"Eule","p":[["e",20.0,14.0,80.0,92.0],["o",38.0,40.0,10.0],["o",62.0,40.0,10.0],["o",38.0,40.0,3.0],["o",62.0,40.0,3.0],["p","M46 52 L50 60 L54 52 Z M24 22 L28 6 L38 18 M76 22 L72 6 L62 18 M36 70 L42 74 L48 70 M52 70 L58 74 L64 70 M40 80 L46 84 L52 80 L58 84 L60 82"]]},"LANTERN":{"l":"Laterne","p":[["p","M34 26 L66 26 L72 80 L28 80 Z M40 26 L40 16 L60 16 L60 26 M50 16 L50 4 M28 80 L72 80 L66 90 L34 90 Z M30 50 L70 50"],["o",50.0,64.0,7.0]]},"GIFT":{"l":"Geschenk","p":[["p","M14 40 L86 40 L86 56 L14 56 Z M20 56 L20 90 L80 90 L80 56 M50 40 L50 90 M50 40 C35 18 18 28 30 40 M50 40 C65 18 82 28 70 40"]]},"CANDLE":{"l":"Kerze","p":[["p","M38 42 L62 42 L62 92 L38 92 Z M50 42 L50 34 M50 34 C40 24 48 14 50 6 C52 14 60 24 50 34 Z M38 56 C44 60 48 54 52 60"]]},"REINDEER":{"l":"Rentier","p":[["e",32.0,40.0,68.0,86.0],["p","M38 44 L28 20 L16 22 M28 20 L30 8 M62 44 L72 20 L84 22 M72 20 L70 8 M32 48 L20 46 M68 48 L80 46"],["o",50.0,80.0,6.0],["o",42.0,58.0,2.5],["o",58.0,58.0,2.5]]},"GINGERBREAD":{"l":"Lebkuchenmann","p":[["p","M50 8 C38 8 34 20 40 28 L18 34 C8 38 12 50 22 48 L36 46 L28 78 C26 88 36 92 40 84 L50 68 L60 84 C64 92 74 88 72 78 L64 46 L78 48 C88 50 92 38 82 34 L60 28 C66 20 62 8 50 8 Z M44 24 C47 27 53 27 56 24"],["o",45.0,17.0,2.0],["o",55.0,17.0,2.0],["o",50.0,40.0,2.5],["o",50.0,52.0,2.5]]},"BELL":{"l":"Glocke","p":[["p","M50 10 L50 18 M50 18 C30 18 28 38 28 55 C28 68 20 72 15 80 L85 80 C80 72 72 68 72 55 C72 38 70 18 50 18 Z"],["o",50.0,86.0,6.0]]},"ORNAMENT":{"l":"Christbaumkugel","p":[["o",50.0,58.0,32.0],["p","M42 26 L58 26 L58 18 L42 18 Z M50 18 C44 8 56 6 50 18 M20 52 L80 52 M22 66 L78 66"]]},"SANTA_BOOT":{"l":"Nikolausstiefel","p":[["p","M35 15 L60 15 L60 60 L85 70 C92 74 90 85 82 85 L30 85 Z"],["p","M32 14 L63 14 L63 28 L32 28 Z"]]},"MOON":{"l":"Mond","p":[["p","M60 10 C35 15 22 40 30 65 C38 85 62 92 80 82 C55 82 40 62 42 42 C44 25 52 15 60 10 Z"],["p","M78 22 L80 28 L86 30 L80 32 L78 38 L76 32 L70 30 L76 28 Z"]]},"CAKE":{"l":"Torte","p":[["p","M18 55 L82 55 L82 88 L18 88 Z M18 68 C30 74 40 62 50 68 C60 74 70 62 82 68 M35 55 L35 40 M50 55 L50 40 M65 55 L65 40"],["e",32.0,30.0,38.0,38.0],["e",47.0,30.0,53.0,38.0],["e",62.0,30.0,68.0,38.0]]},"STARFISH":{"l":"Seestern","p":[["p","M50 10 C54 30 58 36 88 38 C64 50 62 56 72 88 C54 70 46 70 28 88 C38 56 36 50 12 38 C42 36 46 30 50 10 Z"],["o",50.0,50.0,2.0],["o",50.0,32.0,1.5],["o",66.0,46.0,1.5],["o",34.0,46.0,1.5]]}};
 const CATALOG = {"months":[["SNOWMAN","SNOWFLAKE","MITTEN","BEANIE","SLED","SKATE","BEAR","PENGUIN","FIR","HOUSE","BIRDHOUSE","MUG"],["HEART","MASK","PARTY_HAT","BEAR","SNOWFLAKE","BIRD","MITTEN","MUG","BALLOON","OWL","PENGUIN"],["SNOWDROP","TULIP","BEE","BUTTERFLY","RAINBOW","NEST","BUNNY","SUN","LADYBUG","FLOWER","BIRD"],["UMBRELLA","RAINCLOUD","BOOT_RAIN","EGG","BUNNY","CHICK","BASKET","TULIP","RAINBOW","DUCK","PUDDLE"],["FLOWER","BEE","BUTTERFLY","LADYBUG","BIRD","TREE","BASKET","HEART","SUN","TULIP","NEST"],["SUNFLOWER","STRAWBERRY","CHERRY","ICECREAM","BASKET","BEE","FLOWER","BUTTERFLY","SUN","LEMONADE"],["BALL","ICECREAM","PARASOL","SANDCASTLE","SHELL","STARFISH","SUNGLASSES","SAILBOAT","WATERMELON","SUN"],["DOLPHIN","SAILBOAT","PARASOL","SHELL","WATERMELON","FLOWER","TENT","SUNFLOWER","BACKPACK","LEMONADE"],["APPLE","SCHOOLBAG","PENCIL","LEAF","GRAPES","SQUIRREL","HEDGEHOG","BOOK","CHESTNUT","MUSHROOM","TREE"],["PUMPKIN","FOX","SQUIRREL","CHESTNUT","MUSHROOM","HEDGEHOG","LEAF","OWL","UMBRELLA","BASKET","TREE"],["FOX","OWL","HEDGEHOG","UMBRELLA","LANTERN","BOOT_RAIN","LEAF","CHESTNUT","MUG","CLOUD","SQUIRREL","MOON"],["FIR","GIFT","STAR","CANDLE","REINDEER","GINGERBREAD","SANTA_BOOT","BELL","SNOWMAN","ORNAMENT","MOON"]],"headers":[[["Schneemann",["SNOWFLAKE","SNOWMAN","SNOWMAN","SNOWFLAKE"]],["Pinguine",["PENGUIN","SNOWFLAKE","SNOWFLAKE","PENGUIN"]],["Verschneiter Wald",["FIR","FIR","FIR","FIR"]],["Schlittschuhlaufen",["SKATE","SNOWFLAKE","MITTEN","SKATE"]],["Winterhäuschen",["FIR","HOUSE","HOUSE","FIR"]]],[["Herzen",["HEART","HEART","HEART","HEART"]],["Fasching",["MASK","PARTY_HAT","BALLOON","MASK"]],["Eisbären",["BEAR","SNOWFLAKE","SNOWFLAKE","BEAR"]],["Wintervögel",["BIRD","BIRDHOUSE","SNOWFLAKE","BIRD"]],["Eulen",["OWL","HEART","HEART","OWL"]]],[["Schneeglöckchen",["SNOWDROP","SNOWDROP","SNOWDROP","SNOWDROP"]],["Vögel",["BIRD","NEST","BIRD","BIRD"]],["Regenbogen",["CLOUD","RAINBOW","RAINBOW","CLOUD"]],["Frühlingswiese",["FLOWER","TULIP","BUTTERFLY","FLOWER"]],["Häschen",["BUNNY","FLOWER","FLOWER","BUNNY"]]],[["Ostereier",["EGG","EGG","BASKET","EGG"]],["Regenschirme",["UMBRELLA","RAINCLOUD","RAINCLOUD","UMBRELLA"]],["Enten",["DUCK","PUDDLE","PUDDLE","DUCK"]],["Tulpen",["TULIP","TULIP","TULIP","TULIP"]],["Regenwolken",["RAINCLOUD","BOOT_RAIN","UMBRELLA","RAINCLOUD"]]],[["Schmetterlinge",["BUTTERFLY","FLOWER","FLOWER","BUTTERFLY"]],["Bienen",["BEE","FLOWER","FLOWER","BEE"]],["Blumengarten",["TULIP","FLOWER","FLOWER","TULIP"]],["Vogelnest",["TREE","NEST","BIRD","TREE"]],["Marienkäfer",["LADYBUG","LEAF","LEAF","LADYBUG"]]],[["Sonnenblumen",["SUNFLOWER","SUNFLOWER","SUNFLOWER","SUNFLOWER"]],["Kirschen",["CHERRY","CHERRY","CHERRY","CHERRY"]],["Bienen",["BEE","SUNFLOWER","FLOWER","BEE"]],["Picknick",["BASKET","STRAWBERRY","LEMONADE","SUN"]],["Blumenwiese",["FLOWER","BUTTERFLY","TULIP","FLOWER"]]],[["Strand",["PARASOL","BALL","SHELL","PARASOL"]],["Eiscreme",["ICECREAM","ICECREAM","ICECREAM","ICECREAM"]],["Meeresufer",["SHELL","STARFISH","SAILBOAT","SHELL"]],["Sandburg",["SANDCASTLE","SHELL","STARFISH","SANDCASTLE"]],["Sonnenschein",["SUN","SUNGLASSES","SUNGLASSES","SUN"]]],[["Wassermelone",["WATERMELON","WATERMELON","WATERMELON","WATERMELON"]],["Segelboot",["SAILBOAT","SUN","CLOUD","SAILBOAT"]],["Sommercamp",["TENT","TREE","BACKPACK","TENT"]],["Delfine",["DOLPHIN","SHELL","STARFISH","DOLPHIN"]],["Tropische Blumen",["FLOWER","SUNFLOWER","FLOWER","SUNFLOWER"]]],[["Schultasche",["SCHOOLBAG","PENCIL","BOOK","SCHOOLBAG"]],["Äpfel",["APPLE","APPLE","APPLE","APPLE"]],["Herbstblätter",["LEAF","LEAF","LEAF","LEAF"]],["Waldtiere",["SQUIRREL","HEDGEHOG","FOX","SQUIRREL"]],["Weintrauben",["GRAPES","LEAF","LEAF","GRAPES"]]],[["Kürbisse",["PUMPKIN","PUMPKIN","PUMPKIN","PUMPKIN"]],["Eichhörnchen",["SQUIRREL","CHESTNUT","CHESTNUT","SQUIRREL"]],["Kastanien",["CHESTNUT","LEAF","LEAF","CHESTNUT"]],["Pilze",["MUSHROOM","MUSHROOM","MUSHROOM","MUSHROOM"]],["Herbstwald",["TREE","MUSHROOM","LEAF","TREE"]]],[["Füchse",["FOX","LEAF","LEAF","FOX"]],["Eulen",["OWL","MOON","MOON","OWL"]],["Regenschirme",["UMBRELLA","CLOUD","CLOUD","UMBRELLA"]],["Igel",["HEDGEHOG","LEAF","CHESTNUT","HEDGEHOG"]],["Laternenumzug",["LANTERN","STAR","MOON","LANTERN"]]],[["Tannenbaum",["FIR","STAR","STAR","FIR"]],["Rentiere",["REINDEER","STAR","STAR","REINDEER"]],["Lebkuchen",["GINGERBREAD","STAR","HEART","GINGERBREAD"]],["Geschenke",["GIFT","ORNAMENT","BELL","GIFT"]],["Verschneites Dorf",["HOUSE","FIR","FIR","HOUSE"]]]]};
 'use strict';
+/* ColorDays Web – Sprachen: Deutsch (Standard), Magyar, English.
+   Schlüssel ist der deutsche Text; fehlt eine Übersetzung, erscheint Deutsch. */
+
+const LANGS = [['de', 'Deutsch'], ['hu', 'Magyar'], ['en', 'English']];
+let LANG = 'de';
+
+const I18N = {
+hu: {
+  'Mein kreativer Kalender': 'Kreatív naptáram',
+  'Neuer Kalender': 'Új naptár', 'Mal-Kalender oder Jahresplaner erstellen': 'Kifestőnaptár vagy éves tervező készítése',
+  'Meine Kalender': 'Naptáraim', 'Gespeicherte Kalender öffnen und bearbeiten': 'Mentett naptárak megnyitása és szerkesztése',
+  'Vorlagen': 'Sablonok', 'Bilder und Kopfzeilen entdecken': 'Rajzok és fejlécek böngészése',
+  'Einstellungen': 'Beállítások', 'Bundesland, Datensicherung und mehr': 'Nyelv, tartomány, biztonsági mentés',
+  'Deine Kalender werden privat in deinem Claude-Konto gespeichert.': 'A naptáraid privát módon a Claude-fiókodban tárolódnak.',
+  'Deine Kalender werden nur in diesem Browser gespeichert. Sichere sie regelmäßig unter Einstellungen → Datensicherung.': 'A naptáraid csak ebben a böngészőben tárolódnak. Mentsd őket rendszeresen: Beállítások → Biztonsági mentés.',
+  '⚠️ Speichern ist in dieser Ansicht nicht möglich – Änderungen gehen beim Schließen verloren.': '⚠️ Ebben a nézetben nem lehet menteni – bezáráskor a módosítások elvesznek.',
+  'Mal-Kalender': 'Kifestőnaptár', 'Gestalte deinen eigenen Ausmal-Kalender.': 'Tervezd meg a saját kifestőnaptáradat.',
+  'Klassischer Jahresplaner': 'Klasszikus éves tervező', 'Plane dein ganzes Jahr auf einer Seite.': 'Tervezd meg az egész évet egyetlen lapon.',
+  'Mal-Kalender einrichten': 'Kifestőnaptár beállítása', 'Jahresplaner einrichten': 'Éves tervező beállítása',
+  'Name des Kalenders': 'A naptár neve', 'z. B. Dominiks Kalender': 'pl. Dominik naptára', 'Bitte gib einen Namen ein.': 'Kérlek, adj meg egy nevet.',
+  'Jahr': 'Év', 'Jahr verringern': 'Év csökkentése', 'Jahr erhöhen': 'Év növelése', 'Papierformat': 'Papírméret', 'Ausrichtung': 'Tájolás',
+  'Hochformat': 'Álló', 'Querformat': 'Fekvő', 'Stil': 'Stílus', 'Feiertage anzeigen': 'Ünnepnapok megjelenítése', 'Bundesland': 'Német tartomány',
+  'Keine Auswahl': 'Nincs kiválasztva', 'Kalender erstellen': 'Naptár létrehozása', 'Sprache des Kalenders': 'A naptár nyelve',
+  'Klassisch': 'Klasszikus', 'Verspielt': 'Játékos', 'Schwarz-Weiß': 'Fekete-fehér', 'Grau Minimal': 'Szürke minimál', 'Pastell': 'Pasztell', 'Modern Clean': 'Modern letisztult',
+  'Neu': 'Új', 'Noch keine Kalender vorhanden.': 'Még nincs naptárad.', 'Erstelle deinen ersten Kalender!': 'Készítsd el az elsőt!',
+  'Öffnen': 'Megnyitás', 'PDF exportieren': 'PDF exportálása', 'Umbenennen': 'Átnevezés', 'Kopieren': 'Másolás', 'Löschen': 'Törlés',
+  'Kalender umbenennen': 'Naptár átnevezése', 'Kopiere …': 'Másolás …', '(Kopie)': '(másolat)', 'Kalender löschen?': 'Törlöd a naptárat?',
+  '„{0}“ wird dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.': '„{0}” véglegesen törlődik. Ez nem vonható vissza.',
+  'Weitere Aktionen': 'További műveletek', 'Abbrechen': 'Mégse', 'Speichern': 'Mentés', 'Schließen': 'Bezárás', 'Name': 'Név', 'Zurück': 'Vissza',
+  'Tagesbilder ({0})': 'Napi rajzok ({0})', 'Kopfzeilen ({0})': 'Fejlécek ({0})',
+  'Hinweis: einfache Platzhaltergrafiken – die finalen Illustrationen werden separat geliefert.': 'Megjegyzés: egyszerű helyőrző rajzok – a végleges illusztrációk később érkeznek.',
+  'Standard-Bundesland': 'Alapértelmezett német tartomány', 'Feiertage standardmäßig anzeigen': 'Ünnepnapok alapértelmezett megjelenítése',
+  'Sprache': 'Nyelv', 'Datensicherung': 'Biztonsági mentés',
+  'Alle Kalender, Zeichnungen und Bilder als eine Datei sichern bzw. wiederherstellen (z. B. zum Umzug auf ein anderes Gerät).': 'Minden naptár, rajz és kép mentése egyetlen fájlba, illetve visszaállítása (például másik eszközre költözéshez).',
+  'Sicherung speichern': 'Mentés fájlba', 'Sicherung laden': 'Mentés betöltése', 'Über ColorDays': 'A ColorDays-ről',
+  'Speicherung privat im Claude-Konto': 'Tárolás privát módon a Claude-fiókban', 'Speicherung in diesem Browser': 'Tárolás ebben a böngészőben', 'ohne Speicherung': 'mentés nélkül',
+  'Keine Werbung, kein Tracking.': 'Nincs reklám, nincs követés.', 'Sicherung wird erstellt …': 'Mentés készül …', 'Sicherung konnte nicht gespeichert werden.': 'A mentést nem sikerült elkészíteni.',
+  'Sicherung laden?': 'Betöltöd a mentést?', '{0} Kalender werden hinzugefügt. Vorhandene Kalender bleiben erhalten.': '{0} naptár kerül hozzáadásra. A meglévők megmaradnak.',
+  'Laden': 'Betöltés', 'Wird geladen …': 'Betöltés …', 'Sicherung geladen.': 'A mentés betöltve.', 'Die Datei ist keine gültige ColorDays-Sicherung.': 'Ez a fájl nem érvényes ColorDays-mentés.',
+  'Kalendereinstellungen': 'Naptár beállításai', 'Ganzes Jahr als PDF': 'Egész év PDF-ben', 'Bearbeiten': 'Szerkesztés', 'Vorschau': 'Előnézet', 'Drucken': 'Nyomtatás',
+  'Kopfzeile ändern': 'Fejléc cseréje', 'Titel und Fußzeile': 'Cím és lábléc',
+  'Tippe auf einen Tag, um ihn zu bearbeiten. Zoomen: zwei Finger, Mausrad oder Doppeltippen.': 'Koppints egy napra a szerkesztéshez. Nagyítás: két ujjal, egérgörgővel vagy dupla koppintással.',
+  'Vergrößern': 'Nagyítás', 'Verkleinern': 'Kicsinyítés', 'Ganze Seite': 'Teljes oldal',
+  'Eigene Kopfzeile bearbeiten': 'Saját fejléc szerkesztése', 'Eigene Kopfzeile gestalten': 'Saját fejléc készítése',
+  'Eigener Titel (optional)': 'Saját cím (nem kötelező)', 'Text in der Fußzeile (optional)': 'Lábléc szövege (nem kötelező)',
+  'Ohne Fußzeilentext entfällt die Fußzeile – das Raster wird größer.': 'Lábléc-szöveg nélkül a lábléc elmarad – a naptárrács nagyobb lesz.',
+  'Bild ändern': 'Rajz cseréje', 'Vorlage auswählen': 'Sablon kiválasztása', 'Eigenes Bild bearbeiten': 'Saját rajz szerkesztése', 'Selbst gestalten': 'Saját rajz készítése',
+  'Bild entfernen': 'Rajz eltávolítása', 'Ereignis hinzufügen': 'Esemény hozzáadása', 'Original wiederherstellen': 'Eredeti visszaállítása',
+  'Dein selbst gestaltetes Bild für diesen Tag geht dabei verloren.': 'A naphoz készített saját rajzod elvész.', 'Wiederherstellen': 'Visszaállítás',
+  'Übernehmen': 'Alkalmaz', 'Ereignis bearbeiten': 'Esemény szerkesztése', 'Bezeichnung': 'Megnevezés', 'z. B. Dominiks Geburtstag': 'pl. Dominik születésnapja',
+  'Art': 'Típus', 'Symbol': 'Ikon', 'Kurzer Text (optional)': 'Rövid szöveg (nem kötelező)', 'Jedes Jahr wiederholen': 'Ismétlés minden évben',
+  'Symbol statt Tagesbild zeigen': 'Ikon a napi rajz helyett',
+  'Geburtstag': 'Születésnap', 'Namenstag': 'Névnap', 'Feiertag': 'Ünnepnap', 'Urlaub': 'Szabadság', 'Kindergarten': 'Óvoda', 'Schule': 'Iskola',
+  'Arzttermin': 'Orvosi időpont', 'Familienausflug': 'Családi kirándulás', 'Eigener Anlass': 'Egyéb alkalom',
+  'Tippe auf einen Tag in der Vorschau, um einen Termin einzutragen.': 'Koppints egy napra az előnézetben egy időpont beírásához.',
+  'Verwendung': 'Használat', 'Leerer Jahresplaner': 'Üres éves tervező', 'Jahresplaner mit Terminen': 'Éves tervező időpontokkal', 'Kopfzeile': 'Fejléc',
+  'Titel (optional)': 'Cím (nem kötelező)', 'z. B. Familie Müller': 'pl. Kovács család', 'Dekoration anzeigen': 'Díszítés megjelenítése',
+  'Foto ändern': 'Fotó cseréje', 'Foto hinzufügen': 'Fotó hozzáadása', 'Foto entfernen': 'Fotó eltávolítása', 'Foto wird geladen …': 'Fotó betöltése …',
+  'Das Bild konnte nicht geladen werden.': 'A képet nem sikerült betölteni.', 'Keine Termine an diesem Tag.': 'Ezen a napon nincs időpont.',
+  'Feiertage': 'Ünnepnapok', 'Markierungsfarbe für Feiertage': 'Ünnepnapok kiemelő színe', 'Seitengestaltung': 'Oldal kialakítása',
+  'Kleine Kästchen zum Abhaken': 'Kis jelölőnégyzetek', 'Kurzen Spruch unter der Kopfzeile zeigen': 'Rövid mondás a fejléc alatt', 'Ereignisse': 'Események',
+  'Namenstage anzeigen (Auswahl)': 'Névnapok megjelenítése (válogatás)', 'Jährliche Ereignisse vom 29. Februar in Nicht-Schaltjahren:': 'Február 29-i éves események nem szökőévben:',
+  'am 28. Februar': 'február 28-án', 'am 1. März': 'március 1-jén', 'nicht anzeigen': 'ne jelenjen meg',
+  'Jahr auf {0} ändern?': 'Módosítod az évet erre: {0}?',
+  'Sollen einmalige Ereignisse und angepasste Tage ins neue Jahr verschoben oder gelöscht werden? Jährliche Ereignisse bleiben immer erhalten.': 'Az egyszeri eseményeket és módosított napokat áthelyezzük az új évbe, vagy töröljük? Az éves események mindig megmaradnak.',
+  'Verschieben': 'Áthelyezés',
+  'Vorschau und Export': 'Előnézet és exportálás', 'Monate': 'Hónapok', 'Ganzes Jahr': 'Egész év', 'Keine': 'Egyik sem', 'Druckvorschau': 'Nyomtatási előnézet',
+  'Papier': 'Papír', 'Seiten': 'Oldalak', 'Ränder: ca. 10 mm auf allen Seiten': 'Margók: kb. 10 mm minden oldalon',
+  'Tippe auf eine Seite, um sie zu vergrößern. „JPG“ speichert jede Seite als eigenes Bild (bis 300 dpi).': 'Koppints egy oldalra a nagyításhoz. A „JPG” minden oldalt külön képként ment (legfeljebb 300 dpi).',
+  'Bitte mindestens einen Monat auswählen.': 'Válassz ki legalább egy hónapot.', 'Seite {0}': '{0}. oldal', 'Seite {0} vergrößern': '{0}. oldal nagyítása',
+  'Zum Drucken: PDF speichern und die Datei drucken.': 'Nyomtatáshoz: mentsd el a PDF-et, és nyomtasd ki a fájlt.', 'Teilen': 'Megosztás',
+  'PDF wird erstellt …': 'PDF készül …', 'PDF wird erstellt … Seite {0} von {1}': 'PDF készül … {0}/{1}. oldal', 'PDF wurde gespeichert.': 'A PDF elmentve.',
+  'Speichern ist in dieser Ansicht nicht möglich.': 'Ebben a nézetben nem lehet menteni.', 'Das PDF konnte nicht erstellt oder gespeichert werden.': 'A PDF-et nem sikerült elkészíteni vagy menteni.',
+  'Bild {0} von {1} wird erstellt …': '{0}/{1}. kép készül …', 'Bild wurde gespeichert.': 'A kép elmentve.', '{0} Bilder wurden gespeichert.': '{0} kép elmentve.',
+  'Das Bild konnte nicht gespeichert werden.': 'A képet nem sikerült menteni.', 'Teilen wird von diesem Browser nicht unterstützt.': 'Ez a böngésző nem támogatja a megosztást.',
+  'Seite {0} von {1}': '{0}/{1}. oldal', 'Diese Seite als JPG speichern': 'Oldal mentése JPG-be', 'Weiter': 'Tovább', 'Bild wird erstellt …': 'Kép készül …',
+  'Zeichnen': 'Rajzolás', 'Rückgängig': 'Visszavonás', 'Wiederholen': 'Újra', 'Ebenen': 'Rétegek', 'Malvorlage': 'Kifestő', 'Farbe': 'Színes',
+  'Zeichenfläche': 'Rajzlap', 'Diese Zeichnung wurde nicht gefunden.': 'A rajz nem található.', 'Bild': 'Kép', 'Sticker': 'Matrica',
+  'Radierer': 'Radír', 'Pinselstärke': 'Ecsetvastagság', 'Stärke': 'Vastagság', 'Füllen': 'Kitöltés',
+  'Auswahl': 'Kijelölés', 'Stift': 'Ceruza', 'Linie': 'Vonal', 'Pfeil': 'Nyíl', 'Kreis': 'Kör', 'Ellipse': 'Ellipszis', 'Quadrat': 'Négyzet', 'Rechteck': 'Téglalap',
+  'Dreieck': 'Háromszög', 'Stern': 'Csillag', 'Herz': 'Szív', 'Text': 'Szöveg',
+  'Im Malvorlage-Modus erscheinen alle Linien schwarz. Wechsle zu „Farbe“, um Farben zu sehen.': 'Kifestő módban minden vonal fekete. Válts a „Színes” módra a színekhez.',
+  'Bild wird geladen …': 'Kép betöltése …', 'Nach vorn': 'Előre', 'Nach hinten': 'Hátra', 'Farbe übernehmen': 'Szín alkalmazása', 'Füllung entfernen': 'Kitöltés eltávolítása',
+  'Text bearbeiten': 'Szöveg szerkesztése', 'Zuschneiden': 'Vágás', 'Text hinzufügen': 'Szöveg hozzáadása', 'z. B. Alles Gute!': 'pl. Boldog születésnapot!',
+  'Schriftart': 'Betűtípus', 'Schriftgröße': 'Betűméret', 'Fett': 'Félkövér', 'Links': 'Balra', 'Mitte': 'Középre', 'Rechts': 'Jobbra',
+  'Füllen funktioniert bei Formen (Kreis, Rechteck, Dreieck, Stern, Herz).': 'A kitöltés alakzatoknál működik (kör, téglalap, háromszög, csillag, szív).',
+  'Noch keine Objekte.': 'Még nincs elem.', 'Oben': 'Fent', 'Unten': 'Lent', 'Zurücksetzen': 'Visszaállítás', 'Farbe {0}': '{0} szín',
+  'Der Speicher ist voll.': 'A tárhely megtelt.', 'Speichern fehlgeschlagen.': 'A mentés nem sikerült.',
+  'Diese Sprache wird für Monate, Wochentage, Feiertage und Sprüche im Kalender verwendet.': 'Ezen a nyelven jelennek meg a hónapok, napok, ünnepnapok és mondások a naptárban.',
+  'file:Jahr': 'Ev', 'file:Jahresplaner': 'Eves_tervezo', 'file:Monat': 'Honap', 'file:Monate': 'honap', 'file:Kalender': 'Naptar',
+},
+en: {
+  'Mein kreativer Kalender': 'My creative calendar',
+  'Neuer Kalender': 'New calendar', 'Mal-Kalender oder Jahresplaner erstellen': 'Create a colouring calendar or year planner',
+  'Meine Kalender': 'My calendars', 'Gespeicherte Kalender öffnen und bearbeiten': 'Open and edit saved calendars',
+  'Vorlagen': 'Templates', 'Bilder und Kopfzeilen entdecken': 'Browse pictures and headers',
+  'Einstellungen': 'Settings', 'Bundesland, Datensicherung und mehr': 'Language, state, backup and more',
+  'Deine Kalender werden privat in deinem Claude-Konto gespeichert.': 'Your calendars are stored privately in your Claude account.',
+  'Deine Kalender werden nur in diesem Browser gespeichert. Sichere sie regelmäßig unter Einstellungen → Datensicherung.': 'Your calendars are stored only in this browser. Back them up regularly under Settings → Backup.',
+  '⚠️ Speichern ist in dieser Ansicht nicht möglich – Änderungen gehen beim Schließen verloren.': '⚠️ Saving is not possible in this view – changes are lost when you close it.',
+  'Mal-Kalender': 'Colouring calendar', 'Gestalte deinen eigenen Ausmal-Kalender.': 'Design your own colouring calendar.',
+  'Klassischer Jahresplaner': 'Classic year planner', 'Plane dein ganzes Jahr auf einer Seite.': 'Plan your whole year on one page.',
+  'Mal-Kalender einrichten': 'Set up colouring calendar', 'Jahresplaner einrichten': 'Set up year planner',
+  'Name des Kalenders': 'Calendar name', 'z. B. Dominiks Kalender': "e.g. Dominik's calendar", 'Bitte gib einen Namen ein.': 'Please enter a name.',
+  'Jahr': 'Year', 'Jahr verringern': 'Previous year', 'Jahr erhöhen': 'Next year', 'Papierformat': 'Paper size', 'Ausrichtung': 'Orientation',
+  'Hochformat': 'Portrait', 'Querformat': 'Landscape', 'Stil': 'Style', 'Feiertage anzeigen': 'Show public holidays', 'Bundesland': 'German state',
+  'Keine Auswahl': 'None', 'Kalender erstellen': 'Create calendar', 'Sprache des Kalenders': 'Calendar language',
+  'Klassisch': 'Classic', 'Verspielt': 'Playful', 'Schwarz-Weiß': 'Black & white', 'Grau Minimal': 'Grey minimal', 'Pastell': 'Pastel', 'Modern Clean': 'Modern clean',
+  'Neu': 'New', 'Noch keine Kalender vorhanden.': 'No calendars yet.', 'Erstelle deinen ersten Kalender!': 'Create your first one!',
+  'Öffnen': 'Open', 'PDF exportieren': 'Export PDF', 'Umbenennen': 'Rename', 'Kopieren': 'Duplicate', 'Löschen': 'Delete',
+  'Kalender umbenennen': 'Rename calendar', 'Kopiere …': 'Duplicating …', '(Kopie)': '(copy)', 'Kalender löschen?': 'Delete calendar?',
+  '„{0}“ wird dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.': '“{0}” will be deleted permanently. This cannot be undone.',
+  'Weitere Aktionen': 'More actions', 'Abbrechen': 'Cancel', 'Speichern': 'Save', 'Schließen': 'Close', 'Name': 'Name', 'Zurück': 'Back',
+  'Tagesbilder ({0})': 'Day pictures ({0})', 'Kopfzeilen ({0})': 'Headers ({0})',
+  'Hinweis: einfache Platzhaltergrafiken – die finalen Illustrationen werden separat geliefert.': 'Note: simple placeholder drawings – the final illustrations will follow.',
+  'Standard-Bundesland': 'Default German state', 'Feiertage standardmäßig anzeigen': 'Show public holidays by default',
+  'Sprache': 'Language', 'Datensicherung': 'Backup',
+  'Alle Kalender, Zeichnungen und Bilder als eine Datei sichern bzw. wiederherstellen (z. B. zum Umzug auf ein anderes Gerät).': 'Save or restore all calendars, drawings and images as one file (e.g. to move to another device).',
+  'Sicherung speichern': 'Save backup', 'Sicherung laden': 'Load backup', 'Über ColorDays': 'About ColorDays',
+  'Speicherung privat im Claude-Konto': 'stored privately in your Claude account', 'Speicherung in diesem Browser': 'stored in this browser', 'ohne Speicherung': 'not saved',
+  'Keine Werbung, kein Tracking.': 'No ads, no tracking.', 'Sicherung wird erstellt …': 'Creating backup …', 'Sicherung konnte nicht gespeichert werden.': 'The backup could not be saved.',
+  'Sicherung laden?': 'Load backup?', '{0} Kalender werden hinzugefügt. Vorhandene Kalender bleiben erhalten.': '{0} calendar(s) will be added. Existing calendars are kept.',
+  'Laden': 'Load', 'Wird geladen …': 'Loading …', 'Sicherung geladen.': 'Backup loaded.', 'Die Datei ist keine gültige ColorDays-Sicherung.': 'This file is not a valid ColorDays backup.',
+  'Kalendereinstellungen': 'Calendar settings', 'Ganzes Jahr als PDF': 'Whole year as PDF', 'Bearbeiten': 'Edit', 'Vorschau': 'Preview', 'Drucken': 'Print',
+  'Kopfzeile ändern': 'Change header', 'Titel und Fußzeile': 'Title and footer',
+  'Tippe auf einen Tag, um ihn zu bearbeiten. Zoomen: zwei Finger, Mausrad oder Doppeltippen.': 'Tap a day to edit it. Zoom: two fingers, mouse wheel or double tap.',
+  'Vergrößern': 'Zoom in', 'Verkleinern': 'Zoom out', 'Ganze Seite': 'Whole page',
+  'Eigene Kopfzeile bearbeiten': 'Edit my own header', 'Eigene Kopfzeile gestalten': 'Design my own header',
+  'Eigener Titel (optional)': 'Custom title (optional)', 'Text in der Fußzeile (optional)': 'Footer text (optional)',
+  'Ohne Fußzeilentext entfällt die Fußzeile – das Raster wird größer.': 'Without footer text there is no footer – the grid gets bigger.',
+  'Bild ändern': 'Change picture', 'Vorlage auswählen': 'Choose template', 'Eigenes Bild bearbeiten': 'Edit my drawing', 'Selbst gestalten': 'Draw it myself',
+  'Bild entfernen': 'Remove picture', 'Ereignis hinzufügen': 'Add event', 'Original wiederherstellen': 'Restore original',
+  'Dein selbst gestaltetes Bild für diesen Tag geht dabei verloren.': 'Your own drawing for this day will be lost.', 'Wiederherstellen': 'Restore',
+  'Übernehmen': 'Apply', 'Ereignis bearbeiten': 'Edit event', 'Bezeichnung': 'Title', 'z. B. Dominiks Geburtstag': "e.g. Dominik's birthday",
+  'Art': 'Type', 'Symbol': 'Icon', 'Kurzer Text (optional)': 'Short note (optional)', 'Jedes Jahr wiederholen': 'Repeat every year',
+  'Symbol statt Tagesbild zeigen': 'Show icon instead of day picture',
+  'Geburtstag': 'Birthday', 'Namenstag': 'Name day', 'Feiertag': 'Holiday', 'Urlaub': 'Vacation', 'Kindergarten': 'Kindergarten', 'Schule': 'School',
+  'Arzttermin': 'Doctor', 'Familienausflug': 'Family trip', 'Eigener Anlass': 'Other',
+  'Tippe auf einen Tag in der Vorschau, um einen Termin einzutragen.': 'Tap a day in the preview to add an appointment.',
+  'Verwendung': 'Use', 'Leerer Jahresplaner': 'Blank year planner', 'Jahresplaner mit Terminen': 'Year planner with appointments', 'Kopfzeile': 'Header',
+  'Titel (optional)': 'Title (optional)', 'z. B. Familie Müller': 'e.g. The Smiths', 'Dekoration anzeigen': 'Show decoration',
+  'Foto ändern': 'Change photo', 'Foto hinzufügen': 'Add photo', 'Foto entfernen': 'Remove photo', 'Foto wird geladen …': 'Loading photo …',
+  'Das Bild konnte nicht geladen werden.': 'The image could not be loaded.', 'Keine Termine an diesem Tag.': 'No appointments on this day.',
+  'Feiertage': 'Public holidays', 'Markierungsfarbe für Feiertage': 'Holiday highlight colour', 'Seitengestaltung': 'Page layout',
+  'Kleine Kästchen zum Abhaken': 'Small tick boxes', 'Kurzen Spruch unter der Kopfzeile zeigen': 'Show a short saying below the header', 'Ereignisse': 'Events',
+  'Namenstage anzeigen (Auswahl)': 'Show name days (selection)', 'Jährliche Ereignisse vom 29. Februar in Nicht-Schaltjahren:': 'Yearly events on 29 February in non-leap years:',
+  'am 28. Februar': 'on 28 February', 'am 1. März': 'on 1 March', 'nicht anzeigen': 'hide',
+  'Jahr auf {0} ändern?': 'Change year to {0}?',
+  'Sollen einmalige Ereignisse und angepasste Tage ins neue Jahr verschoben oder gelöscht werden? Jährliche Ereignisse bleiben immer erhalten.': 'Move one-off events and customised days to the new year, or delete them? Yearly events are always kept.',
+  'Verschieben': 'Move',
+  'Vorschau und Export': 'Preview and export', 'Monate': 'Months', 'Ganzes Jahr': 'Whole year', 'Keine': 'None', 'Druckvorschau': 'Print preview',
+  'Papier': 'Paper', 'Seiten': 'Pages', 'Ränder: ca. 10 mm auf allen Seiten': 'Margins: approx. 10 mm on all sides',
+  'Tippe auf eine Seite, um sie zu vergrößern. „JPG“ speichert jede Seite als eigenes Bild (bis 300 dpi).': 'Tap a page to enlarge it. “JPG” saves every page as a separate image (up to 300 dpi).',
+  'Bitte mindestens einen Monat auswählen.': 'Please select at least one month.', 'Seite {0}': 'Page {0}', 'Seite {0} vergrößern': 'Enlarge page {0}',
+  'Zum Drucken: PDF speichern und die Datei drucken.': 'To print: save the PDF and print the file.', 'Teilen': 'Share',
+  'PDF wird erstellt …': 'Creating PDF …', 'PDF wird erstellt … Seite {0} von {1}': 'Creating PDF … page {0} of {1}', 'PDF wurde gespeichert.': 'PDF saved.',
+  'Speichern ist in dieser Ansicht nicht möglich.': 'Saving is not possible in this view.', 'Das PDF konnte nicht erstellt oder gespeichert werden.': 'The PDF could not be created or saved.',
+  'Bild {0} von {1} wird erstellt …': 'Creating image {0} of {1} …', 'Bild wurde gespeichert.': 'Image saved.', '{0} Bilder wurden gespeichert.': '{0} images saved.',
+  'Das Bild konnte nicht gespeichert werden.': 'The image could not be saved.', 'Teilen wird von diesem Browser nicht unterstützt.': 'Sharing is not supported by this browser.',
+  'Seite {0} von {1}': 'Page {0} of {1}', 'Diese Seite als JPG speichern': 'Save this page as JPG', 'Weiter': 'Next', 'Bild wird erstellt …': 'Creating image …',
+  'Zeichnen': 'Draw', 'Rückgängig': 'Undo', 'Wiederholen': 'Redo', 'Ebenen': 'Layers', 'Malvorlage': 'Colouring', 'Farbe': 'Colour',
+  'Zeichenfläche': 'Drawing area', 'Diese Zeichnung wurde nicht gefunden.': 'This drawing was not found.', 'Bild': 'Image', 'Sticker': 'Sticker',
+  'Radierer': 'Eraser', 'Pinselstärke': 'Brush size', 'Stärke': 'Size', 'Füllen': 'Fill',
+  'Auswahl': 'Select', 'Stift': 'Pen', 'Linie': 'Line', 'Pfeil': 'Arrow', 'Kreis': 'Circle', 'Ellipse': 'Ellipse', 'Quadrat': 'Square', 'Rechteck': 'Rectangle',
+  'Dreieck': 'Triangle', 'Stern': 'Star', 'Herz': 'Heart', 'Text': 'Text',
+  'Im Malvorlage-Modus erscheinen alle Linien schwarz. Wechsle zu „Farbe“, um Farben zu sehen.': 'In colouring mode all lines are black. Switch to “Colour” to see colours.',
+  'Bild wird geladen …': 'Loading image …', 'Nach vorn': 'Bring forward', 'Nach hinten': 'Send backward', 'Farbe übernehmen': 'Apply colour', 'Füllung entfernen': 'Remove fill',
+  'Text bearbeiten': 'Edit text', 'Zuschneiden': 'Crop', 'Text hinzufügen': 'Add text', 'z. B. Alles Gute!': 'e.g. Happy Birthday!',
+  'Schriftart': 'Font', 'Schriftgröße': 'Font size', 'Fett': 'Bold', 'Links': 'Left', 'Mitte': 'Centre', 'Rechts': 'Right',
+  'Füllen funktioniert bei Formen (Kreis, Rechteck, Dreieck, Stern, Herz).': 'Fill works on shapes (circle, rectangle, triangle, star, heart).',
+  'Noch keine Objekte.': 'No objects yet.', 'Oben': 'Top', 'Unten': 'Bottom', 'Zurücksetzen': 'Reset', 'Farbe {0}': 'Colour {0}',
+  'Der Speicher ist voll.': 'Storage is full.', 'Speichern fehlgeschlagen.': 'Saving failed.',
+  'Diese Sprache wird für Monate, Wochentage, Feiertage und Sprüche im Kalender verwendet.': 'Used for months, weekdays, holidays and sayings printed in the calendar.',
+  'file:Jahr': 'Year', 'file:Jahresplaner': 'Year_planner', 'file:Monat': 'Month', 'file:Monate': 'months', 'file:Kalender': 'Calendar',
+},
+};
+
+function t(s, ...args) {
+  let r = (LANG !== 'de' && I18N[LANG] && I18N[LANG][s]) || (s.startsWith('file:') ? s.slice(5) : s);
+  args.forEach((v, i) => { r = r.split('{' + i + '}').join(v); });
+  return r;
+}
+
+/* ---------- Kalendersprache (gedruckter Inhalt) ---------- */
+const LOC = {
+  de: {
+    months: ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],
+    monthsShort: ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'],
+    wd: ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'], wdShort: ['Mo','Di','Mi','Do','Fr','Sa','So'],
+    title: (m, y) => `${m} ${y}`, day: (d, m, y) => `${d}. ${m} ${y}`,
+  },
+  hu: {
+    months: ['január','február','március','április','május','június','július','augusztus','szeptember','október','november','december'],
+    monthsShort: ['jan.','febr.','márc.','ápr.','máj.','jún.','júl.','aug.','szept.','okt.','nov.','dec.'],
+    wd: ['hétfő','kedd','szerda','csütörtök','péntek','szombat','vasárnap'], wdShort: ['H','K','Sze','Cs','P','Szo','V'],
+    title: (m, y) => `${y}. ${m}`, day: (d, m, y) => `${y}. ${m} ${d}.`,
+  },
+  en: {
+    months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+    monthsShort: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    wd: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], wdShort: ['Mo','Tu','We','Th','Fr','Sa','Su'],
+    title: (m, y) => `${m} ${y}`, day: (d, m, y) => `${d} ${m} ${y}`,
+  },
+};
+const loc = l => LOC[l] || LOC.de;
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+const HOLIDAY_NAMES = {
+  hu: { 'Neujahr': 'Újév', 'Heilige Drei Könige': 'Vízkereszt', 'Internationaler Frauentag': 'Nemzetközi nőnap', 'Karfreitag': 'Nagypéntek', 'Ostersonntag': 'Húsvétvasárnap',
+    'Ostermontag': 'Húsvéthétfő', 'Tag der Arbeit': 'A munka ünnepe', 'Tag der Befreiung': 'A felszabadulás napja', 'Christi Himmelfahrt': 'Áldozócsütörtök',
+    'Pfingstsonntag': 'Pünkösdvasárnap', 'Pfingstmontag': 'Pünkösdhétfő', 'Fronleichnam': 'Úrnapja', 'Mariä Himmelfahrt': 'Nagyboldogasszony', 'Weltkindertag': 'Gyermeknap',
+    'Tag der Deutschen Einheit': 'A német egység napja', 'Reformationstag': 'A reformáció napja', 'Allerheiligen': 'Mindenszentek', 'Buß- und Bettag': 'Bűnbánat napja',
+    '1. Weihnachtstag': 'Karácsony', '2. Weihnachtstag': 'Karácsony másnapja' },
+  en: { 'Neujahr': "New Year's Day", 'Heilige Drei Könige': 'Epiphany', 'Internationaler Frauentag': "International Women's Day", 'Karfreitag': 'Good Friday',
+    'Ostersonntag': 'Easter Sunday', 'Ostermontag': 'Easter Monday', 'Tag der Arbeit': 'Labour Day', 'Tag der Befreiung': 'Liberation Day', 'Christi Himmelfahrt': 'Ascension Day',
+    'Pfingstsonntag': 'Whit Sunday', 'Pfingstmontag': 'Whit Monday', 'Fronleichnam': 'Corpus Christi', 'Mariä Himmelfahrt': 'Assumption Day', 'Weltkindertag': "World Children's Day",
+    'Tag der Deutschen Einheit': 'German Unity Day', 'Reformationstag': 'Reformation Day', 'Allerheiligen': "All Saints' Day", 'Buß- und Bettag': 'Day of Prayer and Repentance',
+    '1. Weihnachtstag': 'Christmas Day', '2. Weihnachtstag': 'Boxing Day' },
+};
+const holidayName = (name, l) => name.split(' / ').map(n => (HOLIDAY_NAMES[l] && HOLIDAY_NAMES[l][n]) || n).join(' / ');
+
+const QUOTES_L = {
+  hu: ['Egy új év tele színes napokkal!','Minden nap egy kis kaland.','A tavasz felébreszti a virágokat.','Eső után jön a szivárvány.','Minden virágzik – te is!','Napsütés az arcon, nevetés a szívben.','A szünidő a boldogság ideje.','Nyár, napfény, kaland!','Új utak, új barátok.','Színes levelek táncolnak a szélben.','Együtt minden olyan meghitt.','Fényes csillogás és sütiillat.'],
+  en: ['A new year full of colourful days!','Every day is a little adventure.','Spring tickles the flowers awake.','After the rain comes the rainbow.','Everything blooms – and so do you!','Sunshine on your face, laughter in your heart.','Holiday time is happy time.','Summer, sunshine, adventure!','New paths, new friends.','Colourful leaves dance in the wind.','It is cosy when we are together.','Twinkling lights and cookie smells.'],
+};
+const quoteFor = (m, l) => (QUOTES_L[l] || QUOTES)[m - 1];
+
+const THEMES_L = {
+  hu: ['Téli varázs','Szívek és téli öröm','Tavaszi ébredés','Eső és húsvét','Virágos rét','Napfényes napok','Nyári szünet','Nyári kaland','Őszkezdet','Őszi erdő','Meghitt ősz','Karácsonyi varázs'],
+  en: ['Winter magic','Hearts and winter joy','Spring awakening','Rain and Easter','Flower meadow','Sunny days','Summer holidays','Summer adventure','Start of autumn','Autumn forest','Cosy autumn','Christmas magic'],
+};
+const themeName = m => (THEMES_L[LANG] || THEMES)[m - 1];
+
+const MOTIF_L = {
+  hu: { SUN:'Nap', SNOWFLAKE:'Hópehely', SNOWMAN:'Hóember', HEART:'Szív', STAR:'Csillag', FIR:'Fenyőfa', HOUSE:'Házikó', MITTEN:'Kesztyű', BEANIE:'Sapka', SLED:'Szánkó', SKATE:'Korcsolya', BOOT_RAIN:'Gumicsizma', MUG:'Bögre', PENGUIN:'Pingvin', BEAR:'Jegesmedve', BIRD:'Madár', BIRDHOUSE:'Madáretető', MASK:'Farsangi maszk', BALLOON:'Lufi', PARTY_HAT:'Bohócsapka', SNOWDROP:'Hóvirág', TULIP:'Tulipán', FLOWER:'Virág', SUNFLOWER:'Napraforgó', BEE:'Méhecske', BUTTERFLY:'Pillangó', RAINBOW:'Szivárvány', LADYBUG:'Katica', NEST:'Madárfészek', BUNNY:'Nyuszi', UMBRELLA:'Esernyő', CLOUD:'Felhő', RAINCLOUD:'Esőfelhő', EGG:'Húsvéti tojás', CHICK:'Csibe', BASKET:'Kosár', DUCK:'Kacsa', PUDDLE:'Pocsolya', STRAWBERRY:'Eper', CHERRY:'Cseresznye', ICECREAM:'Fagylalt', LEMONADE:'Limonádé', BALL:'Strandlabda', PARASOL:'Napernyő', SANDCASTLE:'Homokvár', SHELL:'Kagyló', SUNGLASSES:'Napszemüveg', SAILBOAT:'Vitorlás', WATERMELON:'Görögdinnye', DOLPHIN:'Delfin', TENT:'Sátor', BACKPACK:'Hátizsák', APPLE:'Alma', SCHOOLBAG:'Iskolatáska', PENCIL:'Ceruza', BOOK:'Könyv', LEAF:'Falevél', GRAPES:'Szőlő', SQUIRREL:'Mókus', HEDGEHOG:'Süni', CHESTNUT:'Gesztenye', MUSHROOM:'Gomba', TREE:'Lombos fa', PUMPKIN:'Tök', FOX:'Róka', OWL:'Bagoly', LANTERN:'Lámpás', GIFT:'Ajándék', CANDLE:'Gyertya', REINDEER:'Rénszarvas', GINGERBREAD:'Mézeskalács', BELL:'Harang', ORNAMENT:'Karácsonyi gömb', SANTA_BOOT:'Mikulás csizma', MOON:'Hold', CAKE:'Torta', STARFISH:'Tengeri csillag' },
+  en: { SUN:'Sun', SNOWFLAKE:'Snowflake', SNOWMAN:'Snowman', HEART:'Heart', STAR:'Star', FIR:'Fir tree', HOUSE:'Cottage', MITTEN:'Mitten', BEANIE:'Beanie', SLED:'Sledge', SKATE:'Ice skate', BOOT_RAIN:'Wellies', MUG:'Mug', PENGUIN:'Penguin', BEAR:'Polar bear', BIRD:'Bird', BIRDHOUSE:'Bird feeder', MASK:'Carnival mask', BALLOON:'Balloon', PARTY_HAT:'Party hat', SNOWDROP:'Snowdrop', TULIP:'Tulip', FLOWER:'Flower', SUNFLOWER:'Sunflower', BEE:'Bee', BUTTERFLY:'Butterfly', RAINBOW:'Rainbow', LADYBUG:'Ladybird', NEST:'Bird nest', BUNNY:'Bunny', UMBRELLA:'Umbrella', CLOUD:'Cloud', RAINCLOUD:'Rain cloud', EGG:'Easter egg', CHICK:'Chick', BASKET:'Basket', DUCK:'Duck', PUDDLE:'Puddle', STRAWBERRY:'Strawberry', CHERRY:'Cherries', ICECREAM:'Ice cream', LEMONADE:'Lemonade', BALL:'Beach ball', PARASOL:'Parasol', SANDCASTLE:'Sandcastle', SHELL:'Shell', SUNGLASSES:'Sunglasses', SAILBOAT:'Sailboat', WATERMELON:'Watermelon', DOLPHIN:'Dolphin', TENT:'Tent', BACKPACK:'Backpack', APPLE:'Apple', SCHOOLBAG:'School bag', PENCIL:'Pencil', BOOK:'Book', LEAF:'Leaf', GRAPES:'Grapes', SQUIRREL:'Squirrel', HEDGEHOG:'Hedgehog', CHESTNUT:'Chestnut', MUSHROOM:'Mushroom', TREE:'Tree', PUMPKIN:'Pumpkin', FOX:'Fox', OWL:'Owl', LANTERN:'Lantern', GIFT:'Present', CANDLE:'Candle', REINDEER:'Reindeer', GINGERBREAD:'Gingerbread man', BELL:'Bell', ORNAMENT:'Bauble', SANTA_BOOT:"Santa's boot", MOON:'Moon', CAKE:'Cake', STARFISH:'Starfish' },
+};
+const VARIANT_L = { hu: ['', ' csillogással', ' a réten', ' körben'], en: ['', ' with sparkles', ' on the meadow', ' in a circle'] };
+const drawingName = tpl => {
+  if (LANG === 'de') return tpl.name;
+  return ((MOTIF_L[LANG] || {})[tpl.motif] || MOTIFS[tpl.motif].l) + ((VARIANT_L[LANG] || VARIANT_SUFFIX)[tpl.variant] || '');
+};
+const HEADER_L = {
+  hu: ['Hóember','Pingvinek','Havas erdő','Korcsolyázás','Téli házikó','Szívek','Farsang','Jegesmedvék','Téli madarak','Baglyok','Hóvirág','Madarak','Szivárvány','Tavaszi rét','Nyuszik','Húsvéti tojások','Esernyők','Kacsák','Tulipánok','Esőfelhők','Pillangók','Méhecskék','Virágoskert','Madárfészek','Katicák','Napraforgók','Cseresznyék','Méhek','Piknik','Virágos mező','Strand','Fagylaltok','Tengerpart','Homokvár','Napocska','Görögdinnye','Vitorlás','Nyári tábor','Delfinek','Trópusi virágok','Iskolatáska','Almák','Falevelek','Erdei állatok','Szőlő','Sütőtök','Mókusok','Gesztenyék','Gombák','Őszi erdő','Rókák','Baglyok','Esernyők','Sünik','Lámpás felvonulás','Karácsonyfa','Rénszarvasok','Mézeskalács','Ajándékok','Havas falu'],
+  en: ['Snowman','Penguins','Snowy forest','Ice skating','Winter cottage','Hearts','Carnival','Polar bears','Winter birds','Owls','Snowdrops','Birds','Rainbow','Spring meadow','Bunnies','Easter eggs','Umbrellas','Ducks','Tulips','Rain clouds','Butterflies','Bees','Flower garden','Bird nest','Ladybirds','Sunflowers','Cherries','Bees','Picnic','Flower field','Beach','Ice creams','Seaside','Sandcastle','Sunshine','Watermelon','Sailboat','Summer camp','Dolphins','Tropical flowers','School bag','Apples','Autumn leaves','Woodland animals','Grapes','Pumpkins','Squirrels','Chestnuts','Mushrooms','Autumn forest','Foxes','Owls','Umbrellas','Hedgehogs','Lantern parade','Christmas tree','Reindeer','Gingerbread','Presents','Snowy village'],
+};
+const headerName = h => { if (LANG === 'de') return h.name; const i = Catalog.headers.indexOf(h); return (HEADER_L[LANG] || [])[i] || h.name; };
+
+/** Browsersprache als Startwert. */
+function detectLang() {
+  const n = (navigator.language || 'de').slice(0, 2).toLowerCase();
+  return n === 'hu' ? 'hu' : n === 'en' ? 'en' : 'de';
+}
+function setLang(l) {
+  LANG = LOC[l] ? l : 'de';
+  document.documentElement.lang = LANG;
+}
+
+'use strict';
 /* ColorDays Web 1.0 – Kern: Kalenderlogik, Feiertage, Katalog, Speicher.
    Gleiche Regeln wie die Android-App (CalendarEngine.kt, GermanHolidays.kt, TemplateCatalog.kt). */
 
-const VERSION = '1.1.0';
+const VERSION = '1.2.0';
 const MONTHS = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 const MONTH_KEYS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
 const WD = ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
@@ -225,7 +485,9 @@ function monthGrid(y, m) {
   }
   return weeks;
 }
-const dayTitle = s => { const { y, m, d } = parseIso(s); return `${d}. ${MONTHS[m - 1]} ${y}`; };
+const dayTitle = (s, l = LANG) => { const { y, m, d } = parseIso(s); return loc(l).day(d, loc(l).months[m - 1], y); };
+/** Monatsnamen der Oberfläche (groß geschrieben). */
+const uiMonth = m => cap(loc(LANG).months[m - 1]);
 function moveToYear(s, ny) { const { m, d } = parseIso(s); return dayExists(ny, m, d) ? iso(ny, m, d) : null; }
 function recurringDate(m, d, y, rule) {
   if (dayExists(y, m, d)) return iso(y, m, d);
@@ -326,7 +588,7 @@ const Catalog = {
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 function defaultOptions() {
   return { showCheckboxes: false, showQuotes: true, showEvents: true, holidayColor: '#F6C9A8', headerTitle: '', headerFont: 'fredoka',
-    headerImage: null, headerDecoration: true, showNameDays: false, feb29: 'FEB_28' };
+    headerImage: null, headerDecoration: true, showNameDays: false, feb29: 'FEB_28', lang: LANG };
 }
 function newProject(d) {
   const now = Date.now();
@@ -380,7 +642,7 @@ const Store = {
         this.error = null;
       } catch (e) {
         console.error('Speichern fehlgeschlagen', e);
-        this.error = (e && (e.code === 'quota_exceeded' || e.name === 'QuotaExceededError')) ? 'Der Speicher ist voll.' : 'Speichern fehlgeschlagen.';
+        this.error = (e && (e.code === 'quota_exceeded' || e.name === 'QuotaExceededError')) ? t('Der Speicher ist voll.') : t('Speichern fehlgeschlagen.');
         UI && UI.toast && UI.toast(this.error);
       }
     });
@@ -698,12 +960,13 @@ function monthLayout(W, H, y, m, orientation, hasQuote, hasFooter) {
   return { header, quote, weekdays, cells, footer };
 }
 
+const calLang = p => (p.options && p.options.lang) || 'de';
 function monthModel(p, m) {
-  const o = p.options, ms = p.months[m] || {};
+  const o = p.options, ms = p.months[m] || {}, l = calLang(p), L = loc(l);
   const holidays = p.showHolidays ? holidaysForYear(p.year, p.state) : {};
   const events = eventsForYear(p.events, p.year, o.feb29);
-  return { p, m, o, ms, holidays, events, quote: o.showQuotes ? QUOTES[m - 1] : null, footer: (ms.footerText || '').trim() || null,
-    title: (ms.customTitle || '').trim() || `${MONTHS[m - 1]} ${p.year}` };
+  return { p, m, o, ms, l, holidays, events, quote: o.showQuotes ? quoteFor(m, l) : null, footer: (ms.footerText || '').trim() || null,
+    title: (ms.customTitle || '').trim() || cap(L.title(L.months[m - 1], p.year)) };
 }
 
 function monthPageSVG(p, m, opts = {}) {
@@ -718,7 +981,11 @@ function monthPageSVG(p, m, opts = {}) {
   if (M.ms.customHeader && Store.drawings.get(M.ms.customHeader)) s += docSVG(Store.drawings.get(M.ms.customHeader), hd.x, hd.y, hd.w, hd.h, pdf);
   else s += headerSVG(M.ms.headerId || Catalog.defaultHeader(m), hd.x, hd.y, hd.w, hd.h);
   // … und separate Textebene
-  const ts = hd.h * 0.3, tText = Measure.ellipsize(M.title, ts, mTitle, true, hd.w * 0.5);
+  // Titelgröße an den freien Platz anpassen (Hochformat ist schmaler) statt abzuschneiden
+  let ts = hd.h * 0.3;
+  const natural = Measure.width(M.title, ts, mTitle, true);
+  if (natural > hd.w * 0.5) ts = Math.max(hd.h * 0.16, ts * hd.w * 0.5 / natural);
+  const tText = Measure.ellipsize(M.title, ts, mTitle, true, hd.w * 0.5);
   const tw = Math.min(Measure.width(tText, ts, mTitle, true), hd.w * 0.5);
   const bx = hd.x + hd.w / 2 - tw / 2 - ts * 0.5, by = hd.y + hd.h / 2 - ts * 0.85, bw = tw + ts, bh = ts * 1.6, r = ts * (playful ? 0.6 : 0.3);
   s += `<rect x="${f1(bx)}" y="${f1(by)}" width="${f1(bw)}" height="${f1(bh)}" rx="${f1(r)}" fill="#fff" stroke="#000" stroke-width="${f1(ts * 0.06)}" ${playful ? `stroke-dasharray="${f1(ts * 0.25)} ${f1(ts * 0.15)}"` : ''}/>`;
@@ -729,14 +996,16 @@ function monthPageSVG(p, m, opts = {}) {
     s += `<text x="${f1(L.quote.x + L.quote.w / 2)}" y="${f1(L.quote.y + L.quote.h * 0.72)}" font-family="${esc(body)}" font-style="italic" font-size="${f1(qs)}" text-anchor="middle">${esc(Measure.ellipsize(M.quote, qs, mBody, false, L.quote.w))}</text>`;
   }
   // Wochentage
-  const wds = L.weekdays[0].h * 0.55, longNames = L.weekdays[0].w > Measure.width('Donnerstag', wds, mBody, true) * 1.1;
-  L.weekdays.forEach((r, i) => { s += `<text x="${f1(r.x + r.w / 2)}" y="${f1(r.y + r.h * 0.68)}" font-family="${esc(body)}" font-weight="bold" font-size="${f1(wds)}" text-anchor="middle">${longNames ? WD[i] : WD_SHORT[i]}</text>`; });
+  const LL = loc(M.l), wds = L.weekdays[0].h * 0.55;
+  const longest = Math.max(...LL.wd.map(w => Measure.width(cap(w), wds, mBody, true)));
+  const longNames = L.weekdays[0].w > longest * 1.1;
+  L.weekdays.forEach((r, i) => { s += `<text x="${f1(r.x + r.w / 2)}" y="${f1(r.y + r.h * 0.68)}" font-family="${esc(body)}" font-weight="bold" font-size="${f1(wds)}" text-anchor="middle">${esc(longNames ? cap(LL.wd[i]) : LL.wdShort[i])}</text>`; });
 
   // Tagesfelder
   const lw = playful ? 1.6 : 1.1;
   for (const c of L.cells) {
     if (!c.date) continue;
-    const ds = p.days[c.date] || {}, evs = M.events[c.date] || [], hol = M.holidays[c.date];
+    const ds = p.days[c.date] || {}, evs = M.events[c.date] || [], hol = M.holidays[c.date] && holidayName(M.holidays[c.date], M.l);
     const radius = playful ? Math.min(c.w, c.h) * 0.12 : 0;
     s += playful ? `<rect x="${f1(c.x + 1.5)}" y="${f1(c.y + 1.5)}" width="${f1(c.w - 3)}" height="${f1(c.h - 3)}" rx="${f1(radius)}" fill="none" stroke="#000" stroke-width="${lw}"/>`
       : `<rect x="${f1(c.x)}" y="${f1(c.y)}" width="${f1(c.w)}" height="${f1(c.h)}" fill="none" stroke="#000" stroke-width="${lw}"/>`;
@@ -784,8 +1053,8 @@ const PLANNER_PALETTES = {
   PLANNER_MODERN_CLEAN: { line: '#CDD3DB', headerText: '#2B2D42', weekend: '#F1F4F8', inactive: '#FAFAFA', accent: '#3D5A80', lw: 0.5 },
 };
 function plannerLayout(W, H) {
-  const margin = Math.min(W, H) * 0.04, left = margin, right = W - margin, top = margin, bottom = H - margin;
-  const titleH = (bottom - top) * 0.075, headerH = (bottom - top) * 0.035, gridTop = top + titleH + (bottom - top) * 0.01;
+  const short = Math.min(W, H), margin = short * 0.04, left = margin, right = W - margin, top = margin, bottom = H - margin;
+  const titleH = short * 0.07, headerH = short * 0.033, gridTop = top + titleH + short * 0.009;
   const gap = (right - left) * 0.004, colW = ((right - left) - gap * 11) / 12, rowH = (bottom - gridTop - headerH) / 31;
   const title = { x: left, y: top, w: right - left, h: titleH };
   const headers = [], cells = [];
@@ -799,12 +1068,14 @@ function plannerLayout(W, H) {
   return { title, headers, cells };
 }
 function plannerSVG(p, opts = {}) {
-  const pdf = !!opts.pdf, [W, H] = pageSizePt(p.paper, 'LANDSCAPE'), L = plannerLayout(W, H), o2 = p.options;
+  const pdf = !!opts.pdf, [W, H] = pageSizePt(p.paper, p.orientation || 'LANDSCAPE'), L = plannerLayout(W, H), o2 = p.options;
+  const pl = calLang(p), LL = loc(pl);
   const pal = PLANNER_PALETTES[p.style] || PLANNER_PALETTES.PLANNER_BLACK_WHITE;
   const body = fam('nunito', pdf), mBody = fontFamily('nunito');
   const holidays = p.showHolidays ? holidaysForYear(p.year, p.state) : {};
   const evs = eventsForYear(p.events, p.year, o2.feb29);
   const factor = p.paper === 'A4' ? 0.56 : p.paper === 'A3' ? 0.46 : 0.38;
+  const colW = L.cells[0][0].w, wdW = Math.max(...LL.wdShort.map(w => w.length)) > 2 ? 1.25 : 1;
   let s = `<rect width="${W}" height="${H}" fill="#fff"/>`;
 
   // Titel mit optionalem Foto und Dekoration
@@ -825,27 +1096,29 @@ function plannerSVG(p, opts = {}) {
   const tsz = t.h * 0.62, tfam = fontFamily(o2.headerFont);
   s += `<text x="${f1((tl + tr) / 2)}" y="${f1(t.y + t.h * 0.72)}" font-family="${esc(fam(o2.headerFont, pdf))}" font-weight="bold" font-size="${f1(tsz)}" text-anchor="middle">${esc(Measure.ellipsize(titleText, tsz, tfam, true, Math.max(tr - tl, 10)))}</text>`;
 
+  // Hochformat: schmale Spalten → bei Bedarf abgekürzte Monatsnamen
+  const hs = L.headers[0].h * 0.55, useShort = LL.months.some(n => Measure.width(cap(n), hs, mBody, true) > L.headers[0].w * 0.92);
   L.headers.forEach((r, m) => {
     const bg = pal.fills ? pal.fills[m] : pal.headerFill;
     if (bg) s += `<rect x="${f1(r.x)}" y="${f1(r.y)}" width="${f1(r.w)}" height="${f1(r.h)}" fill="${bg}"/>`;
-    s += `<text x="${f1(r.x + r.w / 2)}" y="${f1(r.y + r.h * 0.7)}" font-family="${esc(body)}" font-weight="bold" font-size="${f1(r.h * 0.55)}" fill="${pal.headerText}" text-anchor="middle">${MONTHS[m]}</text>`;
+    s += `<text x="${f1(r.x + r.w / 2)}" y="${f1(r.y + r.h * 0.7)}" font-family="${esc(body)}" font-weight="bold" font-size="${f1(hs)}" fill="${pal.headerText}" text-anchor="middle">${esc(cap(useShort ? LL.monthsShort[m] : LL.months[m]))}</text>`;
     if (pal.accent) s += `<rect x="${f1(r.x)}" y="${f1(r.y + r.h * 0.92)}" width="${f1(r.w)}" height="${f1(r.h * 0.08)}" fill="${pal.accent}"/>`;
     if (!bg && !pal.accent) s += `<line x1="${f1(r.x)}" y1="${f1(r.y + r.h)}" x2="${f1(r.x + r.w)}" y2="${f1(r.y + r.h)}" stroke="${pal.line}" stroke-width="${pal.lw}"/>`;
   });
   L.cells.forEach((col, mi) => col.forEach((r, di) => {
     const m = mi + 1, d = di + 1, rect = `x="${f1(r.x)}" y="${f1(r.y)}" width="${f1(r.w)}" height="${f1(r.h)}"`;
     if (!dayExists(p.year, m, d)) { s += `<rect ${rect} fill="${pal.inactive}" stroke="${pal.line}" stroke-width="${pal.lw}"/>`; return; }
-    const k = iso(p.year, m, d), hol = holidays[k];
+    const k = iso(p.year, m, d), hol = holidays[k] && holidayName(holidays[k], pl);
     const bg = hol ? o(o2.holidayColor) : isWeekend(p.year, m, d) ? pal.weekend : 'none';
     s += `<rect ${rect} fill="${bg}" stroke="${pal.line}" stroke-width="${pal.lw}"/>`;
-    const pad = r.h * 0.12, ns = r.h * factor, base = r.y + r.h / 2 + ns * 0.35, numW = Measure.width('00', ns, mBody, true);
+    const pad = Math.min(r.h, colW * 0.6) * 0.12, ns = Math.min(r.h * factor, colW * 0.2), base = r.y + r.h / 2 + ns * 0.35, numW = Measure.width('00', ns, mBody, true);
     s += `<text x="${f1(r.x + pad)}" y="${f1(base)}" font-family="${esc(body)}" font-weight="bold" font-size="${f1(ns)}">${d}</text>`;
-    s += `<text x="${f1(r.x + pad * 1.6 + numW)}" y="${f1(base)}" font-family="${esc(body)}" font-size="${f1(ns * 0.8)}" fill="#444">${WD_SHORT[weekday(p.year, m, d)]}</text>`;
+    s += `<text x="${f1(r.x + pad * 1.6 + numW)}" y="${f1(base)}" font-family="${esc(body)}" font-size="${f1(ns * 0.8)}" fill="#444">${esc(LL.wdShort[weekday(p.year, m, d)])}</text>`;
     const notes = [];
     if (hol) notes.push(hol);
     if (o2.showEvents) (evs[k] || []).forEach(e => notes.push(e.title));
     if (o2.showEvents && o2.showNameDays) notes.push(...nameDaysFor(k));
-    const nl = r.x + pad * 2.6 + numW + Measure.width('Mo', ns * 0.8, mBody, false), nw = r.x + r.w - pad - nl;
+    const nl = r.x + pad * 2.6 + numW + Measure.width(wdW > 1 ? 'Sze' : 'Mo', ns * 0.8, mBody, false), nw = r.x + r.w - pad - nl;
     if (notes.length && nw > 8) s += `<text x="${f1(nl)}" y="${f1(base)}" font-family="${esc(body)}" font-size="${f1(ns * 0.72)}">${esc(Measure.ellipsize(notes.join(' · '), ns * 0.72, mBody, false, nw))}</text>`;
   }));
   return { svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">${s}</svg>`, layout: L, W, H };
@@ -1025,7 +1298,7 @@ async function saveFile(filename, blob) {
 function printPages(p, months) {
   const pages = pagesFor(p, months);
   const first = pages[0]({ pdf: false });
-  const [wmm, hmm] = pageSizeMm(p.paper, p.type === 'YEAR_PLANNER' ? 'LANDSCAPE' : p.orientation);
+  const [wmm, hmm] = pageSizeMm(p.paper, p.orientation || 'LANDSCAPE');
   let area = document.getElementById('print-area');
   if (!area) { area = document.createElement('div'); area.id = 'print-area'; document.body.appendChild(area); }
   area.innerHTML = `<style>@page{size:${wmm}mm ${hmm}mm;margin:0}</style>` +
@@ -1037,24 +1310,29 @@ function printPages(p, months) {
 async function saveJpgs(p, months, onProgress) {
   await Store.preload(p);
   const list = p.type === 'YEAR_PLANNER' ? [null] : months.slice().sort((a, b) => a - b);
-  const base = pdfFileName(p, months).replace(/_(Jahr|Jahresplaner|Monat_\d+|\d+_Monate)\.pdf$/, '');
+  const base = pdfBase(p);
   let saved = 0;
   for (let i = 0; i < list.length; i++) {
     const m = list[i];
     const { svg, W, H } = m === null ? plannerSVG(p) : monthPageSVG(p, m);
     onProgress && onProgress(i + 1, list.length);
     const { blob } = await renderPageImage(svg, W, H, 300);
-    const name = m === null ? `${base}_Jahresplaner.jpg` : `${base}_${pad2(m)}_${MONTHS[m - 1].replace('ä', 'ae')}.jpg`;
+    const mn = ascii(cap(loc(calLang(p)).months[(m || 1) - 1]));
+    const name = m === null ? `${base}_${t('file:Jahresplaner')}.jpg` : `${base}_${pad2(m)}_${mn}.jpg`;
     await saveFile(name, blob);
     saved++;
   }
   return saved;
 }
 
+const ascii = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ß/g, 'ss');
+function pdfBase(p) {
+  const safe = ascii(p.name).replace(/[^A-Za-z0-9 _-]/g, '').trim().replace(/\s+/g, '_') || t('file:Kalender');
+  return `${safe}_${p.year}`;
+}
 function pdfFileName(p, months) {
-  const safe = p.name.replace(/[^A-Za-z0-9ÄÖÜäöüß _-]/g, '').trim().replace(/\s+/g, '_') || 'Kalender';
-  const suffix = p.type === 'YEAR_PLANNER' ? 'Jahresplaner' : months.length === 12 ? 'Jahr' : months.length === 1 ? 'Monat_' + pad2(months[0]) : months.length + '_Monate';
-  return `${safe}_${p.year}_${suffix}.pdf`;
+  const suffix = p.type === 'YEAR_PLANNER' ? t('file:Jahresplaner') : months.length === 12 ? t('file:Jahr') : months.length === 1 ? t('file:Monat') + '_' + pad2(months[0]) : months.length + '_' + t('file:Monate');
+  return `${pdfBase(p)}_${suffix}.pdf`;
 }
 
 'use strict';
@@ -1106,11 +1384,11 @@ const UI = {
     Store.flush();
     if (s.load) await s.load(params);
     const canBack = this.stack.length > 1;
-    const title = typeof s.title === 'function' ? s.title(params) : s.title;
+    const title = typeof s.title === 'function' ? s.title(params) : t(s.title);
     const sub = s.subtitle ? s.subtitle(params) : '';
     this.root.innerHTML = `
       <header class="bar">
-        ${canBack ? `<button class="icon-btn" data-act="back" aria-label="Zurück">${icon('back')}</button>` : '<span class="bar-pad"></span>'}
+        ${canBack ? `<button class="icon-btn" data-act="back" aria-label="${t('Zurück')}">${icon('back')}</button>` : '<span class="bar-pad"></span>'}
         <div class="bar-title"><h1>${esc(title)}</h1>${sub ? `<div class="bar-sub">${esc(sub)}</div>` : ''}</div>
         <div class="bar-actions">${s.actions ? s.actions(params) : ''}</div>
       </header>
@@ -1160,21 +1438,23 @@ const UI = {
   closeModal() { const m = this.modals.pop(); if (m) { m.el.remove(); m.onClose && m.onClose(); } },
   closeAll() { while (this.modals.length) this.closeModal(); },
   confirm(title, text, okLabel, onOk, danger = false) {
-    this.modal(`<h2>${esc(title)}</h2><p>${esc(text)}</p><div class="row end"><button class="btn text" data-act="modal-close">Abbrechen</button><button class="btn ${danger ? 'danger' : 'primary'}" data-act="ok">${esc(okLabel)}</button></div>`,
+    title = t(title); text = t(text); okLabel = t(okLabel);
+    this.modal(`<h2>${esc(title)}</h2><p>${esc(text)}</p><div class="row end"><button class="btn text" data-act="modal-close">${t('Abbrechen')}</button><button class="btn ${danger ? 'danger' : 'primary'}" data-act="ok">${esc(okLabel)}</button></div>`,
       { ok: () => { this.closeModal(); onOk(); } });
   },
   prompt(title, value, onOk, opts = {}) {
-    this.modal(`<h2>${esc(title)}</h2><label class="field"><span>${esc(opts.label || 'Name')}</span><input id="pr" maxlength="${opts.max || 60}" value="${esc(value)}"></label>
-      <div class="row end"><button class="btn text" data-act="modal-close">Abbrechen</button><button class="btn primary" data-act="ok">Speichern</button></div>`,
+    title = t(title);
+    this.modal(`<h2>${esc(title)}</h2><label class="field"><span>${esc(opts.label || t('Name'))}</span><input id="pr" maxlength="${opts.max || 60}" value="${esc(value)}"></label>
+      <div class="row end"><button class="btn text" data-act="modal-close">${t('Abbrechen')}</button><button class="btn primary" data-act="ok">${t('Speichern')}</button></div>`,
       { ok: () => { const v = $('#pr').value.trim(); if (!v && !opts.allowEmpty) return; this.closeModal(); onOk(v); } });
   },
   toast(text) {
-    const t = document.createElement('div'); t.className = 'toast'; t.textContent = text; document.body.appendChild(t);
-    setTimeout(() => t.classList.add('show'), 10); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3200);
+    const el = document.createElement('div'); el.className = 'toast'; el.textContent = t(text); document.body.appendChild(el);
+    setTimeout(() => el.classList.add('show'), 10); setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 300); }, 3200);
   },
   busy(on, text = '') {
     let b = $('#busy');
-    if (on) { if (!b) { b = document.createElement('div'); b.id = 'busy'; document.body.appendChild(b); } b.innerHTML = `<div class="spinner"></div><div>${esc(text)}</div>`; }
+    if (on) { if (!b) { b = document.createElement('div'); b.id = 'busy'; document.body.appendChild(b); } b.innerHTML = `<div class="spinner"></div><div>${esc(t(text))}</div>`; }
     else if (b) b.remove();
   },
 };
@@ -1227,7 +1507,7 @@ function attachZoom(viewport, opts = {}) {
     reset: () => { s = 1; tx = 0; ty = 0; apply(); },
   };
 }
-const zoomButtons = () => `<div class="zoom-tools"><button class="icon-btn" data-act="zin" aria-label="Vergrößern">${icon('zoomIn')}</button><button class="icon-btn" data-act="zout" aria-label="Verkleinern">${icon('zoomOut')}</button><button class="icon-btn" data-act="zfit" aria-label="Ganze Seite">${icon('fit')}</button></div>`;
+const zoomButtons = () => `<div class="zoom-tools"><button class="icon-btn" data-act="zin" aria-label="${t('Vergrößern')}">${icon('zoomIn')}</button><button class="icon-btn" data-act="zout" aria-label="${t('Verkleinern')}">${icon('zoomOut')}</button><button class="icon-btn" data-act="zfit" aria-label="${t('Ganze Seite')}">${icon('fit')}</button></div>`;
 function bindZoomButtons(root, z) {
   $$('[data-act=zin]', root).forEach(b => b.onclick = e => { e.stopPropagation(); z.zoomIn(); });
   $$('[data-act=zout]', root).forEach(b => b.onclick = e => { e.stopPropagation(); z.zoomOut(); });
@@ -1256,24 +1536,26 @@ const Settings = {
 };
 
 /* ---------- Gemeinsame Bausteine ---------- */
-const chips = (name, items, sel) => `<div class="chips">${items.map(([v, l]) => `<button class="chip ${String(v) === String(sel) ? 'on' : ''}" data-act="${name}" data-v="${esc(v)}">${esc(l)}</button>`).join('')}</div>`;
-const stateSelect = (sel, attr = 'data-in="state"') => `<select ${attr}><option value="">Keine Auswahl</option>${STATES.map(([c, n]) => `<option value="${c}" ${c === sel ? 'selected' : ''}>${n}</option>`).join('')}</select>`;
-const yearPicker = y => `<div class="year"><button class="icon-btn tonal" data-act="year-" aria-label="Jahr verringern" ${y <= YEAR_MIN ? 'disabled' : ''}>${icon('minus')}</button>
-  <input type="number" min="${YEAR_MIN}" max="${YEAR_MAX}" value="${y}" data-in="year" aria-label="Jahr" inputmode="numeric">
-  <button class="icon-btn tonal" data-act="year+" aria-label="Jahr erhöhen" ${y >= YEAR_MAX ? 'disabled' : ''}>${icon('plus')}</button></div>`;
+const chips = (name, items, sel) => `<div class="chips">${items.map(([v, l]) => `<button class="chip ${String(v) === String(sel) ? 'on' : ''}" data-act="${name}" data-v="${esc(v)}">${esc(t(l))}</button>`).join('')}</div>`;
+const langChips = (act, sel) => `<div class="chips">${LANGS.map(([c, n]) => `<button class="chip ${c === sel ? 'on' : ''}" data-act="${act}" data-v="${c}" lang="${c}">${n}</button>`).join('')}</div>`;
+const monthTabs = sel => `<div class="tabs">${[1,2,3,4,5,6,7,8,9,10,11,12].map(m => `<button class="tab ${m === sel ? 'on' : ''}" data-act="tab" data-v="${m}">${esc(uiMonth(m))}</button>`).join('')}</div>`;
+const stateSelect = (sel, attr = 'data-in="state"') => `<select ${attr}><option value="">${t('Keine Auswahl')}</option>${STATES.map(([c, n]) => `<option value="${c}" ${c === sel ? 'selected' : ''}>${n}</option>`).join('')}</select>`;
+const yearPicker = y => `<div class="year"><button class="icon-btn tonal" data-act="year-" aria-label="${t('Jahr verringern')}" ${y <= YEAR_MIN ? 'disabled' : ''}>${icon('minus')}</button>
+  <input type="number" min="${YEAR_MIN}" max="${YEAR_MAX}" value="${y}" data-in="year" aria-label="${t('Jahr')}" inputmode="numeric">
+  <button class="icon-btn tonal" data-act="year+" aria-label="${t('Jahr erhöhen')}" ${y >= YEAR_MAX ? 'disabled' : ''}>${icon('plus')}</button></div>`;
 const clampYear = y => Math.max(YEAR_MIN, Math.min(YEAR_MAX, Math.round(Number(y) || new Date().getFullYear())));
 const checkRow = (act, label, on) => `<label class="check"><input type="checkbox" data-in="${act}" ${on ? 'checked' : ''}><span>${esc(label)}</span></label>`;
 const PALETTE = ['#000000','#5C5F73','#FFFFFF','#E53935','#FB8C00','#FDD835','#43A047','#00ACC1','#1E88E5','#8E24AA','#D81B60','#8D6E63','#F6C9A8','#CFE3F5','#D5EDDC','#E4DCF2'];
-const swatches = (act, colors, sel) => `<div class="swatches">${colors.map(c => `<button class="sw ${c.toLowerCase() === String(sel).toLowerCase() ? 'on' : ''}" style="background:${c}" data-act="${act}" data-v="${c}" aria-label="Farbe ${c}"></button>`).join('')}</div>`;
+const swatches = (act, colors, sel) => `<div class="swatches">${colors.map(c => `<button class="sw ${c.toLowerCase() === String(sel).toLowerCase() ? 'on' : ''}" style="background:${c}" data-act="${act}" data-v="${c}" aria-label="${t('Farbe {0}', c)}"></button>`).join('')}</div>`;
 const thumb = (svgInner, vb = '0 0 100 100') => `<svg viewBox="${vb}" class="thumb-svg">${svgInner}</svg>`;
 
 /** Bildauswahl über alle Monate (Spez. 7.2): Auswahl mit „Übernehmen“ bestätigen. */
 function pickDrawing(title, month, current, onPick) {
   let m = month, sel = current;
-  const body = () => `<div class="hint">Hinweis: einfache Platzhaltergrafiken – die finalen Illustrationen werden separat geliefert.</div>
-    <div class="grid-thumbs">${Catalog.drawingsFor(m).map(t => `<button class="tcard ${t.id === sel ? 'on' : ''}" data-act="pick" data-v="${t.id}">${thumb(templateDrawingSVG(t.id, 0, 0, 100, 100))}<span>${esc(t.name)}</span></button>`).join('')}</div>`;
-  const md = UI.modal(`<div class="modal-head"><button class="icon-btn" data-act="modal-close" aria-label="Schließen">${icon('close')}</button><h2>${esc(title)}</h2><button class="btn primary" data-act="apply">Übernehmen</button></div>
-    <div class="tabs">${MONTHS.map((n, i) => `<button class="tab ${i + 1 === m ? 'on' : ''}" data-act="tab" data-v="${i + 1}">${n}</button>`).join('')}</div><div class="modal-body" id="pick-body">${body()}</div>`,
+  const body = () => `<div class="hint">${t('Hinweis: einfache Platzhaltergrafiken – die finalen Illustrationen werden separat geliefert.')}</div>
+    <div class="grid-thumbs">${Catalog.drawingsFor(m).map(tp => `<button class="tcard ${tp.id === sel ? 'on' : ''}" data-act="pick" data-v="${tp.id}">${thumb(templateDrawingSVG(tp.id, 0, 0, 100, 100))}<span>${esc(drawingName(tp))}</span></button>`).join('')}</div>`;
+  const md = UI.modal(`<div class="modal-head"><button class="icon-btn" data-act="modal-close" aria-label="${t('Schließen')}">${icon('close')}</button><h2>${esc(title)}</h2><button class="btn primary" data-act="apply">${t('Übernehmen')}</button></div>
+    ${monthTabs(m)}<div class="modal-body" id="pick-body">${body()}</div>`,
     {
       tab: el => { m = +el.dataset.v; $$('.tab', md.el).forEach(t => t.classList.toggle('on', t === el)); $('#pick-body', md.el).innerHTML = body(); },
       pick: el => { sel = el.dataset.v; $$('.tcard', md.el).forEach(t => t.classList.toggle('on', t === el)); },
@@ -1285,14 +1567,14 @@ function pickDrawing(title, month, current, onPick) {
 function editEvent(p, ev, onDone) {
   const e = Object.assign({ id: null, title: '', category: 'BIRTHDAY', icon: null, note: '', yearly: true, asImage: false }, ev);
   e.icon = e.icon || (CATEGORIES.find(c => c[0] === e.category) || CATEGORIES[0])[2];
-  const html = () => `<h2>${e.id ? 'Ereignis bearbeiten' : 'Ereignis hinzufügen'} – ${esc(dayTitle(e.date))}</h2>
-    <label class="field"><span>Bezeichnung</span><input id="ev-title" maxlength="60" value="${esc(e.title)}" placeholder="z. B. Dominiks Geburtstag"></label>
-    <label class="field"><span>Art</span><select id="ev-cat">${CATEGORIES.map(([k, l]) => `<option value="${k}" ${k === e.category ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
-    <div class="label">Symbol</div><div class="icons">${EVENT_ICONS.map(n => `<button class="icon-choice ${n === e.icon ? 'on' : ''}" data-act="ev-icon" data-v="${n}" aria-label="${esc(MOTIFS[n].l)}">${motifIcon(n, 30)}</button>`).join('')}</div>
-    <label class="field"><span>Kurzer Text (optional)</span><input id="ev-note" maxlength="120" value="${esc(e.note || '')}"></label>
-    <label class="check"><input type="checkbox" id="ev-yearly" ${e.yearly ? 'checked' : ''}><span>Jedes Jahr wiederholen</span></label>
-    <label class="check"><input type="checkbox" id="ev-img" ${e.asImage ? 'checked' : ''}><span>Symbol statt Tagesbild zeigen</span></label>
-    <div class="row end">${e.id ? '<button class="btn text danger-text" data-act="ev-del">Löschen</button><span class="grow"></span>' : ''}<button class="btn text" data-act="modal-close">Abbrechen</button><button class="btn primary" data-act="ev-save">Speichern</button></div>`;
+  const html = () => `<h2>${e.id ? t('Ereignis bearbeiten') : t('Ereignis hinzufügen')} – ${esc(dayTitle(e.date))}</h2>
+    <label class="field"><span>${t('Bezeichnung')}</span><input id="ev-title" maxlength="60" value="${esc(e.title)}" placeholder="${t('z. B. Dominiks Geburtstag')}"></label>
+    <label class="field"><span>${t('Art')}</span><select id="ev-cat">${CATEGORIES.map(([k, l]) => `<option value="${k}" ${k === e.category ? 'selected' : ''}>${esc(t(l))}</option>`).join('')}</select></label>
+    <div class="label">${t('Symbol')}</div><div class="icons">${EVENT_ICONS.map(n => `<button class="icon-choice ${n === e.icon ? 'on' : ''}" data-act="ev-icon" data-v="${n}" aria-label="${esc((MOTIF_L[LANG] || {})[n] || MOTIFS[n].l)}">${motifIcon(n, 30)}</button>`).join('')}</div>
+    <label class="field"><span>${t('Kurzer Text (optional)')}</span><input id="ev-note" maxlength="120" value="${esc(e.note || '')}"></label>
+    <label class="check"><input type="checkbox" id="ev-yearly" ${e.yearly ? 'checked' : ''}><span>${t('Jedes Jahr wiederholen')}</span></label>
+    <label class="check"><input type="checkbox" id="ev-img" ${e.asImage ? 'checked' : ''}><span>${t('Symbol statt Tagesbild zeigen')}</span></label>
+    <div class="row end">${e.id ? `<button class="btn text danger-text" data-act="ev-del">${t('Löschen')}</button><span class="grow"></span>` : ''}<button class="btn text" data-act="modal-close">${t('Abbrechen')}</button><button class="btn primary" data-act="ev-save">${t('Speichern')}</button></div>`;
   const read = () => { e.title = $('#ev-title').value; e.note = $('#ev-note').value; e.yearly = $('#ev-yearly').checked; e.asImage = $('#ev-img').checked; e.category = $('#ev-cat').value; };
   const md = UI.modal(html(), {
     'ev-icon': el => { read(); e.icon = el.dataset.v; $$('.icon-choice', md.el).forEach(b => b.classList.toggle('on', b === el)); },
@@ -1316,42 +1598,45 @@ function editEvent(p, ev, onDone) {
 const Screens = {};
 
 Screens.home = {
-  title: 'ColorDays', subtitle: () => 'Mein kreativer Kalender',
+  title: 'ColorDays', subtitle: () => t('Mein kreativer Kalender'),
   render: () => `<div class="home-grid">
-    ${[['new', 'Neuer Kalender', 'Mal-Kalender oder Jahresplaner erstellen', 'blue', 'SUN'], ['mine', 'Meine Kalender', 'Gespeicherte Kalender öffnen und bearbeiten', 'green', 'BOOK'],
-      ['tpl', 'Vorlagen', 'Bilder und Kopfzeilen entdecken', 'peach', 'FLOWER'], ['set', 'Einstellungen', 'Bundesland, Datensicherung und mehr', 'lilac', 'STAR']]
+    ${[['new', t('Neuer Kalender'), t('Mal-Kalender oder Jahresplaner erstellen'), 'blue', 'SUN'], ['mine', t('Meine Kalender'), t('Gespeicherte Kalender öffnen und bearbeiten'), 'green', 'BOOK'],
+      ['tpl', t('Vorlagen'), t('Bilder und Kopfzeilen entdecken'), 'peach', 'FLOWER'], ['set', t('Einstellungen'), t('Bundesland, Datensicherung und mehr'), 'lilac', 'STAR']]
       .map(([a, t, d, c, m]) => `<button class="choice ${c}" data-act="${a}"><span class="choice-ic">${motifIcon(m, 40)}</span><span><b>${t}</b><small>${d}</small></span></button>`).join('')}
-    </div><p class="foot-note">${Store.mode === 'db' ? 'Deine Kalender werden privat in deinem Claude-Konto gespeichert.' : Store.mode === 'local' ? 'Deine Kalender werden nur in diesem Browser gespeichert. Sichere sie regelmäßig unter Einstellungen → Datensicherung.' : '⚠️ Speichern ist in dieser Ansicht nicht möglich – Änderungen gehen beim Schließen verloren.'}</p>`,
-  on: { new: () => UI.go('type'), mine: () => UI.go('mine'), tpl: () => UI.go('templates'), set: () => UI.go('settings') },
+    </div><div class="lang-row">${langChips('lang', LANG)}</div><p class="foot-note">${Store.mode === 'db' ? t('Deine Kalender werden privat in deinem Claude-Konto gespeichert.') : Store.mode === 'local' ? t('Deine Kalender werden nur in diesem Browser gespeichert. Sichere sie regelmäßig unter Einstellungen → Datensicherung.') : t('⚠️ Speichern ist in dieser Ansicht nicht möglich – Änderungen gehen beim Schließen verloren.')}</p>`,
+  on: { new: () => UI.go('type'), mine: () => UI.go('mine'), tpl: () => UI.go('templates'), set: () => UI.go('settings'),
+    lang: el => { setLang(el.dataset.v); Settings.data.lang = LANG; Settings.save(); UI.render(); } },
 };
 
 Screens.type = {
   title: 'Neuer Kalender',
   render: () => `<div class="home-grid two">
-    <button class="choice peach big" data-act="t" data-v="COLORING"><span class="choice-ic">${motifIcon('SNOWMAN', 56)}</span><span><b>Mal-Kalender</b><small>Gestalte deinen eigenen Ausmal-Kalender.</small></span></button>
-    <button class="choice blue big" data-act="t" data-v="YEAR_PLANNER"><span class="choice-ic">${motifIcon('BOOK', 56)}</span><span><b>Klassischer Jahresplaner</b><small>Plane dein ganzes Jahr auf einer Seite.</small></span></button></div>`,
+    <button class="choice peach big" data-act="t" data-v="COLORING"><span class="choice-ic">${motifIcon('SNOWMAN', 56)}</span><span><b>${t('Mal-Kalender')}</b><small>${t('Gestalte deinen eigenen Ausmal-Kalender.')}</small></span></button>
+    <button class="choice blue big" data-act="t" data-v="YEAR_PLANNER"><span class="choice-ic">${motifIcon('BOOK', 56)}</span><span><b>${t('Klassischer Jahresplaner')}</b><small>${t('Plane dein ganzes Jahr auf einer Seite.')}</small></span></button></div>`,
   on: { t: el => UI.go('config', { type: el.dataset.v }) },
 };
 
 Screens.config = {
-  title: p => p.type === 'COLORING' ? 'Mal-Kalender einrichten' : 'Jahresplaner einrichten',
+  title: p => p.type === 'COLORING' ? t('Mal-Kalender einrichten') : t('Jahresplaner einrichten'),
   load(p) {
     if (p.f) return;
     const now = new Date();
     p.f = { name: '', year: clampYear(now.getMonth() >= 9 ? now.getFullYear() + 1 : now.getFullYear()), paper: 'A4',
-      orientation: p.type === 'COLORING' ? 'PORTRAIT' : 'LANDSCAPE', style: STYLES[p.type][0][0], showHolidays: Settings.data.holidays, state: Settings.data.state, err: false };
+      orientation: p.type === 'COLORING' ? 'PORTRAIT' : 'LANDSCAPE', style: STYLES[p.type][0][0], showHolidays: Settings.data.holidays, state: Settings.data.state, lang: LANG, err: false };
   },
   render: p => {
     const f = p.f, coloring = p.type === 'COLORING';
     return `<div class="form">
-      <label class="field ${f.err ? 'err' : ''}"><span>Name des Kalenders</span><input data-in="name" maxlength="60" value="${esc(f.name)}" placeholder="z. B. Dominiks Kalender">${f.err ? '<em>Bitte gib einen Namen ein.</em>' : ''}</label>
-      <div class="label">Jahr</div>${yearPicker(f.year)}
-      <div class="label">Papierformat</div>${chips('paper', (coloring ? ['A4'] : ['A4', 'A3', 'A2']).map(k => [k, `${k} (${PAPER[k][0]} × ${PAPER[k][1]} mm)`]), f.paper)}
-      <div class="label">Ausrichtung</div>${chips('orient', coloring ? [['PORTRAIT', 'Hochformat'], ['LANDSCAPE', 'Querformat']] : [['LANDSCAPE', 'Querformat']], f.orientation)}
-      <div class="label">Stil</div>${chips('style', STYLES[p.type], f.style)}
-      ${checkRow('hol', 'Feiertage anzeigen', f.showHolidays)}
-      ${f.showHolidays ? `<label class="field"><span>Bundesland</span>${stateSelect(f.state)}</label>` : ''}
-      <button class="btn primary wide" data-act="create">Kalender erstellen</button></div>`;
+      <label class="field ${f.err ? 'err' : ''}"><span>${t('Name des Kalenders')}</span><input data-in="name" maxlength="60" value="${esc(f.name)}" placeholder="${t('z. B. Dominiks Kalender')}">${f.err ? `<em>${t('Bitte gib einen Namen ein.')}</em>` : ''}</label>
+      <div class="label">${t('Jahr')}</div>${yearPicker(f.year)}
+      <div class="label">${t('Papierformat')}</div>${chips('paper', (coloring ? ['A4'] : ['A4', 'A3', 'A2']).map(k => [k, `${k} (${PAPER[k][0]} × ${PAPER[k][1]} mm)`]), f.paper)}
+      <div class="label">${t('Ausrichtung')}</div>${chips('orient', [['PORTRAIT', t('Hochformat')], ['LANDSCAPE', t('Querformat')]], f.orientation)}
+      <div class="label">${t('Stil')}</div>${chips('style', STYLES[p.type], f.style)}
+      ${checkRow('hol', t('Feiertage anzeigen'), f.showHolidays)}
+      ${f.showHolidays ? `<label class="field"><span>${t('Bundesland')}</span>${stateSelect(f.state)}</label>` : ''}
+      <div class="label">${t('Sprache des Kalenders')}</div>${langChips('clang', f.lang)}
+      <p class="muted">${t('Diese Sprache wird für Monate, Wochentage, Feiertage und Sprüche im Kalender verwendet.')}</p>
+      <button class="btn primary wide" data-act="create">${t('Kalender erstellen')}</button></div>`;
   },
   on: {
     'name:input': (el, p) => { p.f.name = el.value; if (p.f.err && el.value.trim()) { p.f.err = false; el.parentElement.classList.remove('err'); const em = el.parentElement.querySelector('em'); em && em.remove(); } },
@@ -1363,9 +1648,10 @@ Screens.config = {
     style: (el, p) => { p.f.style = el.dataset.v; UI.refresh(); },
     hol: (el, p) => { p.f.showHolidays = el.checked; UI.refresh(); },
     state: (el, p) => { p.f.state = el.value || null; },
+    clang: (el, p) => { p.f.lang = el.dataset.v; UI.refresh(); },
     create: async (el, p) => {
       const f = p.f; if (!f.name.trim()) { f.err = true; UI.refresh(); return; }
-      const pr = newProject({ ...f, type: p.type });
+      const pr = newProject({ ...f, type: p.type, options: { lang: f.lang } });
       await Store.saveProject(pr, true);
       UI.stack = [UI.stack[0]];
       UI.go(p.type === 'COLORING' ? 'overview' : 'planner', { id: pr.id });
@@ -1375,13 +1661,13 @@ Screens.config = {
 
 Screens.mine = {
   title: 'Meine Kalender',
-  actions: () => `<button class="btn tonal" data-act="new">${icon('plus', 18)} Neu</button>`,
+  actions: () => `<button class="btn tonal" data-act="new">${icon('plus', 18)} ${t('Neu')}</button>`,
   render: () => {
     const list = Store.list();
-    if (!list.length) return `<div class="empty">${motifIcon('BOOK', 64)}<p>Noch keine Kalender vorhanden.<br>Erstelle deinen ersten Kalender!</p><button class="btn primary" data-act="new">Neuer Kalender</button></div>`;
+    if (!list.length) return `<div class="empty">${motifIcon('BOOK', 64)}<p>${t('Noch keine Kalender vorhanden.')}<br>${t('Erstelle deinen ersten Kalender!')}</p><button class="btn primary" data-act="new">${t('Neuer Kalender')}</button></div>`;
     return `<div class="list">${list.map(p => `<div class="item ${p.type === 'COLORING' ? 'peach' : 'blue'}">
-      <button class="item-main" data-act="open" data-id="${p.id}">${motifIcon(p.type === 'COLORING' ? 'SNOWMAN' : 'BOOK', 32)}<span><b>${esc(p.name)}</b><small>${p.type === 'COLORING' ? 'Mal-Kalender' : 'Klassischer Jahresplaner'} · ${p.year} · ${p.paper} ${p.orientation === 'LANDSCAPE' ? 'Querformat' : 'Hochformat'}</small></span></button>
-      <button class="icon-btn" data-act="menu" data-id="${p.id}" aria-label="Weitere Aktionen">${icon('more')}</button></div>`).join('')}</div>`;
+      <button class="item-main" data-act="open" data-id="${p.id}">${motifIcon(p.type === 'COLORING' ? 'SNOWMAN' : 'BOOK', 32)}<span><b>${esc(p.name)}</b><small>${p.type === 'COLORING' ? t('Mal-Kalender') : t('Klassischer Jahresplaner')} · ${p.year} · ${p.paper} ${(p.orientation || 'LANDSCAPE') === 'LANDSCAPE' ? t('Querformat') : t('Hochformat')}</small></span></button>
+      <button class="icon-btn" data-act="menu" data-id="${p.id}" aria-label="${t('Weitere Aktionen')}">${icon('more')}</button></div>`).join('')}</div>`;
   },
   on: {
     new: () => UI.go('type'),
@@ -1389,36 +1675,36 @@ Screens.mine = {
     menu: el => {
       const p = Store.get(el.dataset.id);
       UI.modal(`<h2>${esc(p.name)}</h2><div class="menu">
-        <button data-act="m-open">${icon('edit')} Öffnen</button><button data-act="m-pdf">${icon('pdf')} PDF exportieren</button>
-        <button data-act="m-ren">${icon('text')} Umbenennen</button><button data-act="m-copy">${icon('copy')} Kopieren</button>
-        <button class="danger-text" data-act="m-del">${icon('trash')} Löschen</button></div>`, {
+        <button data-act="m-open">${icon('edit')} ${t('Öffnen')}</button><button data-act="m-pdf">${icon('pdf')} ${t('PDF exportieren')}</button>
+        <button data-act="m-ren">${icon('text')} ${t('Umbenennen')}</button><button data-act="m-copy">${icon('copy')} ${t('Kopieren')}</button>
+        <button class="danger-text" data-act="m-del">${icon('trash')} ${t('Löschen')}</button></div>`, {
         'm-open': () => { UI.closeModal(); UI.go(p.type === 'COLORING' ? 'overview' : 'planner', { id: p.id }); },
         'm-pdf': () => { UI.closeModal(); UI.go('export', { id: p.id, months: p.type === 'COLORING' ? [1,2,3,4,5,6,7,8,9,10,11,12] : [] }); },
         'm-ren': () => { UI.closeModal(); UI.prompt('Kalender umbenennen', p.name, v => { p.name = v; Store.saveProject(p); UI.refresh(); }); },
         'm-copy': async () => {
-          UI.closeModal(); UI.busy(true, 'Kopiere …');
+          UI.closeModal(); UI.busy(true, t('Kopiere …'));
           try {
-            const c = structuredClone(p); c.id = uid(); c.name = (p.name + ' (Kopie)').slice(0, 60); c.createdAt = Date.now();
+            const c = structuredClone(p); c.id = uid(); c.name = (p.name + ' ' + t('(Kopie)')).slice(0, 60); c.createdAt = Date.now();
             for (const d of Object.values(c.days)) if (d.drawingId) d.drawingId = await Store.copyDrawing(d.drawingId);
             for (const m of Object.values(c.months)) if (m.customHeader) m.customHeader = await Store.copyDrawing(m.customHeader);
             if (p.options.headerImage) { await Store.ensureImages([p.options.headerImage]); c.options.headerImage = await Store.saveImage(Store.images.get(p.options.headerImage)); }
             await Store.saveProject(c, true);
           } finally { UI.busy(false); UI.refresh(); }
         },
-        'm-del': () => { UI.closeModal(); UI.confirm('Kalender löschen?', `„${p.name}“ wird dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.`, 'Löschen', async () => { await Store.deleteProject(p); UI.refresh(); }, true); },
+        'm-del': () => { UI.closeModal(); UI.confirm(t('Kalender löschen?'), t('„{0}“ wird dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.', p.name), t('Löschen'), async () => { await Store.deleteProject(p); UI.refresh(); }, true); },
       });
     },
   },
 };
 
 Screens.templates = {
-  title: 'Vorlagen', subtitle: p => THEMES[(p.m || new Date().getMonth() + 1) - 1],
+  title: 'Vorlagen', subtitle: p => themeName(p.m || new Date().getMonth() + 1),
   load(p) { p.m = p.m || new Date().getMonth() + 1; p.h = !!p.h; },
-  render: p => `<div class="chips"><button class="chip ${!p.h ? 'on' : ''}" data-act="kind" data-v="0">Tagesbilder (31)</button><button class="chip ${p.h ? 'on' : ''}" data-act="kind" data-v="1">Kopfzeilen (5)</button></div>
-    <div class="tabs">${MONTHS.map((n, i) => `<button class="tab ${i + 1 === p.m ? 'on' : ''}" data-act="tab" data-v="${i + 1}">${n}</button>`).join('')}</div>
-    <div class="hint">Hinweis: einfache Platzhaltergrafiken – die finalen Illustrationen werden separat geliefert.</div>
-    ${p.h ? `<div class="grid-headers">${Catalog.headersFor(p.m).map(h => `<div class="tcard static">${thumb(headerSVG(h.id, 0, 0, 400, 100) + titleOverlay(`${MONTHS[p.m - 1]} 2027`, 400, 100), '0 0 400 100')}<span>${esc(h.name)} · ${h.id}</span></div>`).join('')}</div>`
-      : `<div class="grid-thumbs">${Catalog.drawingsFor(p.m).map(t => `<div class="tcard static">${thumb(templateDrawingSVG(t.id, 0, 0, 100, 100))}<span>${esc(t.name)}</span></div>`).join('')}</div>`}`,
+  render: p => `<div class="chips"><button class="chip ${!p.h ? 'on' : ''}" data-act="kind" data-v="0">${t('Tagesbilder ({0})', 31)}</button><button class="chip ${p.h ? 'on' : ''}" data-act="kind" data-v="1">${t('Kopfzeilen ({0})', 5)}</button></div>
+    ${monthTabs(p.m)}
+    <div class="hint">${t('Hinweis: einfache Platzhaltergrafiken – die finalen Illustrationen werden separat geliefert.')}</div>
+    ${p.h ? `<div class="grid-headers">${Catalog.headersFor(p.m).map(h => `<div class="tcard static">${thumb(headerSVG(h.id, 0, 0, 400, 100) + titleOverlay(cap(loc(LANG).title(loc(LANG).months[p.m - 1], 2027)), 400, 100), '0 0 400 100')}<span>${esc(headerName(h))} · ${h.id}</span></div>`).join('')}</div>`
+      : `<div class="grid-thumbs">${Catalog.drawingsFor(p.m).map(tp => `<div class="tcard static">${thumb(templateDrawingSVG(tp.id, 0, 0, 100, 100))}<span>${esc(drawingName(tp))}</span></div>`).join('')}</div>`}`,
   on: { kind: (el, p) => { p.h = el.dataset.v === '1'; UI.refresh(); }, tab: (el, p) => { p.m = +el.dataset.v; UI.render(); } },
 };
 function titleOverlay(text, w, h) {
@@ -1429,18 +1715,20 @@ function titleOverlay(text, w, h) {
 Screens.settings = {
   title: 'Einstellungen',
   render: () => `<div class="form">
-    <label class="field"><span>Standard-Bundesland</span>${stateSelect(Settings.data.state)}</label>
-    ${checkRow('hol', 'Feiertage standardmäßig anzeigen', Settings.data.holidays)}
-    <div class="label">Datensicherung</div>
-    <p class="muted">Alle Kalender, Zeichnungen und Bilder als eine Datei sichern bzw. wiederherstellen (z. B. zum Umzug auf ein anderes Gerät).</p>
-    <div class="row"><button class="btn tonal" data-act="backup">${icon('backup', 18)} Sicherung speichern</button><label class="btn tonal">${icon('upload', 18)} Sicherung laden<input type="file" accept=".json,application/json" data-in="restore" hidden></label></div>
-    <div class="label">Über ColorDays</div>
-    <p class="muted">Version ${VERSION} (Web) · ${Store.mode === 'db' ? 'Speicherung privat im Claude-Konto' : Store.mode === 'local' ? 'Speicherung in diesem Browser' : 'ohne Speicherung'} · Keine Werbung, kein Tracking.</p></div>`,
+    <div class="label">${t('Sprache')}</div>${langChips('lang', LANG)}
+    <label class="field"><span>${t('Standard-Bundesland')}</span>${stateSelect(Settings.data.state)}</label>
+    ${checkRow('hol', t('Feiertage standardmäßig anzeigen'), Settings.data.holidays)}
+    <div class="label">${t('Datensicherung')}</div>
+    <p class="muted">${t('Alle Kalender, Zeichnungen und Bilder als eine Datei sichern bzw. wiederherstellen (z. B. zum Umzug auf ein anderes Gerät).')}</p>
+    <div class="row"><button class="btn tonal" data-act="backup">${icon('backup', 18)} ${t('Sicherung speichern')}</button><label class="btn tonal">${icon('upload', 18)} ${t('Sicherung laden')}<input type="file" accept=".json,application/json" data-in="restore" hidden></label></div>
+    <div class="label">${t('Über ColorDays')}</div>
+    <p class="muted">Version ${VERSION} (Web) · ${Store.mode === 'db' ? t('Speicherung privat im Claude-Konto') : Store.mode === 'local' ? t('Speicherung in diesem Browser') : t('ohne Speicherung')} · Keine Werbung, kein Tracking.</p></div>`,
   on: {
     state: el => { Settings.data.state = el.value || null; Settings.save(); },
     hol: el => { Settings.data.holidays = el.checked; Settings.save(); },
+    lang: el => { setLang(el.dataset.v); Settings.data.lang = LANG; Settings.save(); UI.render(); },
     backup: async () => {
-      UI.busy(true, 'Sicherung wird erstellt …');
+      UI.busy(true, t('Sicherung wird erstellt …'));
       try {
         const projects = Store.list(), drawings = {}, images = {};
         for (const p of projects) {
@@ -1460,8 +1748,8 @@ Screens.settings = {
       try {
         const data = JSON.parse(await file.text());
         if (data.app !== 'ColorDays' || !Array.isArray(data.projects)) throw new Error('format');
-        UI.confirm('Sicherung laden?', `${data.projects.length} Kalender werden hinzugefügt. Vorhandene Kalender bleiben erhalten.`, 'Laden', async () => {
-          UI.busy(true, 'Wird geladen …');
+        UI.confirm(t('Sicherung laden?'), t('{0} Kalender werden hinzugefügt. Vorhandene Kalender bleiben erhalten.', data.projects.length), t('Laden'), async () => {
+          UI.busy(true, t('Wird geladen …'));
           for (const [id, url] of Object.entries(data.images || {})) if (url) { Store.images.set(id, url); await Store._write('i_' + id, { kind: 'image', i: url }); }
           for (const d of Object.values(data.drawings || {})) if (d) await Store.saveDrawing(d, true);
           for (const p of data.projects) { if (Store.get(p.id)) p.id = uid(); await Store.saveProject(p, true); }
@@ -1477,15 +1765,15 @@ Screens.settings = {
 Screens.overview = {
   title: p => Store.get(p.id)?.name || '', subtitle: p => String(Store.get(p.id)?.year || ''),
   async load(p) { await Store.preload(Store.get(p.id)); },
-  actions: () => `<button class="icon-btn" data-act="settings" aria-label="Kalendereinstellungen">${icon('tune')}</button><button class="icon-btn" data-act="pdfyear" aria-label="Ganzes Jahr als PDF">${icon('pdf')}</button>`,
+  actions: () => `<button class="icon-btn" data-act="settings" aria-label="${t('Kalendereinstellungen')}">${icon('tune')}</button><button class="icon-btn" data-act="pdfyear" aria-label="${t('Ganzes Jahr als PDF')}">${icon('pdf')}</button>`,
   render: p => {
     const pr = Store.get(p.id); if (!pr) return '';
-    return `<div class="month-grid">${MONTHS.map((name, i) => {
-      const m = i + 1, page = monthPageSVG(pr, m);
-      return `<div class="mcard"><div class="mcard-head">${motifIcon(CATALOG.months[i][0], 28)}<span><b>${name}</b><small>${THEMES[i]}</small></span></div>
+    return `<div class="month-grid">${[0,1,2,3,4,5,6,7,8,9,10,11].map(i => {
+      const m = i + 1, name = uiMonth(m), page = monthPageSVG(pr, m);
+      return `<div class="mcard"><div class="mcard-head">${motifIcon(CATALOG.months[i][0], 28)}<span><b>${name}</b><small>${esc(themeName(m))}</small></span></div>
         <button class="page-thumb" data-act="edit" data-m="${m}" aria-label="${name} bearbeiten">${page.svg}</button>
-        <div class="row between"><button class="icon-btn" data-act="edit" data-m="${m}" aria-label="Bearbeiten">${icon('edit')}</button><button class="icon-btn" data-act="prev" data-m="${m}" aria-label="Vorschau">${icon('eye')}</button><button class="icon-btn" data-act="print" data-m="${m}" aria-label="Drucken">${icon('print')}</button></div></div>`;
-    }).join('')}</div><div class="center"><button class="btn tonal" data-act="pdfyear">Ganzes Jahr als PDF</button></div>`;
+        <div class="row between"><button class="icon-btn" data-act="edit" data-m="${m}" aria-label="${t('Bearbeiten')}">${icon('edit')}</button><button class="icon-btn" data-act="prev" data-m="${m}" aria-label="${t('Vorschau')}">${icon('eye')}</button><button class="icon-btn" data-act="print" data-m="${m}" aria-label="${t('Drucken')}">${icon('print')}</button></div></div>`;
+    }).join('')}</div><div class="center"><button class="btn tonal" data-act="pdfyear">${t('Ganzes Jahr als PDF')}</button></div>`;
   },
   on: {
     edit: (el, p) => UI.go('month', { id: p.id, m: +el.dataset.m }),
@@ -1498,13 +1786,13 @@ Screens.overview = {
 
 /* --- Mal-Kalender: Monatseditor --- */
 Screens.month = {
-  title: p => { const pr = Store.get(p.id); return `${MONTHS[p.m - 1]} ${pr ? pr.year : ''}`; }, subtitle: p => Store.get(p.id)?.name || '',
+  title: p => { const pr = Store.get(p.id); return `${uiMonth(p.m)} ${pr ? pr.year : ''}`; }, subtitle: p => Store.get(p.id)?.name || '',
   async load(p) { await Store.preload(Store.get(p.id)); },
-  actions: () => `<button class="icon-btn" data-act="headers" aria-label="Kopfzeile ändern">${icon('header')}</button><button class="icon-btn" data-act="texts" aria-label="Titel und Fußzeile">${icon('text')}</button><button class="icon-btn" data-act="preview" aria-label="Vorschau">${icon('pdf')}</button>`,
+  actions: () => `<button class="icon-btn" data-act="headers" aria-label="${t('Kopfzeile ändern')}">${icon('header')}</button><button class="icon-btn" data-act="texts" aria-label="${t('Titel und Fußzeile')}">${icon('text')}</button><button class="icon-btn" data-act="preview" aria-label="${t('Vorschau')}">${icon('pdf')}</button>`,
   render: p => {
     const pr = Store.get(p.id), page = monthPageSVG(pr, p.m);
     p.layout = page.layout;
-    return `<div class="hint">Tippe auf einen Tag, um ihn zu bearbeiten. Zoomen: zwei Finger, Mausrad oder Doppeltippen.</div>
+    return `<div class="hint">${t('Tippe auf einen Tag, um ihn zu bearbeiten. Zoomen: zwei Finger, Mausrad oder Doppeltippen.')}</div>
       <div class="page-stage fit" id="stage" style="aspect-ratio:${page.W} / ${page.H}"><div class="page-inner">${page.svg}</div>${zoomButtons()}</div>`;
   },
   mount(p, root) {
@@ -1520,10 +1808,10 @@ Screens.month = {
   on: {
     preview: (el, p) => UI.go('export', { id: p.id, months: [p.m] }),
     headers: (el, p) => {
-      const pr = Store.get(p.id), ms = pr.months[p.m], cur = ms.headerId || Catalog.defaultHeader(p.m), title = `${MONTHS[p.m - 1]} ${pr.year}`;
-      UI.modal(`<div class="modal-head"><button class="icon-btn" data-act="modal-close" aria-label="Schließen">${icon('close')}</button><h2>Kopfzeile ändern</h2></div>
-        <div class="modal-body"><div class="grid-headers">${Catalog.headersFor(p.m).map(h => `<button class="tcard ${!ms.customHeader && h.id === cur ? 'on' : ''}" data-act="h" data-v="${h.id}">${thumb(headerSVG(h.id, 0, 0, 400, 100) + titleOverlay(title, 400, 100), '0 0 400 100')}<span>${esc(h.name)}</span></button>`).join('')}</div>
-        <button class="btn tonal wide" data-act="hown">${ms.customHeader ? 'Eigene Kopfzeile bearbeiten' : 'Eigene Kopfzeile gestalten'}</button></div>`, {
+      const pr = Store.get(p.id), ms = pr.months[p.m], cur = ms.headerId || Catalog.defaultHeader(p.m), title = monthModel(pr, p.m).title;
+      UI.modal(`<div class="modal-head"><button class="icon-btn" data-act="modal-close" aria-label="${t('Schließen')}">${icon('close')}</button><h2>${t('Kopfzeile ändern')}</h2></div>
+        <div class="modal-body"><div class="grid-headers">${Catalog.headersFor(p.m).map(h => `<button class="tcard ${!ms.customHeader && h.id === cur ? 'on' : ''}" data-act="h" data-v="${h.id}">${thumb(headerSVG(h.id, 0, 0, 400, 100) + titleOverlay(title, 400, 100), '0 0 400 100')}<span>${esc(headerName(h))}</span></button>`).join('')}</div>
+        <button class="btn tonal wide" data-act="hown">${ms.customHeader ? t('Eigene Kopfzeile bearbeiten') : t('Eigene Kopfzeile gestalten')}</button></div>`, {
         h: async el2 => { const old = ms.customHeader; ms.headerId = el2.dataset.v; ms.customHeader = null; Store.saveProject(pr); UI.closeModal(); if (old) await Store.deleteDrawing(old); UI.refresh(); },
         hown: async () => {
           UI.closeModal();
@@ -1534,10 +1822,10 @@ Screens.month = {
     },
     texts: (el, p) => {
       const pr = Store.get(p.id), ms = pr.months[p.m];
-      UI.modal(`<h2>Titel und Fußzeile</h2><label class="field"><span>Eigener Titel (optional)</span><input id="t1" maxlength="40" value="${esc(ms.customTitle || '')}" placeholder="${MONTHS[p.m - 1]} ${pr.year}"></label>
-        <label class="field"><span>Text in der Fußzeile (optional)</span><input id="t2" maxlength="80" value="${esc(ms.footerText || '')}"></label>
-        <p class="muted">Ohne Fußzeilentext entfällt die Fußzeile – das Raster wird größer.</p>
-        <div class="row end"><button class="btn text" data-act="modal-close">Abbrechen</button><button class="btn primary" data-act="ok">Speichern</button></div>`,
+      UI.modal(`<h2>${t('Titel und Fußzeile')}</h2><label class="field"><span>${t('Eigener Titel (optional)')}</span><input id="t1" maxlength="40" value="${esc(ms.customTitle || '')}" placeholder="${esc(monthModel(pr, p.m).title)}"></label>
+        <label class="field"><span>${t('Text in der Fußzeile (optional)')}</span><input id="t2" maxlength="80" value="${esc(ms.footerText || '')}"></label>
+        <p class="muted">${t('Ohne Fußzeilentext entfällt die Fußzeile – das Raster wird größer.')}</p>
+        <div class="row end"><button class="btn text" data-act="modal-close">${t('Abbrechen')}</button><button class="btn primary" data-act="ok">${t('Speichern')}</button></div>`,
         { ok: () => { ms.customTitle = $('#t1').value.trim(); ms.footerText = $('#t2').value.trim(); Store.saveProject(pr); UI.closeModal(); UI.render(); } });
     },
   },
@@ -1550,12 +1838,12 @@ function dayPanel(p, date) {
   const dropCustom = async () => { const old = (pr.days[date] || {}).drawingId; if (old) await Store.deleteDrawing(old); };
   const after = () => { UI.closeAll(); UI.refresh(); };
   UI.modal(`<h2>${esc(dayTitle(date))}</h2><div class="menu">
-    <button data-act="d-change">${icon('image')} Bild ändern</button>
-    <button data-act="d-change">${icon('layers')} Vorlage auswählen</button>
-    <button data-act="d-design">${icon('brush')} ${ds.drawingId ? 'Eigenes Bild bearbeiten' : 'Selbst gestalten'}</button>
-    <button data-act="d-remove">${icon('trash')} Bild entfernen</button>
-    <button data-act="d-event">${icon('event')} Ereignis hinzufügen</button>
-    <button data-act="d-restore">${icon('restore')} Original wiederherstellen</button>
+    <button data-act="d-change">${icon('image')} ${t('Bild ändern')}</button>
+    <button data-act="d-change">${icon('layers')} ${t('Vorlage auswählen')}</button>
+    <button data-act="d-design">${icon('brush')} ${ds.drawingId ? t('Eigenes Bild bearbeiten') : t('Selbst gestalten')}</button>
+    <button data-act="d-remove">${icon('trash')} ${t('Bild entfernen')}</button>
+    <button data-act="d-event">${icon('event')} ${t('Ereignis hinzufügen')}</button>
+    <button data-act="d-restore">${icon('restore')} ${t('Original wiederherstellen')}</button>
     ${evs.map(e => `<button data-act="d-ev" data-id="${e.id}">${motifIcon(e.icon || 'STAR', 22)} ${esc(e.title)}${e.yearly ? ' ↻' : ''}</button>`).join('')}</div>`, {
     'd-change': () => pickDrawing(dayTitle(date), parseIso(date).m, ds.templateId || Catalog.defaultDrawing(date), async id => { await dropCustom(); setDay({ templateId: id, drawingId: null, removed: false }); after(); }),
     'd-remove': async () => { await dropCustom(); setDay({ removed: true, drawingId: null }); after(); },
@@ -1572,31 +1860,31 @@ function dayPanel(p, date) {
     'd-ev': el => editEvent(pr, pr.events.find(e => e.id === el.dataset.id), after),
     'd-restore': () => {
       const run = async () => { await dropCustom(); delete pr.days[date]; Store.saveProject(pr); after(); };
-      if (ds.drawingId) UI.confirm('Original wiederherstellen', 'Dein selbst gestaltetes Bild für diesen Tag geht dabei verloren.', 'Wiederherstellen', run, true); else run();
+      if (ds.drawingId) UI.confirm(t('Original wiederherstellen'), t('Dein selbst gestaltetes Bild für diesen Tag geht dabei verloren.'), t('Wiederherstellen'), run, true); else run();
     },
   }, { sheet: true, noFocus: true });
 }
 
 /* --- Jahresplaner --- */
 Screens.planner = {
-  title: p => Store.get(p.id)?.name || '', subtitle: p => { const pr = Store.get(p.id); return pr ? `${pr.year} · ${pr.paper} Querformat` : ''; },
+  title: p => Store.get(p.id)?.name || '', subtitle: p => { const pr = Store.get(p.id); return pr ? `${pr.year} · ${pr.paper} ${(pr.orientation || 'LANDSCAPE') === 'LANDSCAPE' ? t('Querformat') : t('Hochformat')}` : ''; },
   async load(p) { await Store.preload(Store.get(p.id)); },
-  actions: () => `<button class="icon-btn" data-act="settings" aria-label="Kalendereinstellungen">${icon('tune')}</button><button class="icon-btn" data-act="preview" aria-label="Vorschau">${icon('pdf')}</button>`,
+  actions: () => `<button class="icon-btn" data-act="settings" aria-label="${t('Kalendereinstellungen')}">${icon('tune')}</button><button class="icon-btn" data-act="preview" aria-label="${t('Vorschau')}">${icon('pdf')}</button>`,
   render: p => {
     const pr = Store.get(p.id), o2 = pr.options, page = plannerSVG(pr);
     p.layout = page.layout;
     return `<div class="planner">
       <div class="page-stage fit" id="stage" style="aspect-ratio:${page.W} / ${page.H}"><div class="page-inner">${page.svg}</div>${zoomButtons()}</div>
       <div class="panel form">
-        <p class="muted">Tippe auf einen Tag in der Vorschau, um einen Termin einzutragen.</p>
-        <div class="label">Verwendung</div>${chips('mode', [['0', 'Leerer Jahresplaner'], ['1', 'Jahresplaner mit Terminen']], o2.showEvents ? '1' : '0')}
-        <div class="label">Stil</div>${chips('style', STYLES.YEAR_PLANNER, pr.style)}
-        <div class="label">Kopfzeile</div>
-        <label class="field"><span>Titel (optional)</span><input data-in="title" maxlength="40" value="${esc(o2.headerTitle || '')}" placeholder="z. B. Familie Müller"></label>
+        <p class="muted">${t('Tippe auf einen Tag in der Vorschau, um einen Termin einzutragen.')}</p>
+        <div class="label">${t('Verwendung')}</div>${chips('mode', [['0', t('Leerer Jahresplaner')], ['1', t('Jahresplaner mit Terminen')]], o2.showEvents ? '1' : '0')}
+        <div class="label">${t('Stil')}</div>${chips('style', STYLES.YEAR_PLANNER, pr.style)}
+        <div class="label">${t('Kopfzeile')}</div>
+        <label class="field"><span>${t('Titel (optional)')}</span><input data-in="title" maxlength="40" value="${esc(o2.headerTitle || '')}" placeholder="${t('z. B. Familie Müller')}"></label>
         ${chips('font', FONTS.map(f => [f[0], f[1]]), o2.headerFont)}
-        ${checkRow('deco', 'Dekoration anzeigen', o2.headerDecoration)}
-        <div class="row"><label class="btn tonal">${icon('image', 18)} ${o2.headerImage ? 'Foto ändern' : 'Foto hinzufügen'}<input type="file" accept="image/png,image/jpeg,image/webp" data-in="photo" hidden></label>
-        ${o2.headerImage ? '<button class="btn text" data-act="nophoto">Foto entfernen</button>' : ''}</div>
+        ${checkRow('deco', t('Dekoration anzeigen'), o2.headerDecoration)}
+        <div class="row"><label class="btn tonal">${icon('image', 18)} ${o2.headerImage ? t('Foto ändern') : t('Foto hinzufügen')}<input type="file" accept="image/png,image/jpeg,image/webp" data-in="photo" hidden></label>
+        ${o2.headerImage ? `<button class="btn text" data-act="nophoto">${t('Foto entfernen')}</button>` : ''}</div>
       </div></div>`;
   },
   mount(p, root) {
@@ -1606,8 +1894,8 @@ Screens.planner = {
       const pt = svgPoint(svg, e), date = plannerDateAt(pr, p.layout, pt.x, pt.y);
       if (!date) return;
       const evs = eventsForYear(pr.events, pr.year, pr.options.feb29)[date] || [];
-      UI.modal(`<h2>${esc(dayTitle(date))}</h2><div class="menu">${evs.length ? evs.map(ev => `<button data-act="ev" data-id="${ev.id}">${motifIcon(ev.icon || 'STAR', 22)} ${esc(ev.title)}${ev.yearly ? ' ↻' : ''}</button>`).join('') : '<p class="muted">Keine Termine an diesem Tag.</p>'}
-        <button data-act="add">${icon('plus')} Ereignis hinzufügen</button></div>`, {
+      UI.modal(`<h2>${esc(dayTitle(date))}</h2><div class="menu">${evs.length ? evs.map(ev => `<button data-act="ev" data-id="${ev.id}">${motifIcon(ev.icon || 'STAR', 22)} ${esc(ev.title)}${ev.yearly ? ' ↻' : ''}</button>`).join('') : `<p class="muted">${t('Keine Termine an diesem Tag.')}</p>`}
+        <button data-act="add">${icon('plus')} ${t('Ereignis hinzufügen')}</button></div>`, {
         ev: el => editEvent(pr, pr.events.find(x => x.id === el.dataset.id), () => { UI.closeAll(); UI.refresh(); }),
         add: () => editEvent(pr, { date, yearly: false, category: 'CUSTOM' }, () => { UI.closeAll(); UI.refresh(); }),
       }, { sheet: true, noFocus: true });
@@ -1625,7 +1913,7 @@ Screens.planner = {
       const file = el.files[0]; if (!file) return;
       const pr = Store.get(p.id);
       try {
-        UI.busy(true, 'Foto wird geladen …');
+        UI.busy(true, t('Foto wird geladen …'));
         const img = await downscaleImage(file), old = pr.options.headerImage;
         pr.options.headerImage = await Store.saveImage(img.dataUrl); pr.options.headerImageRatio = img.w / img.h;
         Store.saveProject(pr); if (old) Store._write('i_' + old, null);
@@ -1642,23 +1930,24 @@ Screens.psettings = {
   render: p => {
     const pr = Store.get(p.id), o2 = pr.options, col = pr.type === 'COLORING';
     return `<div class="form">
-      <label class="field"><span>Name des Kalenders</span><input data-in="name" maxlength="60" value="${esc(pr.name)}"></label>
-      <div class="label">Jahr</div>${yearPicker(pr.year)}
-      ${col ? `<div class="label">Ausrichtung</div>${chips('orient', [['PORTRAIT', 'Hochformat'], ['LANDSCAPE', 'Querformat']], pr.orientation)}`
-        : `<div class="label">Papierformat</div>${chips('paper', ['A4', 'A3', 'A2'].map(k => [k, `${k} (${PAPER[k][1]} × ${PAPER[k][0]} mm)`]), pr.paper)}`}
-      <div class="label">Stil</div>${chips('style', STYLES[pr.type], pr.style)}
-      <div class="label">Feiertage</div>${checkRow('hol', 'Feiertage anzeigen', pr.showHolidays)}
-      ${pr.showHolidays ? `<label class="field"><span>Bundesland</span>${stateSelect(pr.state)}</label><div class="muted">Markierungsfarbe für Feiertage</div>${swatches('hcol', ['#F6C9A8','#FCE1CF','#CFE3F5','#D5EDDC','#E4DCF2','#FFF59D','#E0E0E0'], o2.holidayColor)}` : ''}
-      ${col ? `<div class="label">Seitengestaltung</div>${checkRow('cb', 'Kleine Kästchen zum Abhaken', o2.showCheckboxes)}${checkRow('qt', 'Kurzen Spruch unter der Kopfzeile zeigen', o2.showQuotes)}` : ''}
-      <div class="label">Ereignisse</div>${checkRow('nd', 'Namenstage anzeigen (Auswahl)', o2.showNameDays)}
-      <div class="muted">Jährliche Ereignisse vom 29. Februar in Nicht-Schaltjahren:</div>${chips('feb', FEB29, o2.feb29)}</div>`;
+      <label class="field"><span>${t('Name des Kalenders')}</span><input data-in="name" maxlength="60" value="${esc(pr.name)}"></label>
+      <div class="label">${t('Jahr')}</div>${yearPicker(pr.year)}
+      ${col ? '' : `<div class="label">${t('Papierformat')}</div>${chips('paper', ['A4', 'A3', 'A2'].map(k => [k, `${k} (${PAPER[k][0]} × ${PAPER[k][1]} mm)`]), pr.paper)}`}
+      <div class="label">${t('Ausrichtung')}</div>${chips('orient', [['PORTRAIT', t('Hochformat')], ['LANDSCAPE', t('Querformat')]], pr.orientation || 'LANDSCAPE')}
+      <div class="label">${t('Sprache des Kalenders')}</div>${langChips('clang', calLang(pr))}
+      <div class="label">${t('Stil')}</div>${chips('style', STYLES[pr.type], pr.style)}
+      <div class="label">${t('Feiertage')}</div>${checkRow('hol', t('Feiertage anzeigen'), pr.showHolidays)}
+      ${pr.showHolidays ? `<label class="field"><span>${t('Bundesland')}</span>${stateSelect(pr.state)}</label><div class="muted">${t('Markierungsfarbe für Feiertage')}</div>${swatches('hcol', ['#F6C9A8','#FCE1CF','#CFE3F5','#D5EDDC','#E4DCF2','#FFF59D','#E0E0E0'], o2.holidayColor)}` : ''}
+      ${col ? `<div class="label">${t('Seitengestaltung')}</div>${checkRow('cb', t('Kleine Kästchen zum Abhaken'), o2.showCheckboxes)}${checkRow('qt', t('Kurzen Spruch unter der Kopfzeile zeigen'), o2.showQuotes)}` : ''}
+      <div class="label">${t('Ereignisse')}</div>${checkRow('nd', t('Namenstage anzeigen (Auswahl)'), o2.showNameDays)}
+      <div class="muted">${t('Jährliche Ereignisse vom 29. Februar in Nicht-Schaltjahren:')}</div>${chips('feb', FEB29, o2.feb29)}</div>`;
   },
   on: (() => {
     const upd = (p, fn) => { const pr = Store.get(p.id); fn(pr); Store.saveProject(pr); UI.refresh(); };
     const changeYear = (p, y) => {
       const pr = Store.get(p.id); y = clampYear(y); if (y === pr.year) return UI.refresh();
-      UI.modal(`<h2>Jahr auf ${y} ändern?</h2><p>Sollen einmalige Ereignisse und angepasste Tage ins neue Jahr verschoben oder gelöscht werden? Jährliche Ereignisse bleiben immer erhalten.</p>
-        <div class="row end"><button class="btn text" data-act="modal-close">Abbrechen</button><button class="btn text danger-text" data-act="del">Löschen</button><button class="btn primary" data-act="move">Verschieben</button></div>`, {
+      UI.modal(`<h2>${t('Jahr auf {0} ändern?', y)}</h2><p>${t('Sollen einmalige Ereignisse und angepasste Tage ins neue Jahr verschoben oder gelöscht werden? Jährliche Ereignisse bleiben immer erhalten.')}</p>
+        <div class="row end"><button class="btn text" data-act="modal-close">${t('Abbrechen')}</button><button class="btn text danger-text" data-act="del">${t('Löschen')}</button><button class="btn primary" data-act="move">${t('Verschieben')}</button></div>`, {
         move: () => { applyYear(pr, y, true); UI.closeModal(); UI.refresh(); },
         del: async () => { await applyYear(pr, y, false); UI.closeModal(); UI.refresh(); },
       }, { onClose: () => UI.refresh() });
@@ -1670,7 +1959,8 @@ Screens.psettings = {
       style: (el, p) => upd(p, pr => pr.style = el.dataset.v), hol: (el, p) => upd(p, pr => pr.showHolidays = el.checked),
       state: (el, p) => upd(p, pr => pr.state = el.value || null), hcol: (el, p) => upd(p, pr => pr.options.holidayColor = el.dataset.v),
       cb: (el, p) => upd(p, pr => pr.options.showCheckboxes = el.checked), qt: (el, p) => upd(p, pr => pr.options.showQuotes = el.checked),
-      nd: (el, p) => upd(p, pr => pr.options.showNameDays = el.checked), feb: (el, p) => upd(p, pr => pr.options.feb29 = el.dataset.v),
+      nd: (el, p) => upd(p, pr => pr.options.showNameDays = el.checked),
+      clang: (el, p) => upd(p, pr => pr.options.lang = el.dataset.v), feb: (el, p) => upd(p, pr => pr.options.feb29 = el.dataset.v),
     };
   })(),
 };
@@ -1698,22 +1988,22 @@ Screens.export = {
   render: p => {
     const pr = Store.get(p.id), col = pr.type === 'COLORING';
     const months = (p.months || []).slice().sort((a, b) => a - b);
-    const [wmm, hmm] = pageSizeMm(pr.paper, col ? pr.orientation : 'LANDSCAPE');
+    const [wmm, hmm] = pageSizeMm(pr.paper, pr.orientation || 'LANDSCAPE');
     const pages = col ? months.map(m => monthPageSVG(pr, m).svg) : [plannerSVG(pr).svg];
     const printable = !inClaude();
     return `<div class="export">
-      ${col ? `<div class="label">Monate</div><div class="chips"><button class="chip ${months.length === 12 ? 'on' : ''}" data-act="all">Ganzes Jahr</button><button class="chip ${!months.length ? 'on' : ''}" data-act="none">Keine</button>
-        ${MONTHS.map((n, i) => `<button class="chip ${months.includes(i + 1) ? 'on' : ''}" data-act="mon" data-v="${i + 1}">${n}</button>`).join('')}</div>` : ''}
-      <div class="label">Druckvorschau</div>
-      ${pages.length ? `<p class="info">Papier: ${pr.paper} ${(col ? pr.orientation : 'LANDSCAPE') === 'LANDSCAPE' ? 'Querformat' : 'Hochformat'} (${wmm} × ${hmm} mm)<br>Seiten: ${pages.length}<br>Ränder: ca. 10 mm auf allen Seiten</p>
-        <p class="muted">Tippe auf eine Seite, um sie zu vergrößern. „JPG“ speichert jede Seite als eigenes Bild (bis 300 dpi).</p>` : '<p class="muted">Bitte mindestens einen Monat auswählen.</p>'}
-      <div class="previews">${pages.map((svg, i) => `<figure><button class="page-thumb big" data-act="zoom" data-i="${i}" aria-label="Seite ${i + 1} vergrößern">${svg}</button><figcaption>Seite ${i + 1}</figcaption></figure>`).join('')}</div>
-      ${!printable ? '<p class="muted center">Zum Drucken: PDF speichern und die Datei drucken.</p>' : ''}
+      ${col ? `<div class="label">${t('Monate')}</div><div class="chips"><button class="chip ${months.length === 12 ? 'on' : ''}" data-act="all">${t('Ganzes Jahr')}</button><button class="chip ${!months.length ? 'on' : ''}" data-act="none">${t('Keine')}</button>
+        ${[1,2,3,4,5,6,7,8,9,10,11,12].map(m => `<button class="chip ${months.includes(m) ? 'on' : ''}" data-act="mon" data-v="${m}">${esc(uiMonth(m))}</button>`).join('')}</div>` : ''}
+      <div class="label">${t('Druckvorschau')}</div>
+      ${pages.length ? `<p class="info">${t('Papier')}: ${pr.paper} ${(pr.orientation || 'LANDSCAPE') === 'LANDSCAPE' ? t('Querformat') : t('Hochformat')} (${wmm} × ${hmm} mm)<br>${t('Seiten')}: ${pages.length}<br>${t('Ränder: ca. 10 mm auf allen Seiten')}</p>
+        <p class="muted">${t('Tippe auf eine Seite, um sie zu vergrößern. „JPG“ speichert jede Seite als eigenes Bild (bis 300 dpi).')}</p>` : `<p class="muted">${t('Bitte mindestens einen Monat auswählen.')}</p>`}
+      <div class="previews">${pages.map((svg, i) => `<figure><button class="page-thumb big" data-act="zoom" data-i="${i}" aria-label="${t('Seite {0} vergrößern', i + 1)}">${svg}</button><figcaption>${t('Seite {0}', i + 1)}</figcaption></figure>`).join('')}</div>
+      ${!printable ? `<p class="muted center">${t('Zum Drucken: PDF speichern und die Datei drucken.')}</p>` : ''}
     </div>
     <div class="bottom-bar"><button class="btn primary" data-act="pdf" ${pages.length ? '' : 'disabled'}>${icon('save', 18)} PDF</button>
       <button class="btn primary" data-act="jpg" ${pages.length ? '' : 'disabled'}>${icon('image', 18)} JPG</button>
-      ${printable ? `<button class="btn tonal" data-act="print" ${pages.length ? '' : 'disabled'} aria-label="Drucken">${icon('print', 18)}<span class="hide-xs"> Drucken</span></button>` : ''}
-      ${printable && navigator.canShare ? `<button class="btn tonal" data-act="share" ${pages.length ? '' : 'disabled'} aria-label="Teilen">${icon('share', 18)}<span class="hide-xs"> Teilen</span></button>` : ''}</div>`;
+      ${printable ? `<button class="btn tonal" data-act="print" ${pages.length ? '' : 'disabled'} aria-label="${t('Drucken')}">${icon('print', 18)}<span class="hide-xs"> ${t('Drucken')}</span></button>` : ''}
+      ${printable && navigator.canShare ? `<button class="btn tonal" data-act="share" ${pages.length ? '' : 'disabled'} aria-label="${t('Teilen')}">${icon('share', 18)}<span class="hide-xs"> ${t('Teilen')}</span></button>` : ''}</div>`;
   },
   mount(p) {
     if (p.autoPrint) { p.autoPrint = false; if (!inClaude()) setTimeout(() => Screens.export.on.print(null, p), 400); }
@@ -1725,35 +2015,35 @@ Screens.export = {
     zoom: (el, p) => zoomViewer(p, +el.dataset.i),
     pdf: async (el, p) => {
       const pr = Store.get(p.id);
-      UI.busy(true, 'PDF wird erstellt …');
+      UI.busy(true, t('PDF wird erstellt …'));
       try {
-        const { blob } = await buildPdf(pr, p.months || [], (i, n) => UI.busy(true, `PDF wird erstellt … Seite ${i} von ${n}`));
+        const { blob } = await buildPdf(pr, p.months || [], (i, n) => UI.busy(true, t('PDF wird erstellt … Seite {0} von {1}', i, n)));
         UI.busy(false);
         await saveFile(pdfFileName(pr, p.months || []), blob);
         UI.toast('PDF wurde gespeichert.');
       } catch (e) {
         UI.busy(false);
         if (e && e.code === 'declined') return;
-        UI.toast(e && e.code === 'unavailable' ? 'Speichern ist in dieser Ansicht nicht möglich.' : 'Das PDF konnte nicht erstellt oder gespeichert werden.');
+        UI.toast(e && e.code === 'unavailable' ? t('Speichern ist in dieser Ansicht nicht möglich.') : t('Das PDF konnte nicht erstellt oder gespeichert werden.'));
       }
     },
     jpg: async (el, p) => {
       const pr = Store.get(p.id);
       try {
-        const n = await saveJpgs(pr, p.months || [], (i, total) => UI.busy(true, `Bild ${i} von ${total} wird erstellt …`));
+        const n = await saveJpgs(pr, p.months || [], (i, total) => UI.busy(true, t('Bild {0} von {1} wird erstellt …', i, total)));
         UI.busy(false);
-        UI.toast(n === 1 ? 'Bild wurde gespeichert.' : `${n} Bilder wurden gespeichert.`);
+        UI.toast(n === 1 ? t('Bild wurde gespeichert.') : t('{0} Bilder wurden gespeichert.', n));
       } catch (e) {
         UI.busy(false);
         if (e && e.code === 'declined') return;
-        UI.toast(e && e.code === 'unavailable' ? 'Speichern ist in dieser Ansicht nicht möglich.' : 'Das Bild konnte nicht gespeichert werden.');
+        UI.toast(e && e.code === 'unavailable' ? t('Speichern ist in dieser Ansicht nicht möglich.') : t('Das Bild konnte nicht gespeichert werden.'));
       }
     },
     print: (el, p) => printPages(Store.get(p.id), p.months || []),
     share: async (el, p) => {
       const pr = Store.get(p.id);
       try {
-        UI.busy(true, 'PDF wird erstellt …');
+        UI.busy(true, t('PDF wird erstellt …'));
         const { blob } = await buildPdf(pr, p.months || []); UI.busy(false);
         const file = new File([blob], pdfFileName(pr, p.months || []), { type: 'application/pdf' });
         if (navigator.canShare({ files: [file] })) await navigator.share({ files: [file], title: pr.name });
@@ -1769,14 +2059,14 @@ function zoomViewer(p, index) {
   const count = col ? months.length : 1;
   let i = index, z = null;
   const page = () => col ? monthPageSVG(pr, months[i]).svg : plannerSVG(pr).svg;
-  const md = UI.modal(`<div class="zoom-top"><button class="icon-btn light" data-act="modal-close" aria-label="Schließen">${icon('close')}</button><span id="zt"></span>
-      <button class="icon-btn light" data-act="zi" aria-label="Vergrößern">${icon('zoomIn')}</button><button class="icon-btn light" data-act="zo" aria-label="Verkleinern">${icon('zoomOut')}</button><button class="icon-btn light" data-act="zr" aria-label="Ganze Seite">${icon('fit')}</button><button class="icon-btn light" data-act="zj" aria-label="Diese Seite als JPG speichern" title="Als JPG speichern">${icon('image')}</button></div>
+  const md = UI.modal(`<div class="zoom-top"><button class="icon-btn light" data-act="modal-close" aria-label="${t('Schließen')}">${icon('close')}</button><span id="zt"></span>
+      <button class="icon-btn light" data-act="zi" aria-label="${t('Vergrößern')}">${icon('zoomIn')}</button><button class="icon-btn light" data-act="zo" aria-label="${t('Verkleinern')}">${icon('zoomOut')}</button><button class="icon-btn light" data-act="zr" aria-label="${t('Ganze Seite')}">${icon('fit')}</button><button class="icon-btn light" data-act="zj" aria-label="${t('Diese Seite als JPG speichern')}" title="Als JPG speichern">${icon('image')}</button></div>
     <div class="zoom-view" id="zv"><div class="zoom-inner"></div></div>
-    ${count > 1 ? '<div class="zoom-nav"><button class="btn tonal" data-act="zp">‹ Zurück</button><button class="btn tonal" data-act="zn">Weiter ›</button></div>' : ''}`, {
+    ${count > 1 ? `<div class="zoom-nav"><button class="btn tonal" data-act="zp">‹ ${t('Zurück')}</button><button class="btn tonal" data-act="zn">${t('Weiter')} ›</button></div>` : ''}`, {
     zi: () => z.zoomIn(), zo: () => z.zoomOut(), zr: () => z.reset(),
     zj: async () => {
       try {
-        UI.busy(true, 'Bild wird erstellt …');
+        UI.busy(true, t('Bild wird erstellt …'));
         await saveJpgs(pr, col ? [months[i]] : []);
         UI.busy(false); UI.toast('Bild wurde gespeichert.');
       } catch (e) { UI.busy(false); if (!e || e.code !== 'declined') UI.toast('Das Bild konnte nicht gespeichert werden.'); }
@@ -1786,7 +2076,7 @@ function zoomViewer(p, index) {
   md.el.classList.add('dark');
   const show = () => {
     $('.zoom-inner', md.el).innerHTML = page();
-    $('#zt', md.el).textContent = `Seite ${i + 1} von ${count}`;
+    $('#zt', md.el).textContent = t('Seite {0} von {1}', i + 1, count);
     z && z.reset();
   };
   show();
@@ -1838,21 +2128,21 @@ Screens.editor = {
       if (Ed.doc) await Store.ensureImages(drawingImageIds(Ed.doc));
     }
   },
-  actions: () => `<button class="icon-btn" data-act="undo" aria-label="Rückgängig" ${Ed.undo.length ? '' : 'disabled'}>${icon('undo')}</button><button class="icon-btn" data-act="redo" aria-label="Wiederholen" ${Ed.redo.length ? '' : 'disabled'}>${icon('redo')}</button><button class="icon-btn" data-act="layers" aria-label="Ebenen">${icon('layers')}</button>`,
+  actions: () => `<button class="icon-btn" data-act="undo" aria-label="${t('Rückgängig')}" ${Ed.undo.length ? '' : 'disabled'}>${icon('undo')}</button><button class="icon-btn" data-act="redo" aria-label="${t('Wiederholen')}" ${Ed.redo.length ? '' : 'disabled'}>${icon('redo')}</button><button class="icon-btn" data-act="layers" aria-label="${t('Ebenen')}">${icon('layers')}</button>`,
   render: () => {
     const d = Ed.doc;
-    if (!d) return '<p class="muted">Diese Zeichnung wurde nicht gefunden.</p>';
+    if (!d) return `<p class="muted">${t('Diese Zeichnung wurde nicht gefunden.')}</p>`;
     return `<div class="editor">
-      <div class="chips"><button class="chip ${d.mode === 'COLORING' ? 'on' : ''}" data-act="mode" data-v="COLORING">Malvorlage</button><button class="chip ${d.mode === 'COLOR' ? 'on' : ''}" data-act="mode" data-v="COLOR">Farbe</button></div>
-      <div class="ed-stage"><svg id="ed" viewBox="0 0 ${d.width} ${d.height}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Zeichenfläche"><g id="ed-content"></g><g id="ed-overlay"></g></svg></div>
+      <div class="chips"><button class="chip ${d.mode === 'COLORING' ? 'on' : ''}" data-act="mode" data-v="COLORING">${t('Malvorlage')}</button><button class="chip ${d.mode === 'COLOR' ? 'on' : ''}" data-act="mode" data-v="COLOR">${t('Farbe')}</button></div>
+      <div class="ed-stage"><svg id="ed" viewBox="0 0 ${d.width} ${d.height}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${t('Zeichenfläche')}"><g id="ed-content"></g><g id="ed-overlay"></g></svg></div>
       <div id="ed-selbar" class="selbar"></div>
-      <div class="ed-tools">${TOOLS.map(([t, l]) => `<button class="tool ${Ed.tool === t ? 'on' : ''}" data-act="tool" data-v="${t}">${toolGlyph(t)}<span>${l}</span></button>`).join('')}
-        <label class="tool">${icon('image')}<span>Bild</span><input type="file" accept="image/png,image/jpeg,image/webp" data-in="img" hidden></label>
-        <button class="tool" data-act="sticker">${icon('sticker')}<span>Sticker</span></button></div>
+      <div class="ed-tools">${TOOLS.map(([tl, l]) => `<button class="tool ${Ed.tool === tl ? 'on' : ''}" data-act="tool" data-v="${tl}">${toolGlyph(tl)}<span>${t(l)}</span></button>`).join('')}
+        <label class="tool">${icon('image')}<span>${t('Bild')}</span><input type="file" accept="image/png,image/jpeg,image/webp" data-in="img" hidden></label>
+        <button class="tool" data-act="sticker">${icon('sticker')}<span>${t('Sticker')}</span></button></div>
       <div id="ed-colors">${swatches('color', PALETTE, Ed.color)}</div>
-      <div class="ed-size row"><span id="ed-size-l">${Ed.tool === 'ERASER' ? 'Radierer' : 'Pinselstärke'}</span>
-        <input type="range" id="ed-size" min="${Ed.tool === 'ERASER' ? 10 : 2}" max="${Ed.tool === 'ERASER' ? 160 : 60}" value="${Ed.tool === 'ERASER' ? Ed.eraser : Ed.sw}" data-in="size" aria-label="Stärke">
-        ${SHAPE_TOOLS.includes(Ed.tool) ? `<button class="chip ${Ed.fillNew ? 'on' : ''}" data-act="fillnew">Füllen</button>` : ''}</div></div>`;
+      <div class="ed-size row"><span id="ed-size-l">${Ed.tool === 'ERASER' ? t('Radierer') : t('Pinselstärke')}</span>
+        <input type="range" id="ed-size" min="${Ed.tool === 'ERASER' ? 10 : 2}" max="${Ed.tool === 'ERASER' ? 160 : 60}" value="${Ed.tool === 'ERASER' ? Ed.eraser : Ed.sw}" data-in="size" aria-label="${t('Stärke')}">
+        ${SHAPE_TOOLS.includes(Ed.tool) ? `<button class="chip ${Ed.fillNew ? 'on' : ''}" data-act="fillnew">${t('Füllen')}</button>` : ''}</div></div>`;
   },
   mount() {
     if (!Ed.doc) return;
@@ -1871,7 +2161,7 @@ Screens.editor = {
     color: el => { Ed.color = el.dataset.v; if (Ed.doc.mode === 'COLORING') UI.toast('Im Malvorlage-Modus erscheinen alle Linien schwarz. Wechsle zu „Farbe“, um Farben zu sehen.'); $('#ed-colors').innerHTML = swatches('color', PALETTE, Ed.color); },
     'size:input': el => { if (Ed.tool === 'ERASER') Ed.eraser = +el.value; else Ed.sw = +el.value; },
     fillnew: () => { Ed.fillNew = !Ed.fillNew; UI.refresh(); },
-    sticker: () => pickDrawing('Sticker', new Date().getMonth() + 1, null, id => {
+    sticker: () => pickDrawing(t('Sticker'), new Date().getMonth() + 1, null, id => {
       const side = Math.min(Ed.doc.width, Ed.doc.height) * 0.4;
       Ed.add({ id: uid(), type: 'STICKER', x: (Ed.doc.width - side) / 2, y: (Ed.doc.height - side) / 2, w: side, h: side, rot: 0, props: { sticker: id } }, true);
       Ed.tool = 'SELECT'; UI.refresh();
@@ -1879,7 +2169,7 @@ Screens.editor = {
     img: async el => {
       const file = el.files[0]; el.value = ''; if (!file) return;
       try {
-        UI.busy(true, 'Bild wird geladen …');
+        UI.busy(true, t('Bild wird geladen …'));
         const im = await downscaleImage(file), id = await Store.saveImage(im.dataUrl);
         const max = Math.min(Ed.doc.width, Ed.doc.height) * 0.7, s = max / Math.max(im.w, im.h), w = im.w * s, h = im.h * s;
         Ed.add({ id: uid(), type: 'IMAGE', x: (Ed.doc.width - w) / 2, y: (Ed.doc.height - h) / 2, w, h, rot: 0, props: { img: id, iw: im.w, ih: im.h, crop: [0, 0, 1, 1] } }, true);
@@ -1923,9 +2213,9 @@ function refreshEditor() {
       <rect x="${rs[0] - px(11)}" y="${rs[1] - px(11)}" width="${px(22)}" height="${px(22)}" fill="#fff" stroke="#3D5A80" stroke-width="${px(3)}"/>`;
   }
   const bar = $('#ed-selbar'), s = Ed.selected();
-  bar.innerHTML = s ? [['s-del', 'trash', 'Löschen'], ['s-copy', 'copy', 'Kopieren'], ['s-front', 'front', 'Nach vorn'], ['s-back', 'back2', 'Nach hinten'], ['s-color', 'palette', 'Farbe übernehmen'],
-    ...(FILLABLE.includes(s.type) ? [['s-fill', 'fill', 'Füllen'], ['s-nofill', 'close', 'Füllung entfernen']] : []),
-    ...(s.type === 'TEXT' ? [['s-text', 'edit', 'Text bearbeiten']] : []), ...(s.type === 'IMAGE' ? [['s-crop', 'crop', 'Zuschneiden']] : [])]
+  bar.innerHTML = s ? [['s-del', 'trash', t('Löschen')], ['s-copy', 'copy', t('Kopieren')], ['s-front', 'front', t('Nach vorn')], ['s-back', 'back2', t('Nach hinten')], ['s-color', 'palette', t('Farbe übernehmen')],
+    ...(FILLABLE.includes(s.type) ? [['s-fill', 'fill', t('Füllen')], ['s-nofill', 'close', t('Füllung entfernen')]] : []),
+    ...(s.type === 'TEXT' ? [['s-text', 'edit', t('Text bearbeiten')]] : []), ...(s.type === 'IMAGE' ? [['s-crop', 'crop', t('Zuschneiden')]] : [])]
     .map(([a, ic, l]) => `<button class="icon-btn" data-act="${a}" title="${l}" aria-label="${l}">${icon(ic)}</button>`).join('') : '';
   const ub = $('[data-act=undo]'), rb = $('[data-act=redo]');
   if (ub) ub.disabled = !Ed.undo.length; if (rb) rb.disabled = !Ed.redo.length;
@@ -1989,14 +2279,14 @@ function onUp(e) {
   const [x, y] = docPt(e);
   if (!d.moved) { // Tippen
     Ed.live = null;
-    const t = Ed.tool, tol = tolDoc(20);
-    if (t === 'TEXT') { const hit = [...Ed.doc.elements].reverse().find(el => el.type === 'TEXT' && hitEl(el, x, y, tol)); return textDialog(hit || null, x, y); }
-    if (t === 'FILL') {
+    const tool = Ed.tool, tol = tolDoc(20);
+    if (tool === 'TEXT') { const hit = [...Ed.doc.elements].reverse().find(el => el.type === 'TEXT' && hitEl(el, x, y, tol)); return textDialog(hit || null, x, y); }
+    if (tool === 'FILL') {
       const hit = topHit(x, y, tol);
       if (!hit || !FILLABLE.includes(hit.type)) return UI.toast('Füllen funktioniert bei Formen (Kreis, Rechteck, Dreieck, Stern, Herz).');
       return Ed.replace({ ...hit, props: { ...hit.props, fill: Ed.color } });
     }
-    if (t === 'PENCIL' || t === 'ERASER') return Ed.add(strokeEl([x, y]), false);
+    if (tool === 'PENCIL' || tool === 'ERASER') return Ed.add(strokeEl([x, y]), false);
     Ed.sel = (topHit(x, y, tol) || {}).id || null; refreshEditor(); return;
   }
   const live = Ed.live; Ed.live = null;
@@ -2028,13 +2318,13 @@ function shapeEl(x0, y0, x, y) {
 function textDialog(existing, x, y) {
   const p0 = existing ? existing.props : { text: '', font: 'fredoka', size: 110, bold: false, align: 'CENTER' };
   const st = { font: p0.font, size: p0.size, bold: p0.bold, align: p0.align };
-  const md = UI.modal(`<h2>${existing ? 'Text bearbeiten' : 'Text hinzufügen'}</h2>
-    <label class="field"><span>Text</span><textarea id="tx" rows="2" maxlength="120" placeholder="z. B. Alles Gute!">${esc(p0.text)}</textarea></label>
-    <div class="label">Schriftart</div><div class="chips" id="tx-fonts">${FONTS.map(([id, l, f]) => `<button class="chip ${id === st.font ? 'on' : ''}" style="font-family:'${f}'" data-act="tf" data-v="${id}">${l}</button>`).join('')}</div>
-    <div class="label">Schriftgröße: <span id="tx-sz">${st.size}</span></div><input type="range" id="tx-size" min="30" max="320" value="${st.size}">
-    <label class="check"><input type="checkbox" id="tx-bold" ${st.bold ? 'checked' : ''}><span>Fett</span></label>
-    <div class="chips">${[['LEFT', 'Links'], ['CENTER', 'Mitte'], ['RIGHT', 'Rechts']].map(([v, l]) => `<button class="chip ${v === st.align ? 'on' : ''}" data-act="ta" data-v="${v}">${l}</button>`).join('')}</div>
-    <div class="row end"><button class="btn text" data-act="modal-close">Abbrechen</button><button class="btn primary" data-act="ok">Speichern</button></div>`, {
+  const md = UI.modal(`<h2>${existing ? t('Text bearbeiten') : t('Text hinzufügen')}</h2>
+    <label class="field"><span>${t('Text')}</span><textarea id="tx" rows="2" maxlength="120" placeholder="${t('z. B. Alles Gute!')}">${esc(p0.text)}</textarea></label>
+    <div class="label">${t('Schriftart')}</div><div class="chips" id="tx-fonts">${FONTS.map(([id, l, f]) => `<button class="chip ${id === st.font ? 'on' : ''}" style="font-family:'${f}'" data-act="tf" data-v="${id}">${l}</button>`).join('')}</div>
+    <div class="label">${t('Schriftgröße')}: <span id="tx-sz">${st.size}</span></div><input type="range" id="tx-size" min="30" max="320" value="${st.size}">
+    <label class="check"><input type="checkbox" id="tx-bold" ${st.bold ? 'checked' : ''}><span>${t('Fett')}</span></label>
+    <div class="chips">${[['LEFT', t('Links')], ['CENTER', t('Mitte')], ['RIGHT', t('Rechts')]].map(([v, l]) => `<button class="chip ${v === st.align ? 'on' : ''}" data-act="ta" data-v="${v}">${l}</button>`).join('')}</div>
+    <div class="row end"><button class="btn text" data-act="modal-close">${t('Abbrechen')}</button><button class="btn primary" data-act="ok">${t('Speichern')}</button></div>`, {
     tf: el => { st.font = el.dataset.v; $$('[data-act=tf]', md.el).forEach(b => b.classList.toggle('on', b === el)); },
     ta: el => { st.align = el.dataset.v; $$('[data-act=ta]', md.el).forEach(b => b.classList.toggle('on', b === el)); },
     ok: () => {
@@ -2056,11 +2346,11 @@ function textDialog(existing, x, y) {
 function layersDialog() {
   const body = () => {
     const items = Ed.doc.elements.map((e, i) => [e, i]).filter(([e]) => e.type !== 'ERASER').reverse();
-    return items.length ? items.map(([e]) => `<div class="layer ${e.id === Ed.sel ? 'on' : ''}"><button class="grow text-left" data-act="l-sel" data-id="${e.id}">${TYPE_LABEL[e.type]}${e.type === 'TEXT' ? ' „' + esc(e.props.text.slice(0, 14)) + '“' : ''}</button>
-      <button class="icon-btn" data-act="l-up" data-id="${e.id}" aria-label="Nach vorn">${icon('up')}</button><button class="icon-btn" data-act="l-down" data-id="${e.id}" aria-label="Nach hinten">${icon('down')}</button><button class="icon-btn" data-act="l-del" data-id="${e.id}" aria-label="Löschen">${icon('trash')}</button></div>`).join('')
-      : '<p class="muted">Noch keine Objekte.</p>';
+    return items.length ? items.map(([e]) => `<div class="layer ${e.id === Ed.sel ? 'on' : ''}"><button class="grow text-left" data-act="l-sel" data-id="${e.id}">${t(TYPE_LABEL[e.type])}${e.type === 'TEXT' ? ' „' + esc(e.props.text.slice(0, 14)) + '“' : ''}</button>
+      <button class="icon-btn" data-act="l-up" data-id="${e.id}" aria-label="${t('Nach vorn')}">${icon('up')}</button><button class="icon-btn" data-act="l-down" data-id="${e.id}" aria-label="${t('Nach hinten')}">${icon('down')}</button><button class="icon-btn" data-act="l-del" data-id="${e.id}" aria-label="${t('Löschen')}">${icon('trash')}</button></div>`).join('')
+      : `<p class="muted">${t('Noch keine Objekte.')}</p>`;
   };
-  const md = UI.modal(`<h2>Ebenen</h2><div id="ly">${body()}</div><div class="row end"><button class="btn primary" data-act="modal-close">Schließen</button></div>`, {
+  const md = UI.modal(`<h2>${t('Ebenen')}</h2><div id="ly">${body()}</div><div class="row end"><button class="btn primary" data-act="modal-close">${t('Schließen')}</button></div>`, {
     'l-sel': el => { Ed.sel = el.dataset.id; Ed.tool = 'SELECT'; UI.closeModal(); UI.refresh(); },
     'l-up': el => { moveLayer(el.dataset.id, 1); $('#ly', md.el).innerHTML = body(); },
     'l-down': el => { moveLayer(el.dataset.id, -1); $('#ly', md.el).innerHTML = body(); },
@@ -2071,10 +2361,10 @@ function layersDialog() {
 function cropDialog(el) {
   const c = el.props.crop || [0, 0, 1, 1];
   const r = (id, v) => `<input type="range" id="${id}" min="0" max="100" value="${Math.round(v * 100)}">`;
-  UI.modal(`<h2>Zuschneiden</h2>
-    <div class="label">Links</div>${r('cl', c[0])}<div class="label">Rechts</div>${r('cr', 1 - c[2])}
-    <div class="label">Oben</div>${r('ct', c[1])}<div class="label">Unten</div>${r('cb', 1 - c[3])}
-    <div class="row end"><button class="btn text" data-act="reset">Zurücksetzen</button><button class="btn primary" data-act="ok">Übernehmen</button></div>`, {
+  UI.modal(`<h2>${t('Zuschneiden')}</h2>
+    <div class="label">${t('Links')}</div>${r('cl', c[0])}<div class="label">${t('Rechts')}</div>${r('cr', 1 - c[2])}
+    <div class="label">${t('Oben')}</div>${r('ct', c[1])}<div class="label">${t('Unten')}</div>${r('cb', 1 - c[3])}
+    <div class="row end"><button class="btn text" data-act="reset">${t('Zurücksetzen')}</button><button class="btn primary" data-act="ok">${t('Übernehmen')}</button></div>`, {
     reset: () => { UI.closeModal(); applyCrop(el, 0, 0, 1, 1); },
     ok: () => {
       const v = id => +$('#' + id).value / 100;
@@ -2093,6 +2383,7 @@ function applyCrop(el, l, t, r, b) {
   Catalog.build();
   await Store.init();
   await Settings.load();
+  setLang(Settings.data.lang || detectLang());
   try { await document.fonts.ready; } catch (_) {}
   UI.start();
 })();
