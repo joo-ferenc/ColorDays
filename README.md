@@ -2,7 +2,7 @@
 
 Gestalte und drucke deinen eigenen Kalender – direkt im Browser, ohne Anmeldung.
 
-**▶ Jetzt ausprobieren:** https://DEIN-NAME.github.io/ColorDays/
+**▶ Jetzt ausprobieren:** https://joo-ferenc.github.io/ColorDays/
 
 ## Was kann ColorDays?
 
@@ -11,7 +11,7 @@ Gestalte und drucke deinen eigenen Kalender – direkt im Browser, ohne Anmeldun
 - Tagesbilder tauschen, entfernen oder **selbst zeichnen** (Formen, Text, eigene Fotos, Sticker)
 - **Ereignisse** wie Geburtstage, auf Wunsch jährlich wiederholt
 - **Gesetzliche Feiertage** für alle 16 Bundesländer
-- **PDF speichern und drucken**, Druckvorschau mit Zoom
+- **PDF und JPG speichern, drucken**, Druckvorschau mit Zoom
 - Funktioniert auf Handy, Tablet und Computer
 
 ## Datenschutz

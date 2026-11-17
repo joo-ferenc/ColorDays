@@ -1,0 +1,2101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FBF8F4">
+<meta name="description" content="ColorDays – Mal-Kalender und Jahresplaner gestalten und drucken">
+<title>ColorDays – Mein kreativer Kalender</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700&family=Open+Sans:wght@400;700&family=Patrick+Hand&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+<style>:root{--bg:#FBF8F4;--surface:#fff;--ink:#2B2D42;--muted:#5C5F73;--line:#DDD8D2;--blue:#3D5A80;--pblue:#CFE3F5;--green:#3C7A57;--pgreen:#D5EDDC;--peach:#B8613A;--ppeach:#FCE1CF;--lilac:#6B5B95;--plilac:#E4DCF2;--danger:#B3261E;--r:16px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Nunito',system-ui,sans-serif;font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0;padding:0}
+button:disabled{opacity:.4;cursor:default}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:8px}
+.ic{display:block;flex:none}
+#app{max-width:1200px;margin:0 auto;padding:0 0 calc(96px + env(safe-area-inset-bottom))}
+.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;padding:10px 12px;padding-top:max(10px,env(safe-area-inset-top));background:var(--bg)}
+.bar-pad{width:4px}
+.bar-title{flex:1;min-width:0}
+.bar h1{margin:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:22px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.screen-home .bar h1,.bar h1:only-child{}
+.bar-sub{color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-actions{display:flex;gap:4px;align-items:center}
+.screen{padding:4px 16px 24px}
+.icon-btn{width:48px;height:48px;display:inline-grid;place-items:center;border-radius:50%;color:var(--ink)}
+.icon-btn:hover{background:rgba(61,90,128,.08)}
+.icon-btn.tonal{background:var(--pblue)}
+.icon-btn.light{color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 20px;border-radius:999px;font-weight:700;white-space:nowrap}
+.btn.primary{background:var(--blue);color:#fff}
+.btn.tonal{background:var(--pgreen);color:var(--ink)}
+.btn.text{color:var(--blue);padding:10px 12px}
+.btn.danger{background:var(--danger);color:#fff}
+.danger-text{color:var(--danger)!important}
+.btn.wide{width:100%;margin-top:12px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row.end{justify-content:flex-end;margin-top:16px}
+.row.between{justify-content:space-between}
+.grow{flex:1}.text-left{text-align:left}.center{text-align:center;margin:16px 0}
+.muted{color:var(--muted);font-size:14px;margin:4px 0}
+.hint{color:var(--muted);font-size:14px;margin:4px 0 10px}
+.label{font-weight:700;margin:14px 0 6px}
+.foot-note{color:var(--muted);font-size:14px;text-align:center;margin-top:24px}
+/* Start */
+.home-grid{display:grid;gap:14px;grid-template-columns:1fr;margin-top:8px}
+@media(min-width:640px){.home-grid{grid-template-columns:1fr 1fr}}
+.choice{display:flex;align-items:center;gap:16px;text-align:left;padding:18px 20px;border-radius:24px;min-height:96px}
+.choice.big{min-height:150px}
+.choice b{display:block;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px}
+.choice.big b{font-size:24px}
+.choice small{display:block;color:var(--muted);font-size:14px}
+.choice-ic{flex:none;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.75);display:grid;place-items:center}
+.blue{background:var(--pblue)}.green{background:var(--pgreen)}.peach{background:var(--ppeach)}.lilac{background:var(--plilac)}
+/* Formulare */
+.form{max-width:640px;margin:0 auto}
+.field{display:block;margin:12px 0}
+.field>span{display:block;font-size:14px;color:var(--muted);margin-bottom:4px}
+.field input,.field select,.field textarea,.form select{width:100%;min-height:52px;padding:12px 14px;border:1px solid #B8B3AD;border-radius:12px;background:#fff}
+.field textarea{min-height:72px;resize:vertical}
+.field.err input{border-color:var(--danger)}.field em{color:var(--danger);font-style:normal;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.chip{min-height:40px;padding:6px 16px;border:1px solid #B8B3AD;border-radius:10px;background:#fff}
+.chip.on{background:var(--pblue);border-color:var(--blue);font-weight:700}
+.check{display:flex;align-items:center;gap:12px;min-height:48px;cursor:pointer}
+.check input{width:22px;height:22px;accent-color:var(--blue)}
+.year{display:flex;align-items:center;gap:12px}
+.year input{width:130px;min-height:52px;text-align:center;font-size:24px;font-weight:700;border:1px solid #B8B3AD;border-radius:12px;background:#fff}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.sw{width:36px;height:36px;border-radius:50%;border:1px solid #B8B3AD}
+.sw.on{border:3px solid var(--blue);box-shadow:inset 0 0 0 2px #fff}
+/* Liste */
+.list{display:grid;gap:12px;max-width:720px;margin:0 auto}
+.item{display:flex;align-items:center;border-radius:var(--r);padding-right:4px}
+.item-main{flex:1;display:flex;align-items:center;gap:14px;padding:14px 16px;text-align:left;min-width:0}
+.item-main b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item-main small{color:var(--muted)}
+.empty{text-align:center;color:var(--muted);padding:48px 16px}
+.menu{display:grid}
+.menu button{display:flex;align-items:center;gap:16px;min-height:56px;padding:0 8px;text-align:left;border-radius:12px}
+.menu button:hover{background:rgba(61,90,128,.06)}.menu .ic{color:var(--blue)}
+/* Vorlagen */
+.tabs{display:flex;gap:4px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:thin}
+.tab{flex:none;padding:10px 14px;border-bottom:3px solid transparent;color:var(--muted);font-weight:600}
+.tab.on{color:var(--blue);border-color:var(--blue)}
+.grid-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.grid-headers{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.tcard{display:flex;flex-direction:column;gap:4px;padding:6px;border:1px solid var(--line);border-radius:12px;background:#fff;text-align:left;font-size:13px}
+.tcard.on{border:3px solid var(--blue);padding:4px}
+.thumb-svg{width:100%;display:block;background:#fff}
+.icons{display:flex;flex-wrap:wrap;gap:6px}
+.icon-choice{width:46px;height:46px;border:1px solid var(--line);border-radius:10px;display:grid;place-items:center;background:#fff}
+.icon-choice.on{border:3px solid var(--blue)}
+/* Übersicht */
+.month-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.mcard{background:#fff;border-radius:var(--r);padding:10px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.mcard-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}.mcard-head b{display:block}.mcard-head small{color:var(--muted);font-size:12px}
+.page-thumb{display:block;width:100%;border:1px solid var(--line);background:#fff;padding:0;line-height:0}
+.page-thumb svg{width:100%;height:auto;display:block}
+.page-thumb.big{max-width:560px;margin:0 auto}
+/* Seitenbühne mit Zoom */
+.page-stage{position:relative;overflow:hidden;background:#EFEAE4;border-radius:12px;height:calc(100vh - 170px);min-height:360px;display:grid;place-items:center}
+.page-stage.fit{height:auto;min-height:0;max-height:calc(100vh - 150px);max-width:100%;margin:0 auto}
+.page-inner{width:100%;height:100%;display:grid;place-items:center;transform-origin:center;padding:8px}
+.page-inner svg{max-width:100%;max-height:100%;width:auto;height:auto;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.15);cursor:pointer}
+.page-stage.zoomed{cursor:grab}
+.zoom-tools{position:absolute;right:8px;bottom:8px;display:flex;gap:4px;background:rgba(255,255,255,.92);border-radius:999px;padding:2px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.planner{display:grid;gap:16px}
+@media(min-width:900px){.planner{grid-template-columns:1fr 340px;align-items:start}}
+.panel{background:#fff;border-radius:var(--r);padding:12px 16px}
+/* Export */
+.export{max-width:760px;margin:0 auto}
+.info{margin:4px 0}
+.previews{display:grid;gap:16px;margin-top:10px}
+figure{margin:0;text-align:center}figcaption{color:var(--muted);font-size:14px;margin-top:4px}
+.bottom-bar{position:fixed;left:0;right:0;bottom:0;z-index:4;display:flex;gap:8px;justify-content:center;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#F1F0F3;box-shadow:0 -1px 4px rgba(0,0,0,.06)}
+.bottom-bar .btn{flex:1;max-width:200px;padding:10px 8px;min-width:0}
+@media(max-width:420px){.hide-xs{display:none}}
+/* Editor */
+.editor .chips{margin-top:0}
+.ed-stage{background:#E9E5E0;border-radius:12px;padding:8px;display:grid;place-items:center}
+#ed{width:100%;max-height:calc(100vh - 380px);min-height:240px;touch-action:none;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.selbar{display:flex;overflow-x:auto;min-height:0;background:#fff;border-radius:12px;margin-top:6px}
+.selbar:empty{display:none}
+.ed-tools{display:flex;overflow-x:auto;gap:2px;margin-top:6px;padding-bottom:4px}
+.tool{flex:none;width:66px;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-radius:12px;font-size:11px;cursor:pointer}
+.tool.on{background:var(--pblue)}
+.ed-size{flex-wrap:nowrap}.ed-size input{flex:1}
+.layer{display:flex;align-items:center;gap:2px;border-bottom:1px solid var(--line);min-height:48px}
+.layer button.grow{padding:8px;min-height:44px}.layer.on button.grow{font-weight:700}
+/* Dialoge */
+.modal-wrap{position:fixed;inset:0;z-index:20;background:rgba(43,45,66,.45);display:grid;place-items:center;padding:16px}
+.modal{background:var(--surface);border-radius:24px;padding:20px;width:min(560px,100%);max-height:calc(100vh - 32px);overflow:auto;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.modal h2{margin:0 0 8px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:21px}
+.modal-wrap.sheet{place-items:end center;padding:0}
+.modal-wrap.sheet .modal{border-radius:24px 24px 0 0;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+.modal-wrap.full{padding:0}
+.modal-wrap.full .modal{width:100%;height:100%;max-height:none;border-radius:0;padding:0;display:flex;flex-direction:column;background:var(--bg)}
+.modal-head{display:flex;align-items:center;gap:8px;padding:8px 12px}.modal-head h2{flex:1;margin:0}
+.modal-body{flex:1;overflow:auto;padding:8px 16px 24px}
+.modal-wrap.full .tabs{padding:0 12px}
+.modal-wrap.dark .modal{background:#2B2D42;color:#fff}
+.zoom-top{display:flex;align-items:center;gap:4px;padding:8px;padding-top:max(8px,env(safe-area-inset-top))}#zt{flex:1;font-weight:700}
+.zoom-view{flex:1;overflow:hidden;position:relative}
+.zoom-inner{width:100%;height:100%;display:grid;place-items:center;transform-origin:center}
+.zoom-inner svg{max-width:96%;max-height:96%;width:auto;height:auto;background:#fff}
+.zoom-nav{display:flex;justify-content:center;gap:24px;padding:12px calc(12px + env(safe-area-inset-bottom))}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;transition:.25s;z-index:40;background:#2B2D42;color:#fff;padding:12px 18px;border-radius:12px;max-width:min(92vw,520px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+#busy{position:fixed;inset:0;z-index:50;background:rgba(251,248,244,.85);display:grid;place-content:center;justify-items:center;gap:12px;font-weight:700}
+.spinner{width:40px;height:40px;border:4px solid var(--pblue);border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#print-area{display:none}
+@media print{
+  body>*:not(#print-area){display:none!important}
+  #print-area{display:block}
+  .print-page{page-break-after:always;break-after:page;overflow:hidden}
+  .print-page svg{width:100%;height:100%;display:block}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="app"><div style="display:grid;place-items:center;min-height:60vh;color:#5C5F73">ColorDays wird geladen …</div></div>
+<script>
+const MOTIFS = {"SUN":{"l":"Sonne","p":[["o",50.0,50.0,18.0],["p","M50 8 L50 24 M50 76 L50 92 M8 50 L24 50 M76 50 L92 50 M21 21 L32 32 M68 68 L79 79 M79 21 L68 32 M21 79 L32 68"]]},"SNOWFLAKE":{"l":"Schneeflocke","p":[["p","M50 10 L50 90 M15 30 L85 70 M15 70 L85 30 M42 16 L50 24 L58 16 M42 84 L50 76 L58 84 M16 40 L26 36 L22 26 M84 60 L74 64 L78 74"]]},"SNOWMAN":{"l":"Schneemann","p":[["o",50.0,72.0,20.0],["o",50.0,38.0,14.0],["p","M36 26 L64 26 M42 26 L42 12 L58 12 L58 26 M50 40 L60 43 L50 45 M30 62 L14 52 M70 62 L86 52"],["o",45.0,35.0,1.5],["o",55.0,35.0,1.5],["o",50.0,66.0,2.0],["o",50.0,76.0,2.0]]},"HEART":{"l":"Herz","p":[["p","M50 85 C20 62 8 45 8 32 C8 18 20 10 32 10 C42 10 48 18 50 24 C52 18 58 10 68 10 C80 10 92 18 92 32 C92 45 80 62 50 85 Z"]]},"STAR":{"l":"Stern","p":[["p","M50 8 L61 38 L93 38 L67 57 L77 89 L50 70 L23 89 L33 57 L7 38 L39 38 Z"]]},"FIR":{"l":"Tannenbaum","p":[["p","M50 8 L28 40 L40 40 L20 68 L80 68 L60 40 L72 40 Z M44 68 L44 90 L56 90 L56 68"]]},"HOUSE":{"l":"Häuschen","p":[["p","M12 50 L50 16 L88 50 M22 42 L22 88 L78 88 L78 42 M42 88 L42 64 L58 64 L58 88 M60 46 L70 46 L70 56 L60 56 Z M66 26 L66 12 L74 12 L74 34"]]},"MITTEN":{"l":"Handschuh","p":[["p","M30 90 L30 45 C30 25 40 15 52 15 C66 15 72 28 72 45 L72 60 C80 52 90 56 84 66 L72 80 L72 90 Z M28 78 L74 78"]]},"BEANIE":{"l":"Mütze","p":[["p","M20 70 C20 40 35 25 50 25 C65 25 80 40 80 70 Z M16 70 L84 70 L84 84 L16 84 Z M35 70 L35 84 M50 70 L50 84 M65 70 L65 84"],["o",50.0,19.0,7.0]]},"SLED":{"l":"Schlitten","p":[["p","M18 56 L78 56 L78 44 L18 44 Z M26 56 L26 70 M70 56 L70 70 M10 70 L84 70 C94 70 94 58 86 58"]]},"SKATE":{"l":"Schlittschuh","p":[["p","M25 20 L50 20 L52 55 L80 62 C86 64 86 72 80 72 L25 72 Z M15 82 L86 82 C92 82 92 74 88 72 M35 72 L35 82 M70 72 L70 82 M30 32 L46 32 M30 42 L47 42"]]},"BOOT_RAIN":{"l":"Gummistiefel","p":[["p","M35 15 L60 15 L60 60 L85 70 C92 74 90 85 82 85 L30 85 Z"],["p","M33 26 L62 26"]]},"MUG":{"l":"Tasse","p":[["p","M22 35 L68 35 L64 85 L26 85 Z M68 45 C85 45 85 70 66 70 M38 26 C34 18 42 14 38 6 M52 26 C48 18 56 14 52 6"]]},"PENGUIN":{"l":"Pinguin","p":[["e",28.0,14.0,72.0,90.0],["e",38.0,34.0,62.0,86.0],["o",42.0,27.0,2.0],["o",58.0,27.0,2.0],["p","M45 33 L50 40 L55 33 Z M36 90 L30 96 M64 90 L70 96 M28 45 L18 64 M72 45 L82 64"]]},"BEAR":{"l":"Eisbär","p":[["o",50.0,56.0,28.0],["o",28.0,32.0,9.0],["o",72.0,32.0,9.0],["o",40.0,50.0,2.5],["o",60.0,50.0,2.5],["e",44.0,58.0,56.0,66.0],["p","M50 66 L50 72 M42 74 C46 78 54 78 58 74"]]},"BIRD":{"l":"Vogel","p":[["p","M20 55 C20 35 40 28 55 35 C60 22 75 22 80 32 L90 34 L80 40 C80 62 62 75 40 72 L15 80 L28 66 C22 62 20 58 20 55 Z M38 52 C48 46 58 50 62 58 M40 72 L38 84 M52 72 L54 84"],["o",70.0,31.0,2.0]]},"BIRDHOUSE":{"l":"Vogelhäuschen","p":[["p","M18 45 L50 15 L82 45 Z M28 45 L28 82 L72 82 L72 45 M38 70 L62 70 M50 82 L50 96 M36 96 L64 96"],["o",50.0,58.0,7.0]]},"MASK":{"l":"Faschingsmaske","p":[["p","M10 40 C25 30 40 34 50 42 C60 34 75 30 90 40 C90 60 72 66 60 60 C55 56 45 56 40 60 C28 66 10 60 10 40 Z M10 40 L4 30 M90 40 L96 30"],["e",22.0,40.0,40.0,52.0],["e",60.0,40.0,78.0,52.0]]},"BALLOON":{"l":"Luftballon","p":[["e",28.0,8.0,72.0,62.0],["p","M50 62 L45 70 L55 70 Z M50 70 C42 78 58 84 50 94 M38 22 C40 16 46 14 50 14"]]},"PARTY_HAT":{"l":"Partyhut","p":[["p","M50 12 L24 86 L76 86 Z M35 56 L62 44 M30 72 L70 58"],["o",50.0,9.0,6.0],["o",44.0,70.0,2.5],["o",58.0,34.0,2.5]]},"SNOWDROP":{"l":"Schneeglöckchen","p":[["p","M50 92 C50 62 52 42 60 26 M60 26 C48 30 42 46 48 60 C56 52 60 40 60 26 M60 26 C72 30 76 46 68 60 C62 52 60 40 60 26 M50 76 C40 70 30 72 24 80 M50 82 C60 72 70 72 76 80"]]},"TULIP":{"l":"Tulpe","p":[["p","M50 95 L50 52 M30 24 L38 34 L50 20 L62 34 L70 24 L70 44 C70 58 30 58 30 44 Z M50 80 C40 70 32 70 26 76 M50 74 C60 64 70 64 76 70"]]},"FLOWER":{"l":"Blume","p":[["o",50.0,38.0,8.0],["o",50.0,22.0,9.0],["o",66.0,38.0,9.0],["o",50.0,54.0,9.0],["o",34.0,38.0,9.0],["p","M50 63 L50 95 M50 82 C60 72 70 72 76 76 M50 88 C40 80 30 80 26 84"]]},"SUNFLOWER":{"l":"Sonnenblume","p":[["o",50.0,36.0,11.0],["o",50.0,36.0,22.0],["p","M50 14 L50 4 M50 58 L50 66 M28 36 L18 36 M72 36 L82 36 M34 20 L27 13 M66 20 L73 13 M34 52 L27 59 M66 52 L73 59 M50 66 L50 96 M50 82 C60 72 70 72 76 76"]]},"BEE":{"l":"Biene","p":[["e",28.0,40.0,72.0,70.0],["p","M42 41 L42 69 M56 41 L56 69 M28 55 L18 55"],["e",34.0,16.0,50.0,42.0],["e",50.0,16.0,66.0,42.0],["o",80.0,55.0,8.0],["o",83.0,52.0,1.5]]},"BUTTERFLY":{"l":"Schmetterling","p":[["p","M50 30 L50 80 M50 40 C40 15 12 15 15 38 C17 52 38 55 50 52 M50 40 C60 15 88 15 85 38 C83 52 62 55 50 52 M50 55 C38 58 22 70 32 82 C40 88 48 75 50 65 M50 55 C62 58 78 70 68 82 C60 88 52 75 50 65 M50 30 L42 18 M50 30 L58 18"]]},"RAINBOW":{"l":"Regenbogen","p":[["p","M8 76 C8 26 92 26 92 76 M20 76 C20 40 80 40 80 76 M32 76 C32 54 68 54 68 76 M4 76 C0 66 14 62 20 70 M80 70 C86 62 100 66 96 76"]]},"LADYBUG":{"l":"Marienkäfer","p":[["e",22.0,30.0,78.0,88.0],["p","M50 32 L50 88 M44 16 L38 6 M56 16 L62 6"],["o",50.0,24.0,10.0],["o",36.0,50.0,5.0],["o",64.0,50.0,5.0],["o",38.0,72.0,5.0],["o",62.0,72.0,5.0]]},"NEST":{"l":"Vogelnest","p":[["p","M12 55 C18 82 82 82 88 55 Z M18 64 L82 64 M22 72 L78 72"],["e",28.0,36.0,44.0,58.0],["e",42.0,30.0,58.0,56.0],["e",56.0,36.0,72.0,58.0]]},"BUNNY":{"l":"Hase","p":[["o",50.0,64.0,22.0],["e",32.0,8.0,46.0,48.0],["e",54.0,8.0,68.0,48.0],["o",42.0,60.0,2.5],["o",58.0,60.0,2.5],["p","M47 68 L53 68 L50 72 Z M50 72 L50 76 M44 78 C47 81 53 81 56 78 M30 68 L18 64 M30 72 L18 74 M70 68 L82 64 M70 72 L82 74"]]},"UMBRELLA":{"l":"Regenschirm","p":[["p","M10 50 C10 20 90 20 90 50 C80 42 70 42 63 50 C57 42 43 42 37 50 C30 42 20 42 10 50 Z M50 50 L50 82 C50 92 36 92 36 82 M50 24 L50 16"]]},"CLOUD":{"l":"Wolke","p":[["p","M25 70 C10 70 10 50 25 48 C25 30 50 25 58 40 C70 30 90 40 82 55 C95 58 92 72 80 72 Z"]]},"RAINCLOUD":{"l":"Regenwolke","p":[["p","M25 70 C10 70 10 50 25 48 C25 30 50 25 58 40 C70 30 90 40 82 55 C95 58 92 72 80 72 Z"],["p","M35 80 L30 92 M55 80 L50 92 M75 80 L70 92"]]},"EGG":{"l":"Osterei","p":[["e",26.0,8.0,74.0,92.0],["p","M28 44 L38 36 L50 44 L62 36 L72 44 M27 60 C40 66 60 66 73 60 M30 74 C42 78 58 78 70 74"]]},"CHICK":{"l":"Küken","p":[["o",50.0,50.0,24.0],["o",58.0,44.0,2.5],["p","M72 48 L84 52 L72 56 M24 64 L32 56 L40 64 L48 56 L56 64 L64 56 L72 64 L76 92 L24 92 Z"]]},"BASKET":{"l":"Körbchen","p":[["p","M15 50 L85 50 L75 88 L25 88 Z M25 50 C25 15 75 15 75 50 M20 62 L80 62 M22 75 L78 75"]]},"DUCK":{"l":"Ente","p":[["p","M25 60 C25 80 75 85 85 65 C88 55 80 50 70 55 L60 55 C60 35 50 28 42 28 C30 28 26 38 30 46 L18 48 L30 52 C26 54 25 57 25 60 Z M48 62 C56 58 64 62 66 68"],["o",42.0,38.0,2.0]]},"PUDDLE":{"l":"Pfütze","p":[["p","M14 70 C10 58 30 54 40 58 C50 50 76 52 84 60 C96 64 92 80 76 80 L26 80 C16 80 12 76 14 70 Z M40 66 C46 62 54 62 60 66 M50 40 L46 48 M62 36 L58 44"]]},"STRAWBERRY":{"l":"Erdbeere","p":[["p","M50 92 C25 75 18 50 25 38 C35 30 65 30 75 38 C82 50 75 75 50 92 Z M30 34 L40 20 L50 30 L60 20 L70 34 M50 30 L50 16"],["o",38.0,50.0,1.8],["o",54.0,48.0,1.8],["o",64.0,58.0,1.8],["o",44.0,64.0,1.8],["o",56.0,74.0,1.8]]},"CHERRY":{"l":"Kirschen","p":[["o",32.0,72.0,14.0],["o",68.0,72.0,14.0],["p","M32 58 C38 35 48 20 60 12 M68 58 C66 40 62 25 60 12 M60 12 C70 6 82 10 86 18 C76 22 66 20 60 12 Z"]]},"ICECREAM":{"l":"Eiswaffel","p":[["p","M30 46 L50 92 L70 46 Z M38 58 L62 58 M44 72 L56 72 M28 46 C20 46 22 30 32 30 C32 14 68 14 68 30 C78 30 80 46 72 46 Z"]]},"LEMONADE":{"l":"Limonade","p":[["p","M28 22 L72 22 L66 90 L34 90 Z M30 40 L70 40 M58 22 L70 4"],["o",42.0,56.0,3.0],["o",54.0,70.0,3.0]]},"BALL":{"l":"Wasserball","p":[["o",50.0,50.0,38.0],["p","M50 12 C35 30 35 70 50 88 M50 12 C65 30 65 70 50 88 M12 50 L88 50"]]},"PARASOL":{"l":"Sonnenschirm","p":[["p","M8 42 C8 14 92 14 92 42 Z M50 42 L50 92 M30 92 L70 92 M30 42 L50 14 L70 42"]]},"SANDCASTLE":{"l":"Sandburg","p":[["p","M15 90 L15 55 L25 55 L25 48 L33 48 L33 55 L42 55 L42 30 L58 30 L58 55 L67 55 L67 48 L75 48 L75 55 L85 55 L85 90 Z M44 90 L44 76 C44 66 56 66 56 76 L56 90 M50 30 L50 12 L62 16 L50 20"]]},"SHELL":{"l":"Muschel","p":[["p","M50 90 L15 45 C15 15 85 15 85 45 Z M50 90 L30 26 M50 90 L50 18 M50 90 L70 26 M42 90 L58 90"]]},"SUNGLASSES":{"l":"Sonnenbrille","p":[["p","M6 40 L94 40 M10 40 C10 64 42 64 42 40 M58 40 C58 64 90 64 90 40 M42 44 C46 40 54 40 58 44"]]},"SAILBOAT":{"l":"Segelboot","p":[["p","M50 10 L50 70 M50 14 L80 62 L50 62 M46 22 L22 62 L46 62 Z M14 72 L86 72 L74 88 L26 88 Z M8 94 C16 90 24 98 32 94 C40 90 48 98 56 94 C64 90 72 98 80 94"]]},"WATERMELON":{"l":"Melone","p":[["p","M8 38 C8 86 92 86 92 38 Z M18 38 C20 72 80 72 82 38"],["o",36.0,50.0,2.2],["o",50.0,56.0,2.2],["o",64.0,50.0,2.2],["o",44.0,44.0,2.2],["o",58.0,44.0,2.2]]},"DOLPHIN":{"l":"Delfin","p":[["p","M10 58 C22 32 58 26 80 44 L92 36 L88 54 L94 70 L80 64 C60 84 26 82 10 58 Z M44 32 L52 18 L60 34 M30 66 L38 76 L44 70"],["o",24.0,54.0,2.0]]},"TENT":{"l":"Zelt","p":[["p","M8 86 L50 14 L92 86 Z M50 14 L50 86 M38 86 L50 56 L62 86 M4 86 L96 86"]]},"BACKPACK":{"l":"Rucksack","p":[["p","M26 30 C26 18 74 18 74 30 L78 88 L22 88 Z M40 22 C40 8 60 8 60 22 M32 54 L68 54 L68 76 L32 76 Z M50 54 L50 62"]]},"APPLE":{"l":"Apfel","p":[["p","M50 30 C30 18 12 32 15 55 C18 80 35 92 50 85 C65 92 82 80 85 55 C88 32 70 18 50 30 Z M50 30 C50 20 52 14 56 8 M54 22 C62 10 76 12 78 16 C70 24 60 24 54 22 Z"]]},"SCHOOLBAG":{"l":"Schultasche","p":[["p","M18 32 L82 32 L82 88 L18 88 Z M30 32 C30 14 70 14 70 32 M18 52 L82 52 M44 52 L44 62 L56 62 L56 52"]]},"PENCIL":{"l":"Bleistift","p":[["p","M22 80 L70 22 L82 34 L34 92 Z M22 80 L16 96 L34 92 M64 29 L76 41"]]},"BOOK":{"l":"Buch","p":[["p","M10 25 C25 20 40 22 50 30 C60 22 75 20 90 25 L90 82 C75 77 60 79 50 86 C40 79 25 77 10 82 Z M50 30 L50 86 M18 36 L40 36 M18 46 L40 46 M60 36 L82 36 M60 46 L82 46"]]},"LEAF":{"l":"Blatt","p":[["p","M15 85 C15 40 45 15 88 12 C85 55 60 85 15 85 Z M15 85 L72 28 M40 60 L38 42 M52 48 L66 50 M30 70 L50 72"]]},"GRAPES":{"l":"Weintrauben","p":[["o",40.0,35.0,9.0],["o",58.0,35.0,9.0],["o",49.0,50.0,9.0],["o",31.0,50.0,9.0],["o",67.0,50.0,9.0],["o",40.0,65.0,9.0],["o",58.0,65.0,9.0],["o",49.0,80.0,9.0],["p","M49 26 L49 12 C58 8 66 12 70 18"]]},"SQUIRREL":{"l":"Eichhörnchen","p":[["p","M60 86 C46 86 40 72 45 60 C40 52 42 40 52 36 L54 24 L60 30 C70 32 72 46 66 56 C72 66 70 80 60 86 Z M46 80 C20 86 6 60 16 40 C24 26 42 30 40 46 C36 40 28 42 30 54 C32 66 40 70 46 70"],["o",58.0,42.0,2.0]]},"HEDGEHOG":{"l":"Igel","p":[["p","M15 72 C15 46 35 30 60 32 L90 64 C82 72 70 74 60 74 Z M22 52 L12 44 M28 42 L22 30 M38 35 L34 22 M50 32 L50 18 M62 33 L68 22 M30 74 L30 82 M56 74 L56 82"],["o",72.0,58.0,2.0],["o",90.0,64.0,2.5]]},"CHESTNUT":{"l":"Kastanie","p":[["p","M50 88 C25 88 15 70 18 55 C22 40 35 30 50 30 C65 30 78 40 82 55 C85 70 75 88 50 88 Z M22 60 C40 52 60 52 78 60 M50 30 L52 22"]]},"MUSHROOM":{"l":"Pilz","p":[["p","M10 50 C10 15 90 15 90 50 Z M38 50 L35 88 L65 88 L62 50"],["o",34.0,34.0,5.0],["o",58.0,28.0,6.0],["o",74.0,42.0,4.0]]},"TREE":{"l":"Laubbaum","p":[["p","M50 70 C20 74 8 50 22 36 C18 16 42 6 52 18 C66 6 88 18 80 36 C94 50 80 74 50 70 Z M50 70 L50 94 M50 82 L40 74 M50 78 L62 68 M40 94 L60 94"]]},"PUMPKIN":{"l":"Kürbis","p":[["e",16.0,30.0,84.0,90.0],["p","M50 30 C40 46 40 76 50 90 M50 30 C60 46 60 76 50 90 M30 34 C24 50 24 72 32 86 M70 34 C76 50 76 72 68 86 M50 30 L52 14 L60 16"]]},"FOX":{"l":"Fuchs","p":[["p","M15 15 L35 40 L65 40 L85 15 L80 50 C75 70 60 85 50 88 C40 85 25 70 20 50 Z M30 56 L50 72 L70 56"],["o",38.0,50.0,2.5],["o",62.0,50.0,2.5],["o",50.0,82.0,3.0]]},"OWL":{"l":"Eule","p":[["e",20.0,14.0,80.0,92.0],["o",38.0,40.0,10.0],["o",62.0,40.0,10.0],["o",38.0,40.0,3.0],["o",62.0,40.0,3.0],["p","M46 52 L50 60 L54 52 Z M24 22 L28 6 L38 18 M76 22 L72 6 L62 18 M36 70 L42 74 L48 70 M52 70 L58 74 L64 70 M40 80 L46 84 L52 80 L58 84 L60 82"]]},"LANTERN":{"l":"Laterne","p":[["p","M34 26 L66 26 L72 80 L28 80 Z M40 26 L40 16 L60 16 L60 26 M50 16 L50 4 M28 80 L72 80 L66 90 L34 90 Z M30 50 L70 50"],["o",50.0,64.0,7.0]]},"GIFT":{"l":"Geschenk","p":[["p","M14 40 L86 40 L86 56 L14 56 Z M20 56 L20 90 L80 90 L80 56 M50 40 L50 90 M50 40 C35 18 18 28 30 40 M50 40 C65 18 82 28 70 40"]]},"CANDLE":{"l":"Kerze","p":[["p","M38 42 L62 42 L62 92 L38 92 Z M50 42 L50 34 M50 34 C40 24 48 14 50 6 C52 14 60 24 50 34 Z M38 56 C44 60 48 54 52 60"]]},"REINDEER":{"l":"Rentier","p":[["e",32.0,40.0,68.0,86.0],["p","M38 44 L28 20 L16 22 M28 20 L30 8 M62 44 L72 20 L84 22 M72 20 L70 8 M32 48 L20 46 M68 48 L80 46"],["o",50.0,80.0,6.0],["o",42.0,58.0,2.5],["o",58.0,58.0,2.5]]},"GINGERBREAD":{"l":"Lebkuchenmann","p":[["p","M50 8 C38 8 34 20 40 28 L18 34 C8 38 12 50 22 48 L36 46 L28 78 C26 88 36 92 40 84 L50 68 L60 84 C64 92 74 88 72 78 L64 46 L78 48 C88 50 92 38 82 34 L60 28 C66 20 62 8 50 8 Z M44 24 C47 27 53 27 56 24"],["o",45.0,17.0,2.0],["o",55.0,17.0,2.0],["o",50.0,40.0,2.5],["o",50.0,52.0,2.5]]},"BELL":{"l":"Glocke","p":[["p","M50 10 L50 18 M50 18 C30 18 28 38 28 55 C28 68 20 72 15 80 L85 80 C80 72 72 68 72 55 C72 38 70 18 50 18 Z"],["o",50.0,86.0,6.0]]},"ORNAMENT":{"l":"Christbaumkugel","p":[["o",50.0,58.0,32.0],["p","M42 26 L58 26 L58 18 L42 18 Z M50 18 C44 8 56 6 50 18 M20 52 L80 52 M22 66 L78 66"]]},"SANTA_BOOT":{"l":"Nikolausstiefel","p":[["p","M35 15 L60 15 L60 60 L85 70 C92 74 90 85 82 85 L30 85 Z"],["p","M32 14 L63 14 L63 28 L32 28 Z"]]},"MOON":{"l":"Mond","p":[["p","M60 10 C35 15 22 40 30 65 C38 85 62 92 80 82 C55 82 40 62 42 42 C44 25 52 15 60 10 Z"],["p","M78 22 L80 28 L86 30 L80 32 L78 38 L76 32 L70 30 L76 28 Z"]]},"CAKE":{"l":"Torte","p":[["p","M18 55 L82 55 L82 88 L18 88 Z M18 68 C30 74 40 62 50 68 C60 74 70 62 82 68 M35 55 L35 40 M50 55 L50 40 M65 55 L65 40"],["e",32.0,30.0,38.0,38.0],["e",47.0,30.0,53.0,38.0],["e",62.0,30.0,68.0,38.0]]},"STARFISH":{"l":"Seestern","p":[["p","M50 10 C54 30 58 36 88 38 C64 50 62 56 72 88 C54 70 46 70 28 88 C38 56 36 50 12 38 C42 36 46 30 50 10 Z"],["o",50.0,50.0,2.0],["o",50.0,32.0,1.5],["o",66.0,46.0,1.5],["o",34.0,46.0,1.5]]}};
+const CATALOG = {"months":[["SNOWMAN","SNOWFLAKE","MITTEN","BEANIE","SLED","SKATE","BEAR","PENGUIN","FIR","HOUSE","BIRDHOUSE","MUG"],["HEART","MASK","PARTY_HAT","BEAR","SNOWFLAKE","BIRD","MITTEN","MUG","BALLOON","OWL","PENGUIN"],["SNOWDROP","TULIP","BEE","BUTTERFLY","RAINBOW","NEST","BUNNY","SUN","LADYBUG","FLOWER","BIRD"],["UMBRELLA","RAINCLOUD","BOOT_RAIN","EGG","BUNNY","CHICK","BASKET","TULIP","RAINBOW","DUCK","PUDDLE"],["FLOWER","BEE","BUTTERFLY","LADYBUG","BIRD","TREE","BASKET","HEART","SUN","TULIP","NEST"],["SUNFLOWER","STRAWBERRY","CHERRY","ICECREAM","BASKET","BEE","FLOWER","BUTTERFLY","SUN","LEMONADE"],["BALL","ICECREAM","PARASOL","SANDCASTLE","SHELL","STARFISH","SUNGLASSES","SAILBOAT","WATERMELON","SUN"],["DOLPHIN","SAILBOAT","PARASOL","SHELL","WATERMELON","FLOWER","TENT","SUNFLOWER","BACKPACK","LEMONADE"],["APPLE","SCHOOLBAG","PENCIL","LEAF","GRAPES","SQUIRREL","HEDGEHOG","BOOK","CHESTNUT","MUSHROOM","TREE"],["PUMPKIN","FOX","SQUIRREL","CHESTNUT","MUSHROOM","HEDGEHOG","LEAF","OWL","UMBRELLA","BASKET","TREE"],["FOX","OWL","HEDGEHOG","UMBRELLA","LANTERN","BOOT_RAIN","LEAF","CHESTNUT","MUG","CLOUD","SQUIRREL","MOON"],["FIR","GIFT","STAR","CANDLE","REINDEER","GINGERBREAD","SANTA_BOOT","BELL","SNOWMAN","ORNAMENT","MOON"]],"headers":[[["Schneemann",["SNOWFLAKE","SNOWMAN","SNOWMAN","SNOWFLAKE"]],["Pinguine",["PENGUIN","SNOWFLAKE","SNOWFLAKE","PENGUIN"]],["Verschneiter Wald",["FIR","FIR","FIR","FIR"]],["Schlittschuhlaufen",["SKATE","SNOWFLAKE","MITTEN","SKATE"]],["Winterhäuschen",["FIR","HOUSE","HOUSE","FIR"]]],[["Herzen",["HEART","HEART","HEART","HEART"]],["Fasching",["MASK","PARTY_HAT","BALLOON","MASK"]],["Eisbären",["BEAR","SNOWFLAKE","SNOWFLAKE","BEAR"]],["Wintervögel",["BIRD","BIRDHOUSE","SNOWFLAKE","BIRD"]],["Eulen",["OWL","HEART","HEART","OWL"]]],[["Schneeglöckchen",["SNOWDROP","SNOWDROP","SNOWDROP","SNOWDROP"]],["Vögel",["BIRD","NEST","BIRD","BIRD"]],["Regenbogen",["CLOUD","RAINBOW","RAINBOW","CLOUD"]],["Frühlingswiese",["FLOWER","TULIP","BUTTERFLY","FLOWER"]],["Häschen",["BUNNY","FLOWER","FLOWER","BUNNY"]]],[["Ostereier",["EGG","EGG","BASKET","EGG"]],["Regenschirme",["UMBRELLA","RAINCLOUD","RAINCLOUD","UMBRELLA"]],["Enten",["DUCK","PUDDLE","PUDDLE","DUCK"]],["Tulpen",["TULIP","TULIP","TULIP","TULIP"]],["Regenwolken",["RAINCLOUD","BOOT_RAIN","UMBRELLA","RAINCLOUD"]]],[["Schmetterlinge",["BUTTERFLY","FLOWER","FLOWER","BUTTERFLY"]],["Bienen",["BEE","FLOWER","FLOWER","BEE"]],["Blumengarten",["TULIP","FLOWER","FLOWER","TULIP"]],["Vogelnest",["TREE","NEST","BIRD","TREE"]],["Marienkäfer",["LADYBUG","LEAF","LEAF","LADYBUG"]]],[["Sonnenblumen",["SUNFLOWER","SUNFLOWER","SUNFLOWER","SUNFLOWER"]],["Kirschen",["CHERRY","CHERRY","CHERRY","CHERRY"]],["Bienen",["BEE","SUNFLOWER","FLOWER","BEE"]],["Picknick",["BASKET","STRAWBERRY","LEMONADE","SUN"]],["Blumenwiese",["FLOWER","BUTTERFLY","TULIP","FLOWER"]]],[["Strand",["PARASOL","BALL","SHELL","PARASOL"]],["Eiscreme",["ICECREAM","ICECREAM","ICECREAM","ICECREAM"]],["Meeresufer",["SHELL","STARFISH","SAILBOAT","SHELL"]],["Sandburg",["SANDCASTLE","SHELL","STARFISH","SANDCASTLE"]],["Sonnenschein",["SUN","SUNGLASSES","SUNGLASSES","SUN"]]],[["Wassermelone",["WATERMELON","WATERMELON","WATERMELON","WATERMELON"]],["Segelboot",["SAILBOAT","SUN","CLOUD","SAILBOAT"]],["Sommercamp",["TENT","TREE","BACKPACK","TENT"]],["Delfine",["DOLPHIN","SHELL","STARFISH","DOLPHIN"]],["Tropische Blumen",["FLOWER","SUNFLOWER","FLOWER","SUNFLOWER"]]],[["Schultasche",["SCHOOLBAG","PENCIL","BOOK","SCHOOLBAG"]],["Äpfel",["APPLE","APPLE","APPLE","APPLE"]],["Herbstblätter",["LEAF","LEAF","LEAF","LEAF"]],["Waldtiere",["SQUIRREL","HEDGEHOG","FOX","SQUIRREL"]],["Weintrauben",["GRAPES","LEAF","LEAF","GRAPES"]]],[["Kürbisse",["PUMPKIN","PUMPKIN","PUMPKIN","PUMPKIN"]],["Eichhörnchen",["SQUIRREL","CHESTNUT","CHESTNUT","SQUIRREL"]],["Kastanien",["CHESTNUT","LEAF","LEAF","CHESTNUT"]],["Pilze",["MUSHROOM","MUSHROOM","MUSHROOM","MUSHROOM"]],["Herbstwald",["TREE","MUSHROOM","LEAF","TREE"]]],[["Füchse",["FOX","LEAF","LEAF","FOX"]],["Eulen",["OWL","MOON","MOON","OWL"]],["Regenschirme",["UMBRELLA","CLOUD","CLOUD","UMBRELLA"]],["Igel",["HEDGEHOG","LEAF","CHESTNUT","HEDGEHOG"]],["Laternenumzug",["LANTERN","STAR","MOON","LANTERN"]]],[["Tannenbaum",["FIR","STAR","STAR","FIR"]],["Rentiere",["REINDEER","STAR","STAR","REINDEER"]],["Lebkuchen",["GINGERBREAD","STAR","HEART","GINGERBREAD"]],["Geschenke",["GIFT","ORNAMENT","BELL","GIFT"]],["Verschneites Dorf",["HOUSE","FIR","FIR","HOUSE"]]]]};
+'use strict';
+/* ColorDays Web 1.0 – Kern: Kalenderlogik, Feiertage, Katalog, Speicher.
+   Gleiche Regeln wie die Android-App (CalendarEngine.kt, GermanHolidays.kt, TemplateCatalog.kt). */
+
+const VERSION = '1.1.0';
+const MONTHS = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const MONTH_KEYS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+const WD = ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
+const WD_SHORT = ['Mo','Di','Mi','Do','Fr','Sa','So'];
+const YEAR_MIN = 1900, YEAR_MAX = 2100;
+
+const PAPER = { A4: [210, 297], A3: [297, 420], A2: [420, 594] };
+const mmToPt = mm => Math.round(mm / 25.4 * 72);
+function pageSizePt(paper, orientation) {
+  const [w, h] = PAPER[paper];
+  return orientation === 'LANDSCAPE' ? [mmToPt(h), mmToPt(w)] : [mmToPt(w), mmToPt(h)];
+}
+function pageSizeMm(paper, orientation) {
+  const [w, h] = PAPER[paper];
+  return orientation === 'LANDSCAPE' ? [h, w] : [w, h];
+}
+
+const STYLES = {
+  COLORING: [['COLORING_CLASSIC', 'Klassisch'], ['COLORING_PLAYFUL', 'Verspielt']],
+  YEAR_PLANNER: [['PLANNER_BLACK_WHITE', 'Schwarz-Weiß'], ['PLANNER_GREY_MINIMAL', 'Grau Minimal'], ['PLANNER_PASTEL', 'Pastell'], ['PLANNER_MODERN_CLEAN', 'Modern Clean']],
+};
+const STATES = [['BW','Baden-Württemberg'],['BY','Bayern'],['BE','Berlin'],['BB','Brandenburg'],['HB','Bremen'],['HH','Hamburg'],['HE','Hessen'],['MV','Mecklenburg-Vorpommern'],['NI','Niedersachsen'],['NW','Nordrhein-Westfalen'],['RP','Rheinland-Pfalz'],['SL','Saarland'],['SN','Sachsen'],['ST','Sachsen-Anhalt'],['SH','Schleswig-Holstein'],['TH','Thüringen']];
+const CATEGORIES = [['BIRTHDAY','Geburtstag','CAKE'],['NAME_DAY','Namenstag','STAR'],['HOLIDAY','Feiertag','BELL'],['VACATION','Urlaub','PARASOL'],['KINDERGARTEN','Kindergarten','BALL'],['SCHOOL','Schule','SCHOOLBAG'],['DOCTOR','Arzttermin','HEART'],['FAMILY_TRIP','Familienausflug','TENT'],['CUSTOM','Eigener Anlass','STAR']];
+const EVENT_ICONS = ['CAKE','GIFT','BALLOON','HEART','STAR','SUN','PARASOL','TENT','SCHOOLBAG','BOOK','BALL','HOUSE','BELL','FLOWER','CANDLE','MUG'];
+const FEB29 = [['FEB_28','am 28. Februar'],['MAR_1','am 1. März'],['HIDE','nicht anzeigen']];
+const FONTS = [['fredoka','Fredoka','Fredoka'],['nunito','Nunito','Nunito'],['quicksand','Quicksand','Quicksand'],['patrick_hand','Patrick Hand','Patrick Hand'],['caveat','Caveat','Caveat'],['open_sans','Open Sans','Open Sans'],['serif','Serif','Georgia']];
+const fontFamily = id => { const f = FONTS.find(x => x[0] === id) || FONTS[0]; return `'${f[2]}', sans-serif`; };
+
+/* ---------- Datum ---------- */
+const pad2 = n => String(n).padStart(2, '0');
+const iso = (y, m, d) => `${y}-${pad2(m)}-${pad2(d)}`;
+const parseIso = s => { const [y, m, d] = s.split('-').map(Number); return { y, m, d }; };
+const isLeap = y => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+const daysInMonth = (y, m) => [31, isLeap(y) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1];
+const dayExists = (y, m, d) => d >= 1 && d <= daysInMonth(y, m);
+/** 0 = Montag … 6 = Sonntag */
+function weekday(y, m, d) { return (new Date(Date.UTC(y, m - 1, d)).getUTCDay() + 6) % 7; }
+const isWeekend = (y, m, d) => weekday(y, m, d) >= 5;
+function addDays(y, m, d, n) {
+  const t = new Date(Date.UTC(y, m - 1, d) + n * 86400000);
+  return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate() };
+}
+/** Wochen ab Montag; 4–6 Zeilen; null = Tag außerhalb des Monats. */
+function monthGrid(y, m) {
+  const lead = weekday(y, m, 1), days = daysInMonth(y, m), rows = Math.ceil((lead + days) / 7);
+  const weeks = [];
+  for (let r = 0; r < rows; r++) {
+    const w = [];
+    for (let c = 0; c < 7; c++) { const i = r * 7 + c - lead; w.push(i >= 0 && i < days ? i + 1 : null); }
+    weeks.push(w);
+  }
+  return weeks;
+}
+const dayTitle = s => { const { y, m, d } = parseIso(s); return `${d}. ${MONTHS[m - 1]} ${y}`; };
+function moveToYear(s, ny) { const { m, d } = parseIso(s); return dayExists(ny, m, d) ? iso(ny, m, d) : null; }
+function recurringDate(m, d, y, rule) {
+  if (dayExists(y, m, d)) return iso(y, m, d);
+  if (m === 2 && d === 29) return rule === 'MAR_1' ? iso(y, 3, 1) : rule === 'HIDE' ? null : iso(y, 2, 28);
+  return null;
+}
+function eventsForYear(events, y, rule) {
+  const map = {};
+  for (const e of events) {
+    const { y: ey, m, d } = parseIso(e.date);
+    const date = e.yearly ? recurringDate(m, d, y, rule) : (ey === y ? e.date : null);
+    if (!date) continue;
+    (map[date] = map[date] || []).push(e);
+  }
+  return map;
+}
+
+/* ---------- Feiertage (lokale Regeln) ---------- */
+function easterSunday(y) {
+  const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25),
+    g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4,
+    l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451),
+    month = Math.floor((h + l - 7 * m + 114) / 31), day = ((h + l - 7 * m + 114) % 31) + 1;
+  return { y, m: month, d: day };
+}
+function repentanceDay(y) { let d = 22; while (weekday(y, 11, d) !== 2) d--; return { y, m: 11, d }; }
+const fx = (m, d) => y => ({ y, m, d });
+const ea = n => y => { const e = easterSunday(y); return addDays(e.y, e.m, e.d, n); };
+const HOLIDAY_RULES = [
+  ['Neujahr', null, fx(1, 1)],
+  ['Heilige Drei Könige', ['BW','BY','ST'], fx(1, 6)],
+  ['Internationaler Frauentag', ['BE'], fx(3, 8), 2019],
+  ['Internationaler Frauentag', ['MV'], fx(3, 8), 2023],
+  ['Karfreitag', null, ea(-2)],
+  ['Ostersonntag', ['BB'], ea(0)],
+  ['Ostermontag', null, ea(1)],
+  ['Tag der Arbeit', null, fx(5, 1)],
+  ['Tag der Befreiung', ['BE'], fx(5, 8), null, null, [2020, 2025]],
+  ['Christi Himmelfahrt', null, ea(39)],
+  ['Pfingstsonntag', ['BB'], ea(49)],
+  ['Pfingstmontag', null, ea(50)],
+  ['Fronleichnam', ['BW','BY','HE','NW','RP','SL'], ea(60)],
+  ['Mariä Himmelfahrt', ['SL'], fx(8, 15)],
+  ['Weltkindertag', ['TH'], fx(9, 20), 2019],
+  ['Tag der Deutschen Einheit', null, fx(10, 3), 1990],
+  ['Reformationstag', ['BB','MV','SN','ST','TH'], fx(10, 31), 1990],
+  ['Reformationstag', ['HB','HH','NI','SH'], fx(10, 31), 2018],
+  ['Reformationstag', ['BW','BY','BE','HB','HH','HE','NI','NW','RP','SL','SH'], fx(10, 31), null, null, [2017]],
+  ['Allerheiligen', ['BW','BY','NW','RP','SL'], fx(11, 1)],
+  ['Buß- und Bettag', ['SN'], repentanceDay, 1995],
+  ['1. Weihnachtstag', null, fx(12, 25)],
+  ['2. Weihnachtstag', null, fx(12, 26)],
+];
+function holidaysForYear(y, state) {
+  const map = {};
+  for (const [name, states, fn, from, to, only] of HOLIDAY_RULES) {
+    if (only && !only.includes(y)) continue;
+    if (from && y < from) continue;
+    if (to && y > to) continue;
+    if (states && !(state && states.includes(state))) continue;
+    const r = fn(y), k = iso(r.y, r.m, r.d);
+    map[k] = map[k] ? map[k] + ' / ' + name : name;
+  }
+  return map;
+}
+
+/* Namenstage – kleine, optionale Datensammlung (keine ungarischen Daten) */
+const NAME_DAYS = {'01-06':['Kaspar','Melchior','Balthasar'],'02-14':['Valentin'],'03-17':['Patrick','Gertrud'],'03-19':['Josef'],'04-23':['Georg'],'06-24':['Johannes'],'06-29':['Peter','Paul'],'07-22':['Maria Magdalena'],'07-25':['Jakob'],'07-26':['Anna','Joachim'],'08-10':['Laurentius'],'09-29':['Michael','Gabriel','Raphael'],'10-04':['Franz'],'11-03':['Hubert'],'11-11':['Martin'],'11-19':['Elisabeth'],'11-30':['Andreas'],'12-04':['Barbara'],'12-06':['Nikolaus'],'12-13':['Lucia'],'12-26':['Stephan']};
+const nameDaysFor = s => NAME_DAYS[s.slice(5)] || [];
+
+/* ---------- Katalog (Platzhaltergrafiken) ---------- */
+const THEMES = ['Winterzauber','Herzen und Winterfreude','Frühlingserwachen','Regen und Ostern','Blumenwiese','Sonnige Tage','Sommerferien','Sommerabenteuer','Herbstbeginn','Herbstwald','Gemütlicher Herbst','Weihnachtszauber'];
+const QUOTES = ['Ein neues Jahr voller bunter Tage!','Jeder Tag ist ein kleines Abenteuer.','Der Frühling kitzelt die Blumen wach.','Nach dem Regen kommt der Regenbogen.','Alles blüht – und du auch!','Sonne im Gesicht, Lachen im Herzen.','Ferienzeit ist Glückszeit.','Sommer, Sonne, Abenteuer!','Neue Wege, neue Freunde.','Bunte Blätter tanzen im Wind.','Gemütlich ist es, wenn wir zusammen sind.','Lichterglanz und Plätzchenduft.'];
+const VARIANT_SUFFIX = ['', ' mit Funkeln', ' auf der Wiese', ' im Kreis'];
+const Catalog = {
+  drawings: [], byId: {}, headers: [], headerById: {},
+  build() {
+    for (let m = 1; m <= 12; m++) {
+      const motifs = CATALOG.months[m - 1];
+      for (let i = 0; i < 31; i++) {
+        const motif = motifs[i % motifs.length], variant = Math.min(Math.floor(i / motifs.length), 3);
+        const t = { id: `drawing_${MONTH_KEYS[m - 1]}_${pad2(i + 1)}`, month: m, name: MOTIFS[motif].l + VARIANT_SUFFIX[variant], motif, variant };
+        this.drawings.push(t); this.byId[t.id] = t;
+      }
+      CATALOG.headers[m - 1].forEach(([name, motifs], i) => {
+        const h = { id: `header_${MONTH_KEYS[m - 1]}_${pad2(i + 1)}`, month: m, name, motifs };
+        this.headers.push(h); this.headerById[h.id] = h;
+      });
+    }
+  },
+  drawingsFor: m => Catalog.drawings.filter(t => t.month === m),
+  headersFor: m => Catalog.headers.filter(h => h.month === m),
+  defaultDrawing: s => { const { m, d } = parseIso(s); return `drawing_${MONTH_KEYS[m - 1]}_${pad2(d)}`; },
+  defaultHeader: m => `header_${MONTH_KEYS[m - 1]}_01`,
+};
+
+/* ---------- Modell ---------- */
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+function defaultOptions() {
+  return { showCheckboxes: false, showQuotes: true, showEvents: true, holidayColor: '#F6C9A8', headerTitle: '', headerFont: 'fredoka',
+    headerImage: null, headerDecoration: true, showNameDays: false, feb29: 'FEB_28' };
+}
+function newProject(d) {
+  const now = Date.now();
+  const months = {};
+  for (let m = 1; m <= 12; m++) months[m] = { headerId: null, customHeader: null, customTitle: '', footerText: '' };
+  return { id: uid(), name: d.name.trim(), year: d.year, type: d.type, paper: d.paper, orientation: d.orientation, style: d.style,
+    showHolidays: d.showHolidays, state: d.state || null, options: Object.assign(defaultOptions(), d.options || {}),
+    months, days: {}, events: [], createdAt: now, updatedAt: now };
+}
+
+/* ---------- Speicher: claude.ai-Datenbank (pro Person, privat) oder localStorage ---------- */
+const Store = {
+  mode: 'memory', db: null, col: null, projects: new Map(), drawings: new Map(), images: new Map(),
+  queues: new Map(), timers: new Map(), error: null,
+
+  async init() {
+    if (window.claude && typeof window.claude.use === 'function') {
+      try {
+        const timeout = new Promise(r => setTimeout(() => r(null), 10000));
+        const [user, db] = await Promise.all([Promise.race([claude.use('user'), timeout]), Promise.race([claude.use('db'), timeout])]);
+        const id = user ? await user.id() : null;
+        if (db && id) {
+          this.db = db; this.col = db.collection('data/users/' + id); this.mode = 'db';
+          const snap = await this.col.where('kind', '==', 'project').get();
+          snap.docs.forEach(d => { const p = d.data().p; if (p) this.projects.set(p.id, structuredClone(p)); });
+          return;
+        }
+      } catch (e) { console.warn('db nicht verfügbar', e); }
+    }
+    try {
+      localStorage.setItem('cd.test', '1'); localStorage.removeItem('cd.test');
+      this.mode = 'local';
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('cd.p.')) { try { const p = JSON.parse(localStorage.getItem(k)); this.projects.set(p.id, p); } catch (_) {} }
+      }
+    } catch (_) { this.mode = 'memory'; }
+  },
+
+  /** Schreibt nacheinander pro Dokument (eine Schreiboperation zur Zeit). */
+  _write(key, body) {
+    const prev = this.queues.get(key) || Promise.resolve();
+    const next = prev.then(async () => {
+      try {
+        if (this.mode === 'db') {
+          if (body === null) await this.col.doc(key).delete(); else await this.col.doc(key).set(body);
+        } else if (this.mode === 'local') {
+          const lk = 'cd.' + key.replace('_', '.');
+          if (body === null) localStorage.removeItem(lk); else localStorage.setItem(lk, JSON.stringify(body.p || body.d || body.i));
+        }
+        this.error = null;
+      } catch (e) {
+        console.error('Speichern fehlgeschlagen', e);
+        this.error = (e && (e.code === 'quota_exceeded' || e.name === 'QuotaExceededError')) ? 'Der Speicher ist voll.' : 'Speichern fehlgeschlagen.';
+        UI && UI.toast && UI.toast(this.error);
+      }
+    });
+    this.queues.set(key, next);
+    return next;
+  },
+  /** Bündelt schnelle Änderungen zu einer Schreiboperation. */
+  _debounced(key, fn, ms = 400) {
+    clearTimeout(this.timers.get(key));
+    this.timers.set(key, setTimeout(() => { this.timers.delete(key); fn(); }, ms));
+  },
+  async flush() {
+    for (const [k, t] of this.timers) { clearTimeout(t); }
+    const pending = [...this.timers.keys()]; this.timers.clear();
+    for (const k of pending) {
+      const [kind, id] = k.split('_');
+      if (kind === 'p' && this.projects.has(id)) this._write(k, { kind: 'project', p: this.projects.get(id) });
+      if (kind === 'd' && this.drawings.has(id)) this._write(k, { kind: 'drawing', d: this.drawings.get(id) });
+    }
+    await Promise.all([...this.queues.values()]);
+  },
+
+  list() { return [...this.projects.values()].sort((a, b) => b.updatedAt - a.updatedAt); },
+  get(id) { return this.projects.get(id); },
+  saveProject(p, immediate = false) {
+    p.updatedAt = Date.now();
+    this.projects.set(p.id, p);
+    const key = 'p_' + p.id;
+    const run = () => this._write(key, { kind: 'project', p });
+    if (immediate) { clearTimeout(this.timers.get(key)); this.timers.delete(key); return run(); }
+    this._debounced(key, run);
+  },
+  async deleteProject(p) {
+    const drawings = new Set();
+    Object.values(p.days).forEach(d => d.drawingId && drawings.add(d.drawingId));
+    Object.values(p.months).forEach(m => m.customHeader && drawings.add(m.customHeader));
+    for (const id of drawings) await this.deleteDrawing(id);
+    if (p.options.headerImage) this._write('i_' + p.options.headerImage, null);
+    this.projects.delete(p.id);
+    await this._write('p_' + p.id, null);
+  },
+
+  async getDrawing(id) {
+    if (this.drawings.has(id)) return this.drawings.get(id);
+    let d = null;
+    try {
+      if (this.mode === 'db') { const s = await this.col.doc('d_' + id).get(); d = s.exists ? structuredClone(s.data().d) : null; }
+      else if (this.mode === 'local') { const raw = localStorage.getItem('cd.d.' + id); d = raw ? JSON.parse(raw) : null; }
+    } catch (e) { console.warn(e); }
+    if (d) { this.drawings.set(id, d); await this.ensureImages(drawingImageIds(d)); }
+    return d;
+  },
+  saveDrawing(d, immediate = false) {
+    this.drawings.set(d.id, d);
+    const key = 'd_' + d.id, run = () => this._write(key, { kind: 'drawing', d });
+    if (immediate) return run();
+    this._debounced(key, run, 600);
+  },
+  async deleteDrawing(id) {
+    const d = await this.getDrawing(id);
+    if (d) for (const img of drawingImageIds(d)) this._write('i_' + img, null);
+    this.drawings.delete(id);
+    await this._write('d_' + id, null);
+  },
+  async copyDrawing(id) {
+    const d = await this.getDrawing(id); if (!d) return null;
+    const c = structuredClone(d); c.id = uid();
+    for (const el of c.elements) if (el.props.img) el.props.img = await this.saveImage(this.images.get(el.props.img));
+    this.saveDrawing(c, true);
+    return c.id;
+  },
+
+  async saveImage(dataUrl) {
+    if (!dataUrl) return null;
+    const id = uid();
+    this.images.set(id, dataUrl);
+    await this._write('i_' + id, { kind: 'image', i: dataUrl });
+    return id;
+  },
+  async ensureImages(ids) {
+    for (const id of ids) {
+      if (!id || this.images.has(id)) continue;
+      try {
+        if (this.mode === 'db') { const s = await this.col.doc('i_' + id).get(); if (s.exists) this.images.set(id, s.data().i); }
+        else if (this.mode === 'local') { const v = localStorage.getItem('cd.i.' + id); if (v) this.images.set(id, JSON.parse(v)); }
+      } catch (e) { console.warn(e); }
+    }
+  },
+  /** Lädt alles, was zum Rendern eines Projekts nötig ist (eigene Zeichnungen, Bilder). */
+  async preload(p) {
+    const ids = new Set();
+    Object.values(p.days).forEach(d => d.drawingId && ids.add(d.drawingId));
+    Object.values(p.months).forEach(m => m.customHeader && ids.add(m.customHeader));
+    for (const id of ids) await this.getDrawing(id);
+    await this.ensureImages([p.options.headerImage]);
+  },
+};
+const drawingImageIds = d => d.elements.filter(e => e.type === 'IMAGE' && e.props.img).map(e => e.props.img);
+
+/** Bild verkleinern (max. 1200 px) und als JPEG/PNG-Data-URL < 240 KB liefern. */
+function downscaleImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let max = 1200, q = 0.85, out = null, w = 0, h = 0;
+      const png = file.type === 'image/png';
+      for (let attempt = 0; attempt < 6; attempt++) {
+        const s = Math.min(1, max / Math.max(img.width, img.height));
+        w = Math.round(img.width * s); h = Math.round(img.height * s);
+        const c = document.createElement('canvas'); c.width = w; c.height = h;
+        const g = c.getContext('2d');
+        if (!png) { g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); }
+        g.drawImage(img, 0, 0, w, h);
+        out = png && attempt < 2 ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', q);
+        if (out.length < 240000) break;
+        max = Math.round(max * 0.8); q = Math.max(0.6, q - 0.07);
+      }
+      resolve({ dataUrl: out, w, h });
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Bild konnte nicht geladen werden')); };
+    img.src = url;
+  });
+}
+
+'use strict';
+/* ColorDays Web – SVG-Renderer. Bildschirm, Vorschau und PDF nutzen dieselben Funktionen. */
+
+const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const f1 = n => (Math.round(n * 100) / 100).toString();
+
+const Measure = {
+  ctx: document.createElement('canvas').getContext('2d'),
+  width(text, size, family, bold) {
+    this.ctx.font = `${bold ? 'bold ' : ''}${size}px ${family}`;
+    return this.ctx.measureText(text).width;
+  },
+  ellipsize(text, size, family, bold, maxW) {
+    text = String(text ?? '');
+    if (this.width(text, size, family, bold) <= maxW) return text;
+    let lo = 0, hi = text.length;
+    while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (this.width(text.slice(0, mid) + '…', size, family, bold) <= maxW) lo = mid; else hi = mid - 1; }
+    return lo > 0 ? text.slice(0, lo) + '…' : '';
+  },
+  wrap(text, size, family, bold, maxW) {
+    const lines = [];
+    for (const para of String(text).split('\n')) {
+      let line = '';
+      for (const word of para.split(/\s+/)) {
+        const t = line ? line + ' ' + word : word;
+        if (line && this.width(t, size, family, bold) > maxW) { lines.push(line); line = word; } else line = t;
+      }
+      lines.push(line);
+    }
+    return lines;
+  },
+};
+
+/** Schriftauswahl je Ziel: im PDF Helvetica (eingebettet), am Bildschirm die Webschriften. */
+const fam = (id, pdf) => pdf ? 'helvetica' : fontFamily(id);
+
+/* ---------- Motive ---------- */
+function motifInner(name, sw = 3.2) {
+  const m = MOTIFS[name]; if (!m) return '';
+  return m.p.map(p => p[0] === 'p' ? `<path d="${p[1]}"/>` :
+    p[0] === 'o' ? `<circle cx="${p[1]}" cy="${p[2]}" r="${p[3]}"/>` :
+      `<ellipse cx="${(p[1] + p[3]) / 2}" cy="${(p[2] + p[4]) / 2}" rx="${(p[3] - p[1]) / 2}" ry="${(p[4] - p[2]) / 2}"/>`).join('');
+}
+function motifSVG(name, x, y, size, sw = 3.2, color = '#000') {
+  if (size <= 0) return '';
+  return `<g transform="translate(${f1(x)} ${f1(y)}) scale(${f1(size / 100)})" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${motifInner(name)}</g>`;
+}
+/** Motiv quadratisch und zentriert in ein Rechteck einpassen. */
+function motifIn(name, x, y, w, h, sw, color) {
+  const s = Math.min(w, h);
+  return motifSVG(name, x + (w - s) / 2, y + (h - s) / 2, s, sw, color);
+}
+
+/* ---------- Katalogvorlagen ---------- */
+function templateDrawingSVG(id, x, y, w, h) {
+  const t = Catalog.byId[id]; if (!t) return '';
+  const side = Math.min(w, h), sx = x + (w - side) / 2, sy = y + (h - side) / 2;
+  const ins = f => motifSVG(t.motif, sx + side * f, sy + side * f, side * (1 - 2 * f));
+  const stroke = sw => `fill="none" stroke="#000" stroke-width="${f1(sw)}" stroke-linecap="round"`;
+  switch (t.variant) {
+    case 1: {
+      const sp = (cx, cy, r) => `<path ${stroke(r * 0.3)} d="M${f1(cx - r)} ${f1(cy)}H${f1(cx + r)}M${f1(cx)} ${f1(cy - r)}V${f1(cy + r)}"/>`;
+      return ins(0.12) + sp(sx + side * 0.1, sy + side * 0.12, side * 0.07) + sp(sx + side * 0.9, sy + side * 0.2, side * 0.05) + sp(sx + side * 0.86, sy + side * 0.9, side * 0.06);
+    }
+    case 2: {
+      let d = `M${f1(sx + side * 0.04)} ${f1(sy + side * 0.88)}`;
+      for (let px = sx + side * 0.04; px < sx + side * 0.92; px += side * 0.12) d += ` Q${f1(px + side * 0.06)} ${f1(sy + side * 0.82)} ${f1(px + side * 0.12)} ${f1(sy + side * 0.88)}`;
+      const s2 = side * 0.8;
+      return motifSVG(t.motif, sx + (side - s2) / 2, sy, s2) + `<path ${stroke(side * 0.025)} d="${d}"/>`;
+    }
+    case 3:
+      return `<circle cx="${f1(sx + side / 2)}" cy="${f1(sy + side / 2)}" r="${f1(side * 0.46)}" ${stroke(side * 0.025)}/>` + ins(0.2);
+    default: return ins(0.04);
+  }
+}
+/** Kopfzeile: Mitte bleibt frei für den Titel (separate Textebene). */
+function headerSVG(id, x, y, w, h) {
+  const hd = Catalog.headerById[id]; if (!hd) return '';
+  const size = h * 0.82, gap = size * 0.08, cy = y + h / 2;
+  const pos = [x + size / 2, x + size * 1.5 + gap, x + w - size * 1.5 - gap, x + w - size / 2];
+  let out = hd.motifs.slice(0, 4).map((m, i) => { const s = (i === 1 || i === 2) ? size * 0.72 : size; return motifSVG(m, pos[i] - s / 2, cy - s / 2, s, 3.0); }).join('');
+  const left = pos[1] + size * 0.5, right = pos[2] - size * 0.5;
+  for (let px = left; px <= right; px += h * 0.12) out += `<circle cx="${f1(px)}" cy="${f1(y + h * 0.94)}" r="${f1(h * 0.018)}" fill="none" stroke="#000" stroke-width="${f1(h * 0.012)}"/>`;
+  return out;
+}
+
+/* ---------- Eigene Zeichnungen ---------- */
+const HEART_D = 'M50 85 C20 62 8 45 8 32 C8 18 20 10 32 10 C42 10 48 18 50 24 C52 18 58 10 68 10 C80 10 92 18 92 32 C92 45 80 62 50 85 Z';
+function starPoints(w, h) {
+  const pts = [];
+  for (let i = 0; i < 10; i++) { const r = i % 2 ? 0.42 : 1, a = -Math.PI / 2 + i * Math.PI / 5; pts.push(f1(w / 2 * r * Math.cos(a)) + ',' + f1(h / 2 * r * Math.sin(a))); }
+  return pts.join(' ');
+}
+function elementSVG(el, coloring, eraserColor, pdf) {
+  const p = el.props, w = el.w, h = el.h, l = -w / 2, t = -h / 2;
+  const stroke = coloring ? '#000' : (p.stroke || '#000');
+  const fill = !coloring && p.fill ? p.fill : 'none';
+  const st = `stroke="${stroke}" stroke-width="${f1(p.sw || 8)}" stroke-linecap="round" stroke-linejoin="round"`;
+  let body = '';
+  switch (el.type) {
+    case 'PATH': case 'ERASER': {
+      const c = el.type === 'ERASER' ? eraserColor : stroke;
+      const pts = p.pts || [];
+      if (pts.length === 2) body = `<circle cx="${f1(l + pts[0] * w)}" cy="${f1(t + pts[1] * h)}" r="${f1((p.sw || 8) / 2)}" fill="${c}"/>`;
+      else {
+        let d = '';
+        for (let i = 0; i + 1 < pts.length; i += 2) d += (i ? 'L' : 'M') + f1(l + pts[i] * w) + ' ' + f1(t + pts[i + 1] * h);
+        body = `<path d="${d}" fill="none" stroke="${c}" stroke-width="${f1(p.sw || 8)}" stroke-linecap="round" stroke-linejoin="round"/>`;
+      }
+      break;
+    }
+    case 'LINE': case 'ARROW': {
+      const q = p.pts && p.pts.length >= 4 ? p.pts : [0, 0, 1, 1];
+      const x1 = l + q[0] * w, y1 = t + q[1] * h, x2 = l + q[2] * w, y2 = t + q[3] * h;
+      body = `<line x1="${f1(x1)}" y1="${f1(y1)}" x2="${f1(x2)}" y2="${f1(y2)}" ${st}/>`;
+      if (el.type === 'ARROW') {
+        const a = Math.atan2(y2 - y1, x2 - x1), len = Math.max((p.sw || 8) * 4, 30);
+        for (const da of [Math.PI * 0.82, -Math.PI * 0.82]) body += `<line x1="${f1(x2)}" y1="${f1(y2)}" x2="${f1(x2 + len * Math.cos(a + da))}" y2="${f1(y2 + len * Math.sin(a + da))}" ${st}/>`;
+      }
+      break;
+    }
+    case 'RECT': body = `<rect x="${f1(l)}" y="${f1(t)}" width="${f1(w)}" height="${f1(h)}" fill="${fill}" ${st}/>`; break;
+    case 'ELLIPSE': body = `<ellipse cx="0" cy="0" rx="${f1(w / 2)}" ry="${f1(h / 2)}" fill="${fill}" ${st}/>`; break;
+    case 'TRIANGLE': body = `<path d="M0 ${f1(t)}L${f1(-l)} ${f1(-t)}L${f1(l)} ${f1(-t)}Z" fill="${fill}" ${st}/>`; break;
+    case 'STAR': body = `<polygon points="${starPoints(w, h)}" fill="${fill}" ${st}/>`; break;
+    case 'HEART': {
+      const sx = w / 84, sy = h / 75;
+      body = `<g transform="translate(${f1(l - 8 * sx)} ${f1(t - 10 * sy)}) scale(${f1(sx)} ${f1(sy)})"><path d="${HEART_D}" fill="${fill}" stroke="${stroke}" stroke-width="${f1((p.sw || 8) / Math.max(sx, sy))}" stroke-linejoin="round"/></g>`;
+      break;
+    }
+    case 'TEXT': {
+      const family = fam(p.font, pdf), size = p.size || 90;
+      const lines = Measure.wrap(p.text || '', size, fontFamily(p.font), p.bold, w);
+      const lh = size * 1.18, top = -lines.length * lh / 2 + size * 0.92;
+      const anchor = p.align === 'LEFT' ? 'start' : p.align === 'RIGHT' ? 'end' : 'middle';
+      const ax = p.align === 'LEFT' ? l : p.align === 'RIGHT' ? -l : 0;
+      body = `<text font-family="${esc(family)}" font-size="${f1(size)}" ${p.bold ? 'font-weight="bold"' : ''} fill="${coloring ? '#000' : (p.stroke || '#000')}" text-anchor="${anchor}">` +
+        lines.map((ln, i) => `<tspan x="${f1(ax)}" y="${f1(top + i * lh)}">${esc(ln)}</tspan>`).join('') + '</text>';
+      break;
+    }
+    case 'IMAGE': {
+      const src = Store.images.get(p.img);
+      const c = p.crop && p.crop.length === 4 ? p.crop : [0, 0, 1, 1];
+      if (src) {
+        const fw = w / (c[2] - c[0]), fh = h / (c[3] - c[1]), cid = 'c' + el.id.replace(/\W/g, '');
+        body = `<clipPath id="${cid}"><rect x="${f1(l)}" y="${f1(t)}" width="${f1(w)}" height="${f1(h)}"/></clipPath>` +
+          `<image clip-path="url(#${cid})" href="${src}" x="${f1(l - c[0] * fw)}" y="${f1(t - c[1] * fh)}" width="${f1(fw)}" height="${f1(fh)}" preserveAspectRatio="none"/>`;
+      } else body = `<rect x="${f1(l)}" y="${f1(t)}" width="${f1(w)}" height="${f1(h)}" fill="none" stroke="#9e9e9e" stroke-width="4"/>`;
+      break;
+    }
+    case 'STICKER': body = templateDrawingSVG(p.sticker, l, t, w, h); break;
+  }
+  return `<g transform="translate(${f1(el.x + w / 2)} ${f1(el.y + h / 2)}) rotate(${f1(el.rot || 0)})">${body}</g>`;
+}
+function docContentSVG(doc, opts = {}) {
+  const coloring = doc.mode === 'COLORING';
+  const eraser = coloring || !doc.bg ? '#fff' : doc.bg;
+  let out = opts.bg !== false ? `<rect width="${doc.width}" height="${doc.height}" fill="${coloring ? '#fff' : (doc.bg || '#fff')}"/>` : '';
+  for (const el of doc.elements) if (!opts.hide || el.id !== opts.hide) out += elementSVG(el, coloring, eraser, opts.pdf);
+  if (opts.extra) out += elementSVG(opts.extra, coloring, eraser, opts.pdf);
+  return out;
+}
+/** Zeichnung proportional in ein Zielrechteck einpassen. */
+function docSVG(doc, x, y, w, h, pdf) {
+  if (!doc) return '';
+  const s = Math.min(w / doc.width, h / doc.height);
+  const ox = x + (w - doc.width * s) / 2, oy = y + (h - doc.height * s) / 2;
+  return `<g transform="translate(${f1(ox)} ${f1(oy)}) scale(${s})">${docContentSVG(doc, { bg: false, pdf })}</g>`;
+}
+
+/* ---------- Monatsseite (Mal-Kalender) ---------- */
+function monthLayout(W, H, y, m, orientation, hasQuote, hasFooter) {
+  const margin = Math.min(W, H) * 0.048;
+  const cx = margin, cy = margin, cw = W - 2 * margin, ch = H - 2 * margin, portrait = orientation === 'PORTRAIT';
+  const headerH = ch * (portrait ? 0.17 : 0.19), quoteH = hasQuote ? ch * (portrait ? 0.03 : 0.04) : 0;
+  const weekdayH = ch * (portrait ? 0.03 : 0.045), footerH = hasFooter ? ch * (portrait ? 0.05 : 0.06) : 0, gap = ch * 0.01;
+  const header = { x: cx, y: cy, w: cw, h: headerH };
+  let yy = cy + headerH + gap * 0.5;
+  const quote = hasQuote ? { x: cx, y: yy, w: cw, h: quoteH } : null;
+  yy += quoteH + gap * 0.5;
+  const colW = cw / 7;
+  const weekdays = WD.map((_, c) => ({ x: cx + c * colW, y: yy, w: colW, h: weekdayH }));
+  yy += weekdayH;
+  const footer = { x: cx, y: cy + ch - footerH, w: cw, h: footerH };
+  const gridBottom = hasFooter ? footer.y - gap : footer.y;
+  const weeks = monthGrid(y, m), rowH = (gridBottom - yy) / weeks.length;
+  const cells = [];
+  weeks.forEach((wk, r) => wk.forEach((d, c) => cells.push({ date: d ? iso(y, m, d) : null, x: cx + c * colW, y: yy + r * rowH, w: colW, h: rowH })));
+  return { header, quote, weekdays, cells, footer };
+}
+
+function monthModel(p, m) {
+  const o = p.options, ms = p.months[m] || {};
+  const holidays = p.showHolidays ? holidaysForYear(p.year, p.state) : {};
+  const events = eventsForYear(p.events, p.year, o.feb29);
+  return { p, m, o, ms, holidays, events, quote: o.showQuotes ? QUOTES[m - 1] : null, footer: (ms.footerText || '').trim() || null,
+    title: (ms.customTitle || '').trim() || `${MONTHS[m - 1]} ${p.year}` };
+}
+
+function monthPageSVG(p, m, opts = {}) {
+  const pdf = !!opts.pdf, [W, H] = pageSizePt(p.paper, p.orientation);
+  const M = monthModel(p, m), L = monthLayout(W, H, p.year, m, p.orientation, !!M.quote, !!M.footer);
+  const playful = p.style === 'COLORING_PLAYFUL';
+  const body = fam('nunito', pdf), title = fam('fredoka', pdf), mBody = fontFamily('nunito'), mTitle = fontFamily('fredoka');
+  let s = `<rect width="${W}" height="${H}" fill="#fff"/>`;
+
+  // Kopfzeile: Grafik …
+  const hd = L.header;
+  if (M.ms.customHeader && Store.drawings.get(M.ms.customHeader)) s += docSVG(Store.drawings.get(M.ms.customHeader), hd.x, hd.y, hd.w, hd.h, pdf);
+  else s += headerSVG(M.ms.headerId || Catalog.defaultHeader(m), hd.x, hd.y, hd.w, hd.h);
+  // … und separate Textebene
+  const ts = hd.h * 0.3, tText = Measure.ellipsize(M.title, ts, mTitle, true, hd.w * 0.5);
+  const tw = Math.min(Measure.width(tText, ts, mTitle, true), hd.w * 0.5);
+  const bx = hd.x + hd.w / 2 - tw / 2 - ts * 0.5, by = hd.y + hd.h / 2 - ts * 0.85, bw = tw + ts, bh = ts * 1.6, r = ts * (playful ? 0.6 : 0.3);
+  s += `<rect x="${f1(bx)}" y="${f1(by)}" width="${f1(bw)}" height="${f1(bh)}" rx="${f1(r)}" fill="#fff" stroke="#000" stroke-width="${f1(ts * 0.06)}" ${playful ? `stroke-dasharray="${f1(ts * 0.25)} ${f1(ts * 0.15)}"` : ''}/>`;
+  s += `<text x="${f1(hd.x + hd.w / 2)}" y="${f1(hd.y + hd.h / 2 + ts * 0.3)}" font-family="${esc(title)}" font-weight="bold" font-size="${f1(ts)}" text-anchor="middle">${esc(tText)}</text>`;
+
+  if (L.quote) {
+    const qs = L.quote.h * 0.62;
+    s += `<text x="${f1(L.quote.x + L.quote.w / 2)}" y="${f1(L.quote.y + L.quote.h * 0.72)}" font-family="${esc(body)}" font-style="italic" font-size="${f1(qs)}" text-anchor="middle">${esc(Measure.ellipsize(M.quote, qs, mBody, false, L.quote.w))}</text>`;
+  }
+  // Wochentage
+  const wds = L.weekdays[0].h * 0.55, longNames = L.weekdays[0].w > Measure.width('Donnerstag', wds, mBody, true) * 1.1;
+  L.weekdays.forEach((r, i) => { s += `<text x="${f1(r.x + r.w / 2)}" y="${f1(r.y + r.h * 0.68)}" font-family="${esc(body)}" font-weight="bold" font-size="${f1(wds)}" text-anchor="middle">${longNames ? WD[i] : WD_SHORT[i]}</text>`; });
+
+  // Tagesfelder
+  const lw = playful ? 1.6 : 1.1;
+  for (const c of L.cells) {
+    if (!c.date) continue;
+    const ds = p.days[c.date] || {}, evs = M.events[c.date] || [], hol = M.holidays[c.date];
+    const radius = playful ? Math.min(c.w, c.h) * 0.12 : 0;
+    s += playful ? `<rect x="${f1(c.x + 1.5)}" y="${f1(c.y + 1.5)}" width="${f1(c.w - 3)}" height="${f1(c.h - 3)}" rx="${f1(radius)}" fill="none" stroke="#000" stroke-width="${lw}"/>`
+      : `<rect x="${f1(c.x)}" y="${f1(c.y)}" width="${f1(c.w)}" height="${f1(c.h)}" fill="none" stroke="#000" stroke-width="${lw}"/>`;
+    const ix = c.x + 1.5, iy = c.y + 1.5, iw = c.w - 3, ih = c.h - 3;
+    const pad = c.w * 0.05, ns = Math.min(c.h * 0.2, c.w * 0.2);
+    const numX = ix + pad, numBase = iy + pad + ns * 0.85, num = String(parseIso(c.date).d);
+    if (hol) s += `<circle cx="${f1(numX + Measure.width(num, ns, mBody, true) / 2)}" cy="${f1(numBase - ns * 0.35)}" r="${f1(ns * 0.7)}" fill="${o(M.o.holidayColor)}"/>`;
+    s += `<text x="${f1(numX)}" y="${f1(numBase)}" font-family="${esc(body)}" font-weight="bold" font-size="${f1(ns)}">${num}</text>`;
+    if (M.o.showCheckboxes) { const b = ns * 0.8; s += `<rect x="${f1(ix + iw - pad - b)}" y="${f1(iy + pad)}" width="${f1(b)}" height="${f1(b)}" rx="${f1(b * 0.15)}" fill="none" stroke="#000" stroke-width="${lw}"/>`; }
+
+    const lines = evs.map(e => [e.title, true]);
+    if (hol) lines.push([hol, false]);
+    if (M.o.showNameDays) { const nd = nameDaysFor(c.date); if (nd.length) lines.push([nd.join(', '), false]); }
+    const shown = lines.slice(0, 2), tsz = Math.max(c.h * 0.085, 4.5), blockH = shown.length * tsz * 1.15;
+
+    const imgTop = numBase + ns * 0.15, imgBottom = iy + ih - pad - blockH;
+    if (imgBottom - imgTop > 6) {
+      const ir = { x: ix + pad, y: imgTop, w: iw - 2 * pad, h: imgBottom - imgTop };
+      const iconEv = evs.find(e => e.asImage);
+      if (iconEv) s += motifIn(iconEv.icon || 'STAR', ir.x, ir.y, ir.w, ir.h);
+      else if (ds.removed) { /* leer */ }
+      else if (ds.drawingId && Store.drawings.get(ds.drawingId)) s += docSVG(Store.drawings.get(ds.drawingId), ir.x, ir.y, ir.w, ir.h, pdf);
+      else s += templateDrawingSVG(ds.templateId || Catalog.defaultDrawing(c.date), ir.x, ir.y, ir.w, ir.h);
+    }
+    let ty = iy + ih - pad - blockH + tsz;
+    for (const [text, bold] of shown) {
+      s += `<text x="${f1(ix + iw / 2)}" y="${f1(ty)}" font-family="${esc(body)}" ${bold ? 'font-weight="bold"' : ''} font-size="${f1(tsz)}" text-anchor="middle">${esc(Measure.ellipsize(text, tsz, mBody, bold, iw - 2 * pad))}</text>`;
+      ty += tsz * 1.15;
+    }
+  }
+  if (M.footer && L.footer.h > 0) {
+    const fs = L.footer.h * 0.45;
+    s += `<text x="${f1(L.footer.x + L.footer.w / 2)}" y="${f1(L.footer.y + L.footer.h * 0.65)}" font-family="${esc(title)}" font-size="${f1(fs)}" text-anchor="middle">${esc(Measure.ellipsize(M.footer, fs, mTitle, false, L.footer.w * 0.9))}</text>`;
+  }
+  return { svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">${s}</svg>`, layout: L, W, H };
+}
+const o = c => esc(c || '#F6C9A8');
+
+/* ---------- Jahresplaner ---------- */
+const PLANNER_PALETTES = {
+  PLANNER_BLACK_WHITE: { line: '#000', headerFill: '#000', headerText: '#fff', weekend: '#E6E6E6', inactive: '#F6F6F6', lw: 0.7 },
+  PLANNER_GREY_MINIMAL: { line: '#A0A0A0', headerText: '#404040', weekend: '#F0F0F0', inactive: '#F8F8F8', lw: 0.5 },
+  PLANNER_PASTEL: { line: '#B0B0B0', headerText: '#2B2D42', weekend: '#EDEDED', inactive: '#F8F8F8', lw: 0.5,
+    fills: ['#CFE3F5','#CFE3F5','#D5EDDC','#D5EDDC','#D5EDDC','#FCE1CF','#FCE1CF','#FCE1CF','#E4DCF2','#E4DCF2','#E4DCF2','#CFE3F5'] },
+  PLANNER_MODERN_CLEAN: { line: '#CDD3DB', headerText: '#2B2D42', weekend: '#F1F4F8', inactive: '#FAFAFA', accent: '#3D5A80', lw: 0.5 },
+};
+function plannerLayout(W, H) {
+  const margin = Math.min(W, H) * 0.04, left = margin, right = W - margin, top = margin, bottom = H - margin;
+  const titleH = (bottom - top) * 0.075, headerH = (bottom - top) * 0.035, gridTop = top + titleH + (bottom - top) * 0.01;
+  const gap = (right - left) * 0.004, colW = ((right - left) - gap * 11) / 12, rowH = (bottom - gridTop - headerH) / 31;
+  const title = { x: left, y: top, w: right - left, h: titleH };
+  const headers = [], cells = [];
+  for (let m = 0; m < 12; m++) {
+    const x = left + m * (colW + gap);
+    headers.push({ x, y: gridTop, w: colW, h: headerH });
+    const col = [];
+    for (let d = 0; d < 31; d++) col.push({ x, y: gridTop + headerH + d * rowH, w: colW, h: rowH });
+    cells.push(col);
+  }
+  return { title, headers, cells };
+}
+function plannerSVG(p, opts = {}) {
+  const pdf = !!opts.pdf, [W, H] = pageSizePt(p.paper, 'LANDSCAPE'), L = plannerLayout(W, H), o2 = p.options;
+  const pal = PLANNER_PALETTES[p.style] || PLANNER_PALETTES.PLANNER_BLACK_WHITE;
+  const body = fam('nunito', pdf), mBody = fontFamily('nunito');
+  const holidays = p.showHolidays ? holidaysForYear(p.year, p.state) : {};
+  const evs = eventsForYear(p.events, p.year, o2.feb29);
+  const factor = p.paper === 'A4' ? 0.56 : p.paper === 'A3' ? 0.46 : 0.38;
+  let s = `<rect width="${W}" height="${H}" fill="#fff"/>`;
+
+  // Titel mit optionalem Foto und Dekoration
+  const t = L.title; let tl = t.x, tr = t.x + t.w;
+  const img = o2.headerImage && Store.images.get(o2.headerImage);
+  if (img) {
+    const ih = t.h, iw = Math.min(ih * (o2.headerImageRatio || 1.4), t.w * 0.25);
+    s += `<clipPath id="ph"><rect x="${f1(t.x)}" y="${f1(t.y)}" width="${f1(iw)}" height="${f1(ih)}" rx="${f1(ih * 0.15)}"/></clipPath>` +
+      `<image clip-path="url(#ph)" href="${img}" x="${f1(t.x)}" y="${f1(t.y)}" width="${f1(iw)}" height="${f1(ih)}" preserveAspectRatio="xMidYMid slice"/>`;
+    tl = t.x + iw + ih * 0.3;
+  }
+  if (o2.headerDecoration) {
+    const sz = t.h * 0.8, ms = ['SNOWFLAKE', 'FLOWER', 'SUN', 'LEAF'];
+    ms.forEach((mm, i) => { s += motifSVG(mm, t.x + t.w - sz * (ms.length - i) * 1.15, t.y + (t.h - sz) / 2, sz, 3.0); });
+    tr = t.x + t.w - sz * ms.length * 1.15 - sz * 0.3;
+  }
+  const titleText = (o2.headerTitle || '').trim() ? `${o2.headerTitle.trim()} ${p.year}` : String(p.year);
+  const tsz = t.h * 0.62, tfam = fontFamily(o2.headerFont);
+  s += `<text x="${f1((tl + tr) / 2)}" y="${f1(t.y + t.h * 0.72)}" font-family="${esc(fam(o2.headerFont, pdf))}" font-weight="bold" font-size="${f1(tsz)}" text-anchor="middle">${esc(Measure.ellipsize(titleText, tsz, tfam, true, Math.max(tr - tl, 10)))}</text>`;
+
+  L.headers.forEach((r, m) => {
+    const bg = pal.fills ? pal.fills[m] : pal.headerFill;
+    if (bg) s += `<rect x="${f1(r.x)}" y="${f1(r.y)}" width="${f1(r.w)}" height="${f1(r.h)}" fill="${bg}"/>`;
+    s += `<text x="${f1(r.x + r.w / 2)}" y="${f1(r.y + r.h * 0.7)}" font-family="${esc(body)}" font-weight="bold" font-size="${f1(r.h * 0.55)}" fill="${pal.headerText}" text-anchor="middle">${MONTHS[m]}</text>`;
+    if (pal.accent) s += `<rect x="${f1(r.x)}" y="${f1(r.y + r.h * 0.92)}" width="${f1(r.w)}" height="${f1(r.h * 0.08)}" fill="${pal.accent}"/>`;
+    if (!bg && !pal.accent) s += `<line x1="${f1(r.x)}" y1="${f1(r.y + r.h)}" x2="${f1(r.x + r.w)}" y2="${f1(r.y + r.h)}" stroke="${pal.line}" stroke-width="${pal.lw}"/>`;
+  });
+  L.cells.forEach((col, mi) => col.forEach((r, di) => {
+    const m = mi + 1, d = di + 1, rect = `x="${f1(r.x)}" y="${f1(r.y)}" width="${f1(r.w)}" height="${f1(r.h)}"`;
+    if (!dayExists(p.year, m, d)) { s += `<rect ${rect} fill="${pal.inactive}" stroke="${pal.line}" stroke-width="${pal.lw}"/>`; return; }
+    const k = iso(p.year, m, d), hol = holidays[k];
+    const bg = hol ? o(o2.holidayColor) : isWeekend(p.year, m, d) ? pal.weekend : 'none';
+    s += `<rect ${rect} fill="${bg}" stroke="${pal.line}" stroke-width="${pal.lw}"/>`;
+    const pad = r.h * 0.12, ns = r.h * factor, base = r.y + r.h / 2 + ns * 0.35, numW = Measure.width('00', ns, mBody, true);
+    s += `<text x="${f1(r.x + pad)}" y="${f1(base)}" font-family="${esc(body)}" font-weight="bold" font-size="${f1(ns)}">${d}</text>`;
+    s += `<text x="${f1(r.x + pad * 1.6 + numW)}" y="${f1(base)}" font-family="${esc(body)}" font-size="${f1(ns * 0.8)}" fill="#444">${WD_SHORT[weekday(p.year, m, d)]}</text>`;
+    const notes = [];
+    if (hol) notes.push(hol);
+    if (o2.showEvents) (evs[k] || []).forEach(e => notes.push(e.title));
+    if (o2.showEvents && o2.showNameDays) notes.push(...nameDaysFor(k));
+    const nl = r.x + pad * 2.6 + numW + Measure.width('Mo', ns * 0.8, mBody, false), nw = r.x + r.w - pad - nl;
+    if (notes.length && nw > 8) s += `<text x="${f1(nl)}" y="${f1(base)}" font-family="${esc(body)}" font-size="${f1(ns * 0.72)}">${esc(Measure.ellipsize(notes.join(' · '), ns * 0.72, mBody, false, nw))}</text>`;
+  }));
+  return { svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">${s}</svg>`, layout: L, W, H };
+}
+function plannerDateAt(p, L, x, y) {
+  for (let m = 0; m < 12; m++) for (let d = 0; d < 31; d++) {
+    const r = L.cells[m][d];
+    if (x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h && dayExists(p.year, m + 1, d + 1)) return iso(p.year, m + 1, d + 1);
+  }
+  return null;
+}
+
+'use strict';
+/* ColorDays Web – PDF-Erzeugung, Speichern, Drucken, Teilen. */
+
+const PdfLibs = {
+  promise: null,
+  load() {
+    if (this.promise) return this.promise;
+    const load = src => new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+    this.promise = load('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js')
+      .then(() => load('https://cdn.jsdelivr.net/npm/svg2pdf.js@2.2.3/dist/svg2pdf.umd.min.js'))
+      .then(() => !!(window.jspdf && window.jspdf.jsPDF))
+      .catch(() => false);
+    return this.promise;
+  },
+};
+
+function pagesFor(p, months) {
+  if (p.type === 'YEAR_PLANNER') return [opts => plannerSVG(p, opts)];
+  return months.slice().sort((a, b) => a - b).map(m => opts => monthPageSVG(p, m, opts));
+}
+
+/** PDF direkt aus dem Datenmodell. Vektor (jsPDF + svg2pdf) wenn verfügbar, sonst Rasterbild 200 dpi. */
+async function buildPdf(p, months, onProgress) {
+  await Store.preload(p);
+  const pages = pagesFor(p, months);
+  if (await PdfLibs.load()) {
+    try { return { blob: await vectorPdf(pages, onProgress), vector: true }; } catch (e) { console.warn('Vektor-PDF fehlgeschlagen, Raster-Fallback', e); }
+  }
+  return { blob: await rasterPdf(pages, onProgress), vector: false };
+}
+
+async function vectorPdf(pages, onProgress) {
+  const { jsPDF } = window.jspdf;
+  let doc = null;
+  const holder = document.createElement('div');
+  holder.style.cssText = 'position:fixed;left:-99999px;top:0;width:10px;height:10px;overflow:hidden';
+  document.body.appendChild(holder);
+  try {
+    for (let i = 0; i < pages.length; i++) {
+      const { svg, W, H } = pages[i]({ pdf: true });
+      const orient = W > H ? 'l' : 'p';
+      if (!doc) doc = new jsPDF({ orientation: orient, unit: 'pt', format: [W, H], compress: true });
+      else doc.addPage([W, H], orient);
+      holder.innerHTML = svg;
+      const el = holder.firstElementChild;
+      if (typeof doc.svg === 'function') await doc.svg(el, { x: 0, y: 0, width: W, height: H });
+      else await window.svg2pdf.svg2pdf(el, doc, { x: 0, y: 0, width: W, height: H });
+      onProgress && onProgress(i + 1, pages.length);
+    }
+    return doc.output('blob');
+  } finally { holder.remove(); }
+}
+
+/* Webschriften für Bilder: Ein SVG, das als Bild gezeichnet wird, darf keine externen Schriften laden.
+   Daher werden die Schriftdateien (nur Latin) einmal geladen und als data:-URL eingebettet.
+   Ohne Internet bzw. wo fetch gesperrt ist, wird eine Systemschrift verwendet. */
+const FONT_CSS_URL = 'https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700&family=Open+Sans:wght@400;700&family=Patrick+Hand&family=Quicksand:wght@400;700&display=swap';
+const FontEmbed = {
+  promise: null,
+  get() {
+    if (this.promise) return this.promise;
+    this.promise = (async () => {
+      try {
+        const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 8000);
+        const css = await (await fetch(FONT_CSS_URL, { signal: ctrl.signal })).text();
+        clearTimeout(t);
+        const blocks = css.split('/* ').filter(b => b.startsWith('latin */')).map(b => b.slice(9));
+        const out = [];
+        for (const b of blocks) {
+          const m = b.match(/url\((https:[^)]+)\)/); if (!m) continue;
+          const blob = await (await fetch(m[1])).blob();
+          const data = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
+          out.push(b.replace(m[1], data).replace(/unicode-range:[^;]+;/, ''));
+        }
+        return out.join('\n');
+      } catch (_) { return ''; }
+    })();
+    return this.promise;
+  },
+};
+
+/** Eine Seite als Bild. Auflösung bis 300 dpi, begrenzt auf ca. 16 Megapixel (Grenze mobiler Browser). */
+async function renderPageImage(svg, W, H, dpi = 300, type = 'image/jpeg') {
+  dpi = Math.min(dpi, Math.sqrt(16e6 / (W * H)) * 72);
+  const fonts = await FontEmbed.get();
+  if (fonts) svg = svg.replace(/^(<svg[^>]*>)/, `$1<defs><style>${fonts}</style></defs>`);
+  return svgToJpeg(svg, W, H, dpi, type);
+}
+
+function svgToJpeg(svg, W, H, dpi = 200, type = 'image/jpeg') {
+  return new Promise((resolve, reject) => {
+    const scale = dpi / 72, img = new Image();
+    img.onload = () => {
+      const c = document.createElement('canvas'); c.width = Math.round(W * scale); c.height = Math.round(H * scale);
+      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+      g.drawImage(img, 0, 0, c.width, c.height);
+      c.toBlob(blob => {
+        if (!blob) return reject(new Error('Bild zu groß'));
+        if (type !== 'image/jpeg') return resolve({ blob, pw: c.width, ph: c.height });
+        const fr = new FileReader();
+        fr.onload = () => resolve({ blob, data: fr.result, pw: c.width, ph: c.height });
+        fr.readAsDataURL(blob);
+      }, type, 0.92);
+    };
+    img.onerror = reject;
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  });
+}
+
+async function rasterPdf(pages, onProgress) {
+  const imgs = [];
+  for (let i = 0; i < pages.length; i++) {
+    const { svg, W, H } = pages[i]({ pdf: false });
+    imgs.push({ ...(await renderPageImage(svg, W, H, 200)), W, H });
+    onProgress && onProgress(i + 1, pages.length);
+  }
+  return jpegPdf(imgs);
+}
+
+/** Minimaler PDF-Schreiber: eine JPEG-Seite pro Blatt in exakter Papiergröße. */
+function jpegPdf(imgs) {
+  const enc = new TextEncoder(), chunks = [], offsets = [];
+  let len = 0;
+  const push = x => { const b = typeof x === 'string' ? enc.encode(x) : x; chunks.push(b); len += b.length; };
+  const obj = (n, body) => { offsets[n] = len; push(`${n} 0 obj\n`); body(); push('\nendobj\n'); };
+  push('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+  const n = imgs.length, kids = [];
+  for (let i = 0; i < n; i++) kids.push(`${3 + i * 3} 0 R`);
+  obj(1, () => push('<< /Type /Catalog /Pages 2 0 R >>'));
+  obj(2, () => push(`<< /Type /Pages /Kids [${kids.join(' ')}] /Count ${n} >>`));
+  imgs.forEach((im, i) => {
+    const pg = 3 + i * 3, content = pg + 1, image = pg + 2;
+    obj(pg, () => push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${im.W} ${im.H}] /Resources << /XObject << /Im${i} ${image} 0 R >> >> /Contents ${content} 0 R >>`));
+    const stream = `q ${im.W} 0 0 ${im.H} 0 0 cm /Im${i} Do Q`;
+    obj(content, () => push(`<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`));
+    const bin = atob(im.data.split(',')[1]), bytes = new Uint8Array(bin.length);
+    for (let k = 0; k < bin.length; k++) bytes[k] = bin.charCodeAt(k);
+    obj(image, () => { push(`<< /Type /XObject /Subtype /Image /Width ${im.pw} /Height ${im.ph} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.length} >>\nstream\n`); push(bytes); push('\nendstream'); });
+  });
+  const total = 3 + n * 3, xref = len;
+  let x = `xref\n0 ${total}\n0000000000 65535 f \n`;
+  for (let i = 1; i < total; i++) x += String(offsets[i]).padStart(10, '0') + ' 00000 n \n';
+  push(x + `trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
+  return new Blob(chunks, { type: 'application/pdf' });
+}
+
+const inClaude = () => !!(window.claude && typeof window.claude.use === 'function');
+
+/** Datei speichern: in claude.ai über die Download-Freigabe, sonst als normaler Browser-Download. */
+async function saveFile(filename, blob) {
+  if (inClaude()) {
+    const dl = await claude.use('downloads');
+    if (!dl) throw { code: 'unavailable' };
+    await dl.save({ filename, data: blob });
+    return true;
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  return true;
+}
+
+/** Drucken im Browser (außerhalb von claude.ai): Seiten in Originalgröße, @page passend gesetzt. */
+function printPages(p, months) {
+  const pages = pagesFor(p, months);
+  const first = pages[0]({ pdf: false });
+  const [wmm, hmm] = pageSizeMm(p.paper, p.type === 'YEAR_PLANNER' ? 'LANDSCAPE' : p.orientation);
+  let area = document.getElementById('print-area');
+  if (!area) { area = document.createElement('div'); area.id = 'print-area'; document.body.appendChild(area); }
+  area.innerHTML = `<style>@page{size:${wmm}mm ${hmm}mm;margin:0}</style>` +
+    pages.map((fn, i) => { const { svg } = i === 0 ? first : fn({ pdf: false }); return `<div class="print-page" style="width:${wmm}mm;height:${hmm}mm">${svg}</div>`; }).join('');
+  setTimeout(() => window.print(), 300);
+}
+
+/** Jede Seite als eigene JPG-Datei speichern (Spez.-Erweiterung: Bildexport). */
+async function saveJpgs(p, months, onProgress) {
+  await Store.preload(p);
+  const list = p.type === 'YEAR_PLANNER' ? [null] : months.slice().sort((a, b) => a - b);
+  const base = pdfFileName(p, months).replace(/_(Jahr|Jahresplaner|Monat_\d+|\d+_Monate)\.pdf$/, '');
+  let saved = 0;
+  for (let i = 0; i < list.length; i++) {
+    const m = list[i];
+    const { svg, W, H } = m === null ? plannerSVG(p) : monthPageSVG(p, m);
+    onProgress && onProgress(i + 1, list.length);
+    const { blob } = await renderPageImage(svg, W, H, 300);
+    const name = m === null ? `${base}_Jahresplaner.jpg` : `${base}_${pad2(m)}_${MONTHS[m - 1].replace('ä', 'ae')}.jpg`;
+    await saveFile(name, blob);
+    saved++;
+  }
+  return saved;
+}
+
+function pdfFileName(p, months) {
+  const safe = p.name.replace(/[^A-Za-z0-9ÄÖÜäöüß _-]/g, '').trim().replace(/\s+/g, '_') || 'Kalender';
+  const suffix = p.type === 'YEAR_PLANNER' ? 'Jahresplaner' : months.length === 12 ? 'Jahr' : months.length === 1 ? 'Monat_' + pad2(months[0]) : months.length + '_Monate';
+  return `${safe}_${p.year}_${suffix}.pdf`;
+}
+
+'use strict';
+/* ColorDays Web – Oberfläche: Navigation, Bildschirme, Dialoge, Zoom. */
+
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+const ICON = {
+  back: '<path d="M15 5l-7 7 7 7"/>', plus: '<path d="M12 5v14M5 12h14"/>', minus: '<path d="M5 12h14"/>', close: '<path d="M6 6l12 12M18 6L6 18"/>',
+  pdf: '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/><path d="M9 14h6M9 17h4"/>', tune: '<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>', eye: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  print: '<path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/>', save: '<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7V3M8 21v-7h8v7"/>',
+  share: '<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.9l7.6-4.6M8.2 13.1l7.6 4.6"/>',
+  more: '<circle cx="12" cy="5" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="12" cy="19" r="1.3"/>', header: '<rect x="3" y="4" width="18" height="6" rx="1"/><path d="M3 14h18M3 18h18"/>',
+  text: '<path d="M5 6V4h14v2M12 4v16M9 20h6"/>', zoomIn: '<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M8 11h6M11 8v6"/>', zoomOut: '<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M8 11h6"/>',
+  fit: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>', undo: '<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 010 12h-3"/>', redo: '<path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 000 12h3"/>',
+  layers: '<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>', trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/>',
+  up: '<path d="M6 15l6-6 6 6"/>', down: '<path d="M6 9l6 6 6-6"/>', image: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-6-6-8 8"/>',
+  sticker: '<circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M8 15c2 2 6 2 8 0"/>', brush: '<path d="M14 4l6 6-9 9H5v-6z"/>',
+  restore: '<path d="M4 12a8 8 0 108-8H8"/><path d="M8 1v6h6" transform="translate(-4 0)"/>', event: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M12 13v4M10 15h4"/>',
+  palette: '<path d="M12 3a9 9 0 100 18c1.5 0 2-1 2-2s-1-2 0-3 3 0 4-1 2-3 2-4a8 8 0 00-8-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/>',
+  fill: '<path d="M5 11l7-7 7 7-7 7z"/><path d="M20 15s2 2.5 2 4a2 2 0 01-4 0c0-1.5 2-4 2-4z"/>', crop: '<path d="M6 2v16h16M2 6h16v16"/>', front: '<rect x="8" y="8" width="12" height="12" rx="1"/><path d="M4 16V4h12"/>',
+  back2: '<rect x="4" y="4" width="12" height="12" rx="1"/><path d="M20 8v12H8"/>', select: '<path d="M5 3l14 9-7 1-3 7z"/>', pencil: '<path d="M4 20h4L19 9l-4-4L4 16z"/>',
+  eraser: '<path d="M4 15l9-9 7 7-7 7H8z"/><path d="M9 11l6 6"/>', check: '<path d="M5 12l5 5 9-10"/>', backup: '<path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/>', upload: '<path d="M12 21V9M7 14l5-5 5 5"/><path d="M5 3h14"/>',
+};
+const icon = (n, size = 22) => `<svg class="ic" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n] || ''}</svg>`;
+const motifIcon = (name, size = 28) => `<svg width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true">${motifSVG(name, 4, 4, 92, 5)}</svg>`;
+
+const UI = {
+  stack: [], actions: {}, modals: [],
+  root: null,
+  start() {
+    this.root = $('#app');
+    document.addEventListener('click', e => this.onClick(e));
+    document.addEventListener('change', e => this.onInput(e, 'change'));
+    document.addEventListener('input', e => this.onInput(e, 'input'));
+    window.addEventListener('beforeunload', () => { Store.flush(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) Store.flush(); });
+    this.go('home');
+  },
+  go(screen, params = {}) { this.stack.push({ screen, params }); this.render(); },
+  replace(screen, params = {}) { this.stack.pop(); this.stack.push({ screen, params }); this.render(); },
+  back() { if (this.modals.length) return this.closeModal(); if (this.stack.length > 1) { this.stack.pop(); this.render(); } },
+  home() { this.stack = [this.stack[0]]; this.render(); },
+  cur() { return this.stack[this.stack.length - 1]; },
+  async render() {
+    const { screen, params } = this.cur();
+    const s = Screens[screen];
+    Store.flush();
+    if (s.load) await s.load(params);
+    const canBack = this.stack.length > 1;
+    const title = typeof s.title === 'function' ? s.title(params) : s.title;
+    const sub = s.subtitle ? s.subtitle(params) : '';
+    this.root.innerHTML = `
+      <header class="bar">
+        ${canBack ? `<button class="icon-btn" data-act="back" aria-label="Zurück">${icon('back')}</button>` : '<span class="bar-pad"></span>'}
+        <div class="bar-title"><h1>${esc(title)}</h1>${sub ? `<div class="bar-sub">${esc(sub)}</div>` : ''}</div>
+        <div class="bar-actions">${s.actions ? s.actions(params) : ''}</div>
+      </header>
+      <main class="screen screen-${screen}">${s.render(params)}</main>`;
+    this.actions = s.on || {};
+    if (s.mount) s.mount(params, $('main', this.root));
+    window.scrollTo(0, 0);
+  },
+  refresh() { // nur Inhalt neu zeichnen (Scrollposition behalten)
+    if (this._refreshing) { setTimeout(() => this.refresh(), 0); return; } // z. B. blur → change während des Neuzeichnens
+    this._refreshing = true;
+    const { screen, params } = this.cur(), s = Screens[screen], main = $('main', this.root), y = window.scrollY;
+    try { main.innerHTML = s.render(params); } finally { this._refreshing = false; }
+    if (s.mount) s.mount(params, main);
+    const sub = $('.bar-sub', this.root); if (sub && s.subtitle) sub.textContent = s.subtitle(params);
+    window.scrollTo(0, y);
+  },
+  onClick(e) {
+    const el = e.target.closest('[data-act]'); if (!el) return;
+    const act = el.dataset.act;
+    if (act === 'back') return this.back();
+    if (act === 'home') return this.home();
+    if (act === 'modal-close') return this.closeModal();
+    const m = this.modals[this.modals.length - 1];
+    const fn = (m && m.on[act]) || this.actions[act] || Global[act];
+    if (fn) { e.preventDefault(); fn(el, this.cur().params, e); }
+  },
+  onInput(e, kind) {
+    const el = e.target.closest('[data-in]'); if (!el) return;
+    const m = this.modals[this.modals.length - 1];
+    const key = el.dataset.in + (kind === 'input' ? ':input' : '');
+    const fn = (m && m.on[key]) || this.actions[key];
+    if (fn) fn(el, this.cur().params, e);
+  },
+  modal(html, on = {}, opts = {}) {
+    const wrap = document.createElement('div');
+    wrap.className = 'modal-wrap' + (opts.full ? ' full' : '') + (opts.sheet ? ' sheet' : '');
+    wrap.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}</div>`;
+    wrap.addEventListener('click', e => { if (e.target === wrap && !opts.sticky) this.closeModal(); });
+    document.body.appendChild(wrap);
+    const m = { el: wrap, on, onClose: opts.onClose };
+    this.modals.push(m);
+    if (opts.mount) opts.mount(wrap);
+    const f = wrap.querySelector('input,textarea,select'); if (f && !opts.noFocus) setTimeout(() => f.focus(), 50);
+    return m;
+  },
+  closeModal() { const m = this.modals.pop(); if (m) { m.el.remove(); m.onClose && m.onClose(); } },
+  closeAll() { while (this.modals.length) this.closeModal(); },
+  confirm(title, text, okLabel, onOk, danger = false) {
+    this.modal(`<h2>${esc(title)}</h2><p>${esc(text)}</p><div class="row end"><button class="btn text" data-act="modal-close">Abbrechen</button><button class="btn ${danger ? 'danger' : 'primary'}" data-act="ok">${esc(okLabel)}</button></div>`,
+      { ok: () => { this.closeModal(); onOk(); } });
+  },
+  prompt(title, value, onOk, opts = {}) {
+    this.modal(`<h2>${esc(title)}</h2><label class="field"><span>${esc(opts.label || 'Name')}</span><input id="pr" maxlength="${opts.max || 60}" value="${esc(value)}"></label>
+      <div class="row end"><button class="btn text" data-act="modal-close">Abbrechen</button><button class="btn primary" data-act="ok">Speichern</button></div>`,
+      { ok: () => { const v = $('#pr').value.trim(); if (!v && !opts.allowEmpty) return; this.closeModal(); onOk(v); } });
+  },
+  toast(text) {
+    const t = document.createElement('div'); t.className = 'toast'; t.textContent = text; document.body.appendChild(t);
+    setTimeout(() => t.classList.add('show'), 10); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3200);
+  },
+  busy(on, text = '') {
+    let b = $('#busy');
+    if (on) { if (!b) { b = document.createElement('div'); b.id = 'busy'; document.body.appendChild(b); } b.innerHTML = `<div class="spinner"></div><div>${esc(text)}</div>`; }
+    else if (b) b.remove();
+  },
+};
+const Global = {};
+
+/* ---------- Zoom (Pinch, Mausrad, Ziehen, Doppeltippen) ---------- */
+function attachZoom(viewport, opts = {}) {
+  const inner = viewport.firstElementChild;
+  let s = 1, tx = 0, ty = 0, pts = new Map(), start = null, moved = false;
+  const max = opts.max || 6;
+  const apply = () => {
+    const vw = viewport.clientWidth, vh = viewport.clientHeight;
+    const mx = vw * (s - 1) / 2, my = vh * (s - 1) / 2;
+    tx = Math.max(-mx, Math.min(mx, tx)); ty = Math.max(-my, Math.min(my, ty));
+    inner.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
+    viewport.classList.toggle('zoomed', s > 1.01);
+  };
+  const zoomAt = (ns, cx, cy) => {
+    ns = Math.max(1, Math.min(max, ns));
+    const r = viewport.getBoundingClientRect(), px = cx - r.left - r.width / 2, py = cy - r.top - r.height / 2;
+    tx = px - (px - tx) * ns / s; ty = py - (py - ty) * ns / s; s = ns;
+    if (s === 1) { tx = 0; ty = 0; }
+    apply();
+  };
+  viewport.addEventListener('wheel', e => { e.preventDefault(); zoomAt(s * (e.deltaY < 0 ? 1.15 : 1 / 1.15), e.clientX, e.clientY); }, { passive: false });
+  viewport.addEventListener('pointerdown', e => {
+    pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); moved = false;
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; start = { d: Math.hypot(a.x - b.x, a.y - b.y), s, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2 }; }
+  });
+  viewport.addEventListener('pointermove', e => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pts.size === 2 && start) {
+      const [a, b] = [...pts.values()];
+      zoomAt(start.s * Math.hypot(a.x - b.x, a.y - b.y) / start.d, (a.x + b.x) / 2, (a.y + b.y) / 2); moved = true;
+    } else if (pts.size === 1 && s > 1) {
+      const dx = e.clientX - prev.x, dy = e.clientY - prev.y;
+      if (Math.abs(dx) + Math.abs(dy) > 0.5) { tx += dx; ty += dy; apply(); if (Math.abs(dx) + Math.abs(dy) > 2) moved = true; }
+    }
+  });
+  const up = e => { pts.delete(e.pointerId); if (pts.size < 2) start = null; };
+  viewport.addEventListener('pointerup', up); viewport.addEventListener('pointercancel', up);
+  viewport.addEventListener('click', e => { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
+  viewport.addEventListener('dblclick', e => { e.preventDefault(); zoomAt(s > 1.2 ? 1 : 3, e.clientX, e.clientY); });
+  viewport.style.touchAction = 'none';
+  apply();
+  return {
+    zoomIn: () => { const r = viewport.getBoundingClientRect(); zoomAt(s * 1.5, r.left + r.width / 2, r.top + r.height / 2); },
+    zoomOut: () => { const r = viewport.getBoundingClientRect(); zoomAt(s / 1.5, r.left + r.width / 2, r.top + r.height / 2); },
+    reset: () => { s = 1; tx = 0; ty = 0; apply(); },
+  };
+}
+const zoomButtons = () => `<div class="zoom-tools"><button class="icon-btn" data-act="zin" aria-label="Vergrößern">${icon('zoomIn')}</button><button class="icon-btn" data-act="zout" aria-label="Verkleinern">${icon('zoomOut')}</button><button class="icon-btn" data-act="zfit" aria-label="Ganze Seite">${icon('fit')}</button></div>`;
+function bindZoomButtons(root, z) {
+  $$('[data-act=zin]', root).forEach(b => b.onclick = e => { e.stopPropagation(); z.zoomIn(); });
+  $$('[data-act=zout]', root).forEach(b => b.onclick = e => { e.stopPropagation(); z.zoomOut(); });
+  $$('[data-act=zfit]', root).forEach(b => b.onclick = e => { e.stopPropagation(); z.reset(); });
+}
+/** SVG-Klick in Seitenkoordinaten (pt) umrechnen. */
+function svgPoint(svg, e) {
+  const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+  return pt.matrixTransform(svg.getScreenCTM().inverse());
+}
+
+/* ---------- Einstellungen ---------- */
+const Settings = {
+  data: { state: null, holidays: true },
+  async load() {
+    try {
+      if (Store.mode === 'db') { const s = await Store.col.doc('settings').get(); if (s.exists) Object.assign(this.data, s.data().s || {}); }
+      else if (Store.mode === 'local') { const v = localStorage.getItem('cd.settings'); if (v) Object.assign(this.data, JSON.parse(v)); }
+    } catch (_) {}
+  },
+  save() {
+    const d = { ...this.data };
+    if (Store.mode === 'db') Store._write('settings', { kind: 'settings', s: d });
+    else if (Store.mode === 'local') { try { localStorage.setItem('cd.settings', JSON.stringify(d)); } catch (_) {} }
+  },
+};
+
+/* ---------- Gemeinsame Bausteine ---------- */
+const chips = (name, items, sel) => `<div class="chips">${items.map(([v, l]) => `<button class="chip ${String(v) === String(sel) ? 'on' : ''}" data-act="${name}" data-v="${esc(v)}">${esc(l)}</button>`).join('')}</div>`;
+const stateSelect = (sel, attr = 'data-in="state"') => `<select ${attr}><option value="">Keine Auswahl</option>${STATES.map(([c, n]) => `<option value="${c}" ${c === sel ? 'selected' : ''}>${n}</option>`).join('')}</select>`;
+const yearPicker = y => `<div class="year"><button class="icon-btn tonal" data-act="year-" aria-label="Jahr verringern" ${y <= YEAR_MIN ? 'disabled' : ''}>${icon('minus')}</button>
+  <input type="number" min="${YEAR_MIN}" max="${YEAR_MAX}" value="${y}" data-in="year" aria-label="Jahr" inputmode="numeric">
+  <button class="icon-btn tonal" data-act="year+" aria-label="Jahr erhöhen" ${y >= YEAR_MAX ? 'disabled' : ''}>${icon('plus')}</button></div>`;
+const clampYear = y => Math.max(YEAR_MIN, Math.min(YEAR_MAX, Math.round(Number(y) || new Date().getFullYear())));
+const checkRow = (act, label, on) => `<label class="check"><input type="checkbox" data-in="${act}" ${on ? 'checked' : ''}><span>${esc(label)}</span></label>`;
+const PALETTE = ['#000000','#5C5F73','#FFFFFF','#E53935','#FB8C00','#FDD835','#43A047','#00ACC1','#1E88E5','#8E24AA','#D81B60','#8D6E63','#F6C9A8','#CFE3F5','#D5EDDC','#E4DCF2'];
+const swatches = (act, colors, sel) => `<div class="swatches">${colors.map(c => `<button class="sw ${c.toLowerCase() === String(sel).toLowerCase() ? 'on' : ''}" style="background:${c}" data-act="${act}" data-v="${c}" aria-label="Farbe ${c}"></button>`).join('')}</div>`;
+const thumb = (svgInner, vb = '0 0 100 100') => `<svg viewBox="${vb}" class="thumb-svg">${svgInner}</svg>`;
+
+/** Bildauswahl über alle Monate (Spez. 7.2): Auswahl mit „Übernehmen“ bestätigen. */
+function pickDrawing(title, month, current, onPick) {
+  let m = month, sel = current;
+  const body = () => `<div class="hint">Hinweis: einfache Platzhaltergrafiken – die finalen Illustrationen werden separat geliefert.</div>
+    <div class="grid-thumbs">${Catalog.drawingsFor(m).map(t => `<button class="tcard ${t.id === sel ? 'on' : ''}" data-act="pick" data-v="${t.id}">${thumb(templateDrawingSVG(t.id, 0, 0, 100, 100))}<span>${esc(t.name)}</span></button>`).join('')}</div>`;
+  const md = UI.modal(`<div class="modal-head"><button class="icon-btn" data-act="modal-close" aria-label="Schließen">${icon('close')}</button><h2>${esc(title)}</h2><button class="btn primary" data-act="apply">Übernehmen</button></div>
+    <div class="tabs">${MONTHS.map((n, i) => `<button class="tab ${i + 1 === m ? 'on' : ''}" data-act="tab" data-v="${i + 1}">${n}</button>`).join('')}</div><div class="modal-body" id="pick-body">${body()}</div>`,
+    {
+      tab: el => { m = +el.dataset.v; $$('.tab', md.el).forEach(t => t.classList.toggle('on', t === el)); $('#pick-body', md.el).innerHTML = body(); },
+      pick: el => { sel = el.dataset.v; $$('.tcard', md.el).forEach(t => t.classList.toggle('on', t === el)); },
+      apply: () => { if (sel) { UI.closeModal(); onPick(sel); } },
+    }, { full: true, noFocus: true });
+}
+
+/** Ereignis-Dialog (Spez. 11.2). */
+function editEvent(p, ev, onDone) {
+  const e = Object.assign({ id: null, title: '', category: 'BIRTHDAY', icon: null, note: '', yearly: true, asImage: false }, ev);
+  e.icon = e.icon || (CATEGORIES.find(c => c[0] === e.category) || CATEGORIES[0])[2];
+  const html = () => `<h2>${e.id ? 'Ereignis bearbeiten' : 'Ereignis hinzufügen'} – ${esc(dayTitle(e.date))}</h2>
+    <label class="field"><span>Bezeichnung</span><input id="ev-title" maxlength="60" value="${esc(e.title)}" placeholder="z. B. Dominiks Geburtstag"></label>
+    <label class="field"><span>Art</span><select id="ev-cat">${CATEGORIES.map(([k, l]) => `<option value="${k}" ${k === e.category ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+    <div class="label">Symbol</div><div class="icons">${EVENT_ICONS.map(n => `<button class="icon-choice ${n === e.icon ? 'on' : ''}" data-act="ev-icon" data-v="${n}" aria-label="${esc(MOTIFS[n].l)}">${motifIcon(n, 30)}</button>`).join('')}</div>
+    <label class="field"><span>Kurzer Text (optional)</span><input id="ev-note" maxlength="120" value="${esc(e.note || '')}"></label>
+    <label class="check"><input type="checkbox" id="ev-yearly" ${e.yearly ? 'checked' : ''}><span>Jedes Jahr wiederholen</span></label>
+    <label class="check"><input type="checkbox" id="ev-img" ${e.asImage ? 'checked' : ''}><span>Symbol statt Tagesbild zeigen</span></label>
+    <div class="row end">${e.id ? '<button class="btn text danger-text" data-act="ev-del">Löschen</button><span class="grow"></span>' : ''}<button class="btn text" data-act="modal-close">Abbrechen</button><button class="btn primary" data-act="ev-save">Speichern</button></div>`;
+  const read = () => { e.title = $('#ev-title').value; e.note = $('#ev-note').value; e.yearly = $('#ev-yearly').checked; e.asImage = $('#ev-img').checked; e.category = $('#ev-cat').value; };
+  const md = UI.modal(html(), {
+    'ev-icon': el => { read(); e.icon = el.dataset.v; $$('.icon-choice', md.el).forEach(b => b.classList.toggle('on', b === el)); },
+    'ev-save': () => {
+      read(); if (!e.title.trim()) { $('#ev-title').focus(); return; }
+      const clean = { id: e.id || uid(), date: e.date, title: e.title.trim(), category: e.category, icon: e.icon, note: e.note.trim(), yearly: e.yearly, asImage: e.asImage };
+      const i = p.events.findIndex(x => x.id === clean.id);
+      if (i >= 0) p.events[i] = clean; else p.events.push(clean);
+      Store.saveProject(p); UI.closeModal(); onDone && onDone();
+    },
+    'ev-del': () => { p.events = p.events.filter(x => x.id !== e.id); Store.saveProject(p); UI.closeModal(); onDone && onDone(); },
+  });
+  $('#ev-cat', md.el).addEventListener('change', ev2 => {
+    read(); const c = CATEGORIES.find(x => x[0] === ev2.target.value); e.icon = c[2];
+    if (c[0] === 'BIRTHDAY' || c[0] === 'NAME_DAY') $('#ev-yearly').checked = true;
+    $$('.icon-choice', md.el).forEach(b => b.classList.toggle('on', b.dataset.v === e.icon));
+  });
+}
+
+/* ---------- Bildschirme ---------- */
+const Screens = {};
+
+Screens.home = {
+  title: 'ColorDays', subtitle: () => 'Mein kreativer Kalender',
+  render: () => `<div class="home-grid">
+    ${[['new', 'Neuer Kalender', 'Mal-Kalender oder Jahresplaner erstellen', 'blue', 'SUN'], ['mine', 'Meine Kalender', 'Gespeicherte Kalender öffnen und bearbeiten', 'green', 'BOOK'],
+      ['tpl', 'Vorlagen', 'Bilder und Kopfzeilen entdecken', 'peach', 'FLOWER'], ['set', 'Einstellungen', 'Bundesland, Datensicherung und mehr', 'lilac', 'STAR']]
+      .map(([a, t, d, c, m]) => `<button class="choice ${c}" data-act="${a}"><span class="choice-ic">${motifIcon(m, 40)}</span><span><b>${t}</b><small>${d}</small></span></button>`).join('')}
+    </div><p class="foot-note">${Store.mode === 'db' ? 'Deine Kalender werden privat in deinem Claude-Konto gespeichert.' : Store.mode === 'local' ? 'Deine Kalender werden nur in diesem Browser gespeichert. Sichere sie regelmäßig unter Einstellungen → Datensicherung.' : '⚠️ Speichern ist in dieser Ansicht nicht möglich – Änderungen gehen beim Schließen verloren.'}</p>`,
+  on: { new: () => UI.go('type'), mine: () => UI.go('mine'), tpl: () => UI.go('templates'), set: () => UI.go('settings') },
+};
+
+Screens.type = {
+  title: 'Neuer Kalender',
+  render: () => `<div class="home-grid two">
+    <button class="choice peach big" data-act="t" data-v="COLORING"><span class="choice-ic">${motifIcon('SNOWMAN', 56)}</span><span><b>Mal-Kalender</b><small>Gestalte deinen eigenen Ausmal-Kalender.</small></span></button>
+    <button class="choice blue big" data-act="t" data-v="YEAR_PLANNER"><span class="choice-ic">${motifIcon('BOOK', 56)}</span><span><b>Klassischer Jahresplaner</b><small>Plane dein ganzes Jahr auf einer Seite.</small></span></button></div>`,
+  on: { t: el => UI.go('config', { type: el.dataset.v }) },
+};
+
+Screens.config = {
+  title: p => p.type === 'COLORING' ? 'Mal-Kalender einrichten' : 'Jahresplaner einrichten',
+  load(p) {
+    if (p.f) return;
+    const now = new Date();
+    p.f = { name: '', year: clampYear(now.getMonth() >= 9 ? now.getFullYear() + 1 : now.getFullYear()), paper: 'A4',
+      orientation: p.type === 'COLORING' ? 'PORTRAIT' : 'LANDSCAPE', style: STYLES[p.type][0][0], showHolidays: Settings.data.holidays, state: Settings.data.state, err: false };
+  },
+  render: p => {
+    const f = p.f, coloring = p.type === 'COLORING';
+    return `<div class="form">
+      <label class="field ${f.err ? 'err' : ''}"><span>Name des Kalenders</span><input data-in="name" maxlength="60" value="${esc(f.name)}" placeholder="z. B. Dominiks Kalender">${f.err ? '<em>Bitte gib einen Namen ein.</em>' : ''}</label>
+      <div class="label">Jahr</div>${yearPicker(f.year)}
+      <div class="label">Papierformat</div>${chips('paper', (coloring ? ['A4'] : ['A4', 'A3', 'A2']).map(k => [k, `${k} (${PAPER[k][0]} × ${PAPER[k][1]} mm)`]), f.paper)}
+      <div class="label">Ausrichtung</div>${chips('orient', coloring ? [['PORTRAIT', 'Hochformat'], ['LANDSCAPE', 'Querformat']] : [['LANDSCAPE', 'Querformat']], f.orientation)}
+      <div class="label">Stil</div>${chips('style', STYLES[p.type], f.style)}
+      ${checkRow('hol', 'Feiertage anzeigen', f.showHolidays)}
+      ${f.showHolidays ? `<label class="field"><span>Bundesland</span>${stateSelect(f.state)}</label>` : ''}
+      <button class="btn primary wide" data-act="create">Kalender erstellen</button></div>`;
+  },
+  on: {
+    'name:input': (el, p) => { p.f.name = el.value; if (p.f.err && el.value.trim()) { p.f.err = false; el.parentElement.classList.remove('err'); const em = el.parentElement.querySelector('em'); em && em.remove(); } },
+    year: (el, p) => { p.f.year = clampYear(el.value); UI.refresh(); },
+    'year-': (el, p) => { p.f.year = clampYear(p.f.year - 1); UI.refresh(); },
+    'year+': (el, p) => { p.f.year = clampYear(p.f.year + 1); UI.refresh(); },
+    paper: (el, p) => { p.f.paper = el.dataset.v; UI.refresh(); },
+    orient: (el, p) => { p.f.orientation = el.dataset.v; UI.refresh(); },
+    style: (el, p) => { p.f.style = el.dataset.v; UI.refresh(); },
+    hol: (el, p) => { p.f.showHolidays = el.checked; UI.refresh(); },
+    state: (el, p) => { p.f.state = el.value || null; },
+    create: async (el, p) => {
+      const f = p.f; if (!f.name.trim()) { f.err = true; UI.refresh(); return; }
+      const pr = newProject({ ...f, type: p.type });
+      await Store.saveProject(pr, true);
+      UI.stack = [UI.stack[0]];
+      UI.go(p.type === 'COLORING' ? 'overview' : 'planner', { id: pr.id });
+    },
+  },
+};
+
+Screens.mine = {
+  title: 'Meine Kalender',
+  actions: () => `<button class="btn tonal" data-act="new">${icon('plus', 18)} Neu</button>`,
+  render: () => {
+    const list = Store.list();
+    if (!list.length) return `<div class="empty">${motifIcon('BOOK', 64)}<p>Noch keine Kalender vorhanden.<br>Erstelle deinen ersten Kalender!</p><button class="btn primary" data-act="new">Neuer Kalender</button></div>`;
+    return `<div class="list">${list.map(p => `<div class="item ${p.type === 'COLORING' ? 'peach' : 'blue'}">
+      <button class="item-main" data-act="open" data-id="${p.id}">${motifIcon(p.type === 'COLORING' ? 'SNOWMAN' : 'BOOK', 32)}<span><b>${esc(p.name)}</b><small>${p.type === 'COLORING' ? 'Mal-Kalender' : 'Klassischer Jahresplaner'} · ${p.year} · ${p.paper} ${p.orientation === 'LANDSCAPE' ? 'Querformat' : 'Hochformat'}</small></span></button>
+      <button class="icon-btn" data-act="menu" data-id="${p.id}" aria-label="Weitere Aktionen">${icon('more')}</button></div>`).join('')}</div>`;
+  },
+  on: {
+    new: () => UI.go('type'),
+    open: el => { const p = Store.get(el.dataset.id); UI.go(p.type === 'COLORING' ? 'overview' : 'planner', { id: p.id }); },
+    menu: el => {
+      const p = Store.get(el.dataset.id);
+      UI.modal(`<h2>${esc(p.name)}</h2><div class="menu">
+        <button data-act="m-open">${icon('edit')} Öffnen</button><button data-act="m-pdf">${icon('pdf')} PDF exportieren</button>
+        <button data-act="m-ren">${icon('text')} Umbenennen</button><button data-act="m-copy">${icon('copy')} Kopieren</button>
+        <button class="danger-text" data-act="m-del">${icon('trash')} Löschen</button></div>`, {
+        'm-open': () => { UI.closeModal(); UI.go(p.type === 'COLORING' ? 'overview' : 'planner', { id: p.id }); },
+        'm-pdf': () => { UI.closeModal(); UI.go('export', { id: p.id, months: p.type === 'COLORING' ? [1,2,3,4,5,6,7,8,9,10,11,12] : [] }); },
+        'm-ren': () => { UI.closeModal(); UI.prompt('Kalender umbenennen', p.name, v => { p.name = v; Store.saveProject(p); UI.refresh(); }); },
+        'm-copy': async () => {
+          UI.closeModal(); UI.busy(true, 'Kopiere …');
+          try {
+            const c = structuredClone(p); c.id = uid(); c.name = (p.name + ' (Kopie)').slice(0, 60); c.createdAt = Date.now();
+            for (const d of Object.values(c.days)) if (d.drawingId) d.drawingId = await Store.copyDrawing(d.drawingId);
+            for (const m of Object.values(c.months)) if (m.customHeader) m.customHeader = await Store.copyDrawing(m.customHeader);
+            if (p.options.headerImage) { await Store.ensureImages([p.options.headerImage]); c.options.headerImage = await Store.saveImage(Store.images.get(p.options.headerImage)); }
+            await Store.saveProject(c, true);
+          } finally { UI.busy(false); UI.refresh(); }
+        },
+        'm-del': () => { UI.closeModal(); UI.confirm('Kalender löschen?', `„${p.name}“ wird dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.`, 'Löschen', async () => { await Store.deleteProject(p); UI.refresh(); }, true); },
+      });
+    },
+  },
+};
+
+Screens.templates = {
+  title: 'Vorlagen', subtitle: p => THEMES[(p.m || new Date().getMonth() + 1) - 1],
+  load(p) { p.m = p.m || new Date().getMonth() + 1; p.h = !!p.h; },
+  render: p => `<div class="chips"><button class="chip ${!p.h ? 'on' : ''}" data-act="kind" data-v="0">Tagesbilder (31)</button><button class="chip ${p.h ? 'on' : ''}" data-act="kind" data-v="1">Kopfzeilen (5)</button></div>
+    <div class="tabs">${MONTHS.map((n, i) => `<button class="tab ${i + 1 === p.m ? 'on' : ''}" data-act="tab" data-v="${i + 1}">${n}</button>`).join('')}</div>
+    <div class="hint">Hinweis: einfache Platzhaltergrafiken – die finalen Illustrationen werden separat geliefert.</div>
+    ${p.h ? `<div class="grid-headers">${Catalog.headersFor(p.m).map(h => `<div class="tcard static">${thumb(headerSVG(h.id, 0, 0, 400, 100) + titleOverlay(`${MONTHS[p.m - 1]} 2027`, 400, 100), '0 0 400 100')}<span>${esc(h.name)} · ${h.id}</span></div>`).join('')}</div>`
+      : `<div class="grid-thumbs">${Catalog.drawingsFor(p.m).map(t => `<div class="tcard static">${thumb(templateDrawingSVG(t.id, 0, 0, 100, 100))}<span>${esc(t.name)}</span></div>`).join('')}</div>`}`,
+  on: { kind: (el, p) => { p.h = el.dataset.v === '1'; UI.refresh(); }, tab: (el, p) => { p.m = +el.dataset.v; UI.render(); } },
+};
+function titleOverlay(text, w, h) {
+  const ts = h * 0.26, tw = Measure.width(text, ts, fontFamily('fredoka'), true);
+  return `<rect x="${w / 2 - tw / 2 - ts * 0.5}" y="${h / 2 - ts * 0.85}" width="${tw + ts}" height="${ts * 1.6}" rx="${ts * 0.3}" fill="#fff" stroke="#000" stroke-width="${ts * 0.06}"/><text x="${w / 2}" y="${h / 2 + ts * 0.3}" font-family="${fontFamily('fredoka')}" font-weight="bold" font-size="${ts}" text-anchor="middle">${esc(text)}</text>`;
+}
+
+Screens.settings = {
+  title: 'Einstellungen',
+  render: () => `<div class="form">
+    <label class="field"><span>Standard-Bundesland</span>${stateSelect(Settings.data.state)}</label>
+    ${checkRow('hol', 'Feiertage standardmäßig anzeigen', Settings.data.holidays)}
+    <div class="label">Datensicherung</div>
+    <p class="muted">Alle Kalender, Zeichnungen und Bilder als eine Datei sichern bzw. wiederherstellen (z. B. zum Umzug auf ein anderes Gerät).</p>
+    <div class="row"><button class="btn tonal" data-act="backup">${icon('backup', 18)} Sicherung speichern</button><label class="btn tonal">${icon('upload', 18)} Sicherung laden<input type="file" accept=".json,application/json" data-in="restore" hidden></label></div>
+    <div class="label">Über ColorDays</div>
+    <p class="muted">Version ${VERSION} (Web) · ${Store.mode === 'db' ? 'Speicherung privat im Claude-Konto' : Store.mode === 'local' ? 'Speicherung in diesem Browser' : 'ohne Speicherung'} · Keine Werbung, kein Tracking.</p></div>`,
+  on: {
+    state: el => { Settings.data.state = el.value || null; Settings.save(); },
+    hol: el => { Settings.data.holidays = el.checked; Settings.save(); },
+    backup: async () => {
+      UI.busy(true, 'Sicherung wird erstellt …');
+      try {
+        const projects = Store.list(), drawings = {}, images = {};
+        for (const p of projects) {
+          await Store.preload(p);
+          for (const d of Object.values(p.days)) if (d.drawingId) drawings[d.drawingId] = Store.drawings.get(d.drawingId);
+          for (const m of Object.values(p.months)) if (m.customHeader) drawings[m.customHeader] = Store.drawings.get(m.customHeader);
+          if (p.options.headerImage) images[p.options.headerImage] = Store.images.get(p.options.headerImage);
+        }
+        for (const d of Object.values(drawings)) if (d) for (const id of drawingImageIds(d)) images[id] = Store.images.get(id);
+        const data = JSON.stringify({ app: 'ColorDays', version: VERSION, created: new Date().toISOString(), settings: Settings.data, projects, drawings, images });
+        await saveFile(`ColorDays_Sicherung_${new Date().toISOString().slice(0, 10)}.json`, new Blob([data], { type: 'application/json' }));
+      } catch (e) { if (!e || e.code !== 'declined') UI.toast('Sicherung konnte nicht gespeichert werden.'); }
+      finally { UI.busy(false); }
+    },
+    restore: async el => {
+      const file = el.files[0]; if (!file) return;
+      try {
+        const data = JSON.parse(await file.text());
+        if (data.app !== 'ColorDays' || !Array.isArray(data.projects)) throw new Error('format');
+        UI.confirm('Sicherung laden?', `${data.projects.length} Kalender werden hinzugefügt. Vorhandene Kalender bleiben erhalten.`, 'Laden', async () => {
+          UI.busy(true, 'Wird geladen …');
+          for (const [id, url] of Object.entries(data.images || {})) if (url) { Store.images.set(id, url); await Store._write('i_' + id, { kind: 'image', i: url }); }
+          for (const d of Object.values(data.drawings || {})) if (d) await Store.saveDrawing(d, true);
+          for (const p of data.projects) { if (Store.get(p.id)) p.id = uid(); await Store.saveProject(p, true); }
+          UI.busy(false); UI.toast('Sicherung geladen.');
+        });
+      } catch (_) { UI.toast('Die Datei ist keine gültige ColorDays-Sicherung.'); }
+      el.value = '';
+    },
+  },
+};
+
+/* --- Mal-Kalender: Übersicht --- */
+Screens.overview = {
+  title: p => Store.get(p.id)?.name || '', subtitle: p => String(Store.get(p.id)?.year || ''),
+  async load(p) { await Store.preload(Store.get(p.id)); },
+  actions: () => `<button class="icon-btn" data-act="settings" aria-label="Kalendereinstellungen">${icon('tune')}</button><button class="icon-btn" data-act="pdfyear" aria-label="Ganzes Jahr als PDF">${icon('pdf')}</button>`,
+  render: p => {
+    const pr = Store.get(p.id); if (!pr) return '';
+    return `<div class="month-grid">${MONTHS.map((name, i) => {
+      const m = i + 1, page = monthPageSVG(pr, m);
+      return `<div class="mcard"><div class="mcard-head">${motifIcon(CATALOG.months[i][0], 28)}<span><b>${name}</b><small>${THEMES[i]}</small></span></div>
+        <button class="page-thumb" data-act="edit" data-m="${m}" aria-label="${name} bearbeiten">${page.svg}</button>
+        <div class="row between"><button class="icon-btn" data-act="edit" data-m="${m}" aria-label="Bearbeiten">${icon('edit')}</button><button class="icon-btn" data-act="prev" data-m="${m}" aria-label="Vorschau">${icon('eye')}</button><button class="icon-btn" data-act="print" data-m="${m}" aria-label="Drucken">${icon('print')}</button></div></div>`;
+    }).join('')}</div><div class="center"><button class="btn tonal" data-act="pdfyear">Ganzes Jahr als PDF</button></div>`;
+  },
+  on: {
+    edit: (el, p) => UI.go('month', { id: p.id, m: +el.dataset.m }),
+    prev: (el, p) => UI.go('export', { id: p.id, months: [+el.dataset.m] }),
+    print: (el, p) => UI.go('export', { id: p.id, months: [+el.dataset.m], autoPrint: true }),
+    pdfyear: (el, p) => UI.go('export', { id: p.id, months: [1,2,3,4,5,6,7,8,9,10,11,12] }),
+    settings: (el, p) => UI.go('psettings', { id: p.id }),
+  },
+};
+
+/* --- Mal-Kalender: Monatseditor --- */
+Screens.month = {
+  title: p => { const pr = Store.get(p.id); return `${MONTHS[p.m - 1]} ${pr ? pr.year : ''}`; }, subtitle: p => Store.get(p.id)?.name || '',
+  async load(p) { await Store.preload(Store.get(p.id)); },
+  actions: () => `<button class="icon-btn" data-act="headers" aria-label="Kopfzeile ändern">${icon('header')}</button><button class="icon-btn" data-act="texts" aria-label="Titel und Fußzeile">${icon('text')}</button><button class="icon-btn" data-act="preview" aria-label="Vorschau">${icon('pdf')}</button>`,
+  render: p => {
+    const pr = Store.get(p.id), page = monthPageSVG(pr, p.m);
+    p.layout = page.layout;
+    return `<div class="hint">Tippe auf einen Tag, um ihn zu bearbeiten. Zoomen: zwei Finger, Mausrad oder Doppeltippen.</div>
+      <div class="page-stage fit" id="stage" style="aspect-ratio:${page.W} / ${page.H}"><div class="page-inner">${page.svg}</div>${zoomButtons()}</div>`;
+  },
+  mount(p, root) {
+    const stage = $('#stage', root), z = attachZoom(stage); bindZoomButtons(stage, z);
+    const svg = $('.page-inner svg', stage);
+    svg.addEventListener('click', e => {
+      const pt = svgPoint(svg, e), L = p.layout, h = L.header;
+      if (pt.x >= h.x && pt.x <= h.x + h.w && pt.y >= h.y && pt.y <= h.y + h.h) return Screens.month.on.headers(null, p);
+      const c = L.cells.find(c => c.date && pt.x >= c.x && pt.x <= c.x + c.w && pt.y >= c.y && pt.y <= c.y + c.h);
+      if (c) dayPanel(p, c.date);
+    });
+  },
+  on: {
+    preview: (el, p) => UI.go('export', { id: p.id, months: [p.m] }),
+    headers: (el, p) => {
+      const pr = Store.get(p.id), ms = pr.months[p.m], cur = ms.headerId || Catalog.defaultHeader(p.m), title = `${MONTHS[p.m - 1]} ${pr.year}`;
+      UI.modal(`<div class="modal-head"><button class="icon-btn" data-act="modal-close" aria-label="Schließen">${icon('close')}</button><h2>Kopfzeile ändern</h2></div>
+        <div class="modal-body"><div class="grid-headers">${Catalog.headersFor(p.m).map(h => `<button class="tcard ${!ms.customHeader && h.id === cur ? 'on' : ''}" data-act="h" data-v="${h.id}">${thumb(headerSVG(h.id, 0, 0, 400, 100) + titleOverlay(title, 400, 100), '0 0 400 100')}<span>${esc(h.name)}</span></button>`).join('')}</div>
+        <button class="btn tonal wide" data-act="hown">${ms.customHeader ? 'Eigene Kopfzeile bearbeiten' : 'Eigene Kopfzeile gestalten'}</button></div>`, {
+        h: async el2 => { const old = ms.customHeader; ms.headerId = el2.dataset.v; ms.customHeader = null; Store.saveProject(pr); UI.closeModal(); if (old) await Store.deleteDrawing(old); UI.refresh(); },
+        hown: async () => {
+          UI.closeModal();
+          if (!ms.customHeader) { const d = { id: uid(), width: 2400, height: 800, mode: 'COLORING', bg: '#ffffff', elements: [] }; await Store.saveDrawing(d, true); ms.customHeader = d.id; Store.saveProject(pr, true); }
+          UI.go('editor', { docId: ms.customHeader, projectId: pr.id });
+        },
+      }, { full: true, noFocus: true });
+    },
+    texts: (el, p) => {
+      const pr = Store.get(p.id), ms = pr.months[p.m];
+      UI.modal(`<h2>Titel und Fußzeile</h2><label class="field"><span>Eigener Titel (optional)</span><input id="t1" maxlength="40" value="${esc(ms.customTitle || '')}" placeholder="${MONTHS[p.m - 1]} ${pr.year}"></label>
+        <label class="field"><span>Text in der Fußzeile (optional)</span><input id="t2" maxlength="80" value="${esc(ms.footerText || '')}"></label>
+        <p class="muted">Ohne Fußzeilentext entfällt die Fußzeile – das Raster wird größer.</p>
+        <div class="row end"><button class="btn text" data-act="modal-close">Abbrechen</button><button class="btn primary" data-act="ok">Speichern</button></div>`,
+        { ok: () => { ms.customTitle = $('#t1').value.trim(); ms.footerText = $('#t2').value.trim(); Store.saveProject(pr); UI.closeModal(); UI.render(); } });
+    },
+  },
+};
+
+/** Tagespanel (Spez. 7.1). */
+function dayPanel(p, date) {
+  const pr = Store.get(p.id), ds = pr.days[date] || {}, evs = eventsForYear(pr.events, pr.year, pr.options.feb29)[date] || [];
+  const setDay = patch => { pr.days[date] = Object.assign({}, pr.days[date] || {}, patch); Store.saveProject(pr); };
+  const dropCustom = async () => { const old = (pr.days[date] || {}).drawingId; if (old) await Store.deleteDrawing(old); };
+  const after = () => { UI.closeAll(); UI.refresh(); };
+  UI.modal(`<h2>${esc(dayTitle(date))}</h2><div class="menu">
+    <button data-act="d-change">${icon('image')} Bild ändern</button>
+    <button data-act="d-change">${icon('layers')} Vorlage auswählen</button>
+    <button data-act="d-design">${icon('brush')} ${ds.drawingId ? 'Eigenes Bild bearbeiten' : 'Selbst gestalten'}</button>
+    <button data-act="d-remove">${icon('trash')} Bild entfernen</button>
+    <button data-act="d-event">${icon('event')} Ereignis hinzufügen</button>
+    <button data-act="d-restore">${icon('restore')} Original wiederherstellen</button>
+    ${evs.map(e => `<button data-act="d-ev" data-id="${e.id}">${motifIcon(e.icon || 'STAR', 22)} ${esc(e.title)}${e.yearly ? ' ↻' : ''}</button>`).join('')}</div>`, {
+    'd-change': () => pickDrawing(dayTitle(date), parseIso(date).m, ds.templateId || Catalog.defaultDrawing(date), async id => { await dropCustom(); setDay({ templateId: id, drawingId: null, removed: false }); after(); }),
+    'd-remove': async () => { await dropCustom(); setDay({ removed: true, drawingId: null }); after(); },
+    'd-design': async () => {
+      let id = ds.drawingId;
+      if (!id) {
+        const start = ds.removed ? [] : [{ id: uid(), type: 'STICKER', x: 100, y: 100, w: 800, h: 800, rot: 0, props: { sticker: ds.templateId || Catalog.defaultDrawing(date) } }];
+        const d = { id: uid(), width: 1000, height: 1000, mode: 'COLORING', bg: '#ffffff', elements: start };
+        await Store.saveDrawing(d, true); id = d.id; setDay({ drawingId: id, removed: false }); Store.saveProject(pr, true);
+      }
+      UI.closeAll(); UI.go('editor', { docId: id, projectId: pr.id });
+    },
+    'd-event': () => editEvent(pr, { date }, after),
+    'd-ev': el => editEvent(pr, pr.events.find(e => e.id === el.dataset.id), after),
+    'd-restore': () => {
+      const run = async () => { await dropCustom(); delete pr.days[date]; Store.saveProject(pr); after(); };
+      if (ds.drawingId) UI.confirm('Original wiederherstellen', 'Dein selbst gestaltetes Bild für diesen Tag geht dabei verloren.', 'Wiederherstellen', run, true); else run();
+    },
+  }, { sheet: true, noFocus: true });
+}
+
+/* --- Jahresplaner --- */
+Screens.planner = {
+  title: p => Store.get(p.id)?.name || '', subtitle: p => { const pr = Store.get(p.id); return pr ? `${pr.year} · ${pr.paper} Querformat` : ''; },
+  async load(p) { await Store.preload(Store.get(p.id)); },
+  actions: () => `<button class="icon-btn" data-act="settings" aria-label="Kalendereinstellungen">${icon('tune')}</button><button class="icon-btn" data-act="preview" aria-label="Vorschau">${icon('pdf')}</button>`,
+  render: p => {
+    const pr = Store.get(p.id), o2 = pr.options, page = plannerSVG(pr);
+    p.layout = page.layout;
+    return `<div class="planner">
+      <div class="page-stage fit" id="stage" style="aspect-ratio:${page.W} / ${page.H}"><div class="page-inner">${page.svg}</div>${zoomButtons()}</div>
+      <div class="panel form">
+        <p class="muted">Tippe auf einen Tag in der Vorschau, um einen Termin einzutragen.</p>
+        <div class="label">Verwendung</div>${chips('mode', [['0', 'Leerer Jahresplaner'], ['1', 'Jahresplaner mit Terminen']], o2.showEvents ? '1' : '0')}
+        <div class="label">Stil</div>${chips('style', STYLES.YEAR_PLANNER, pr.style)}
+        <div class="label">Kopfzeile</div>
+        <label class="field"><span>Titel (optional)</span><input data-in="title" maxlength="40" value="${esc(o2.headerTitle || '')}" placeholder="z. B. Familie Müller"></label>
+        ${chips('font', FONTS.map(f => [f[0], f[1]]), o2.headerFont)}
+        ${checkRow('deco', 'Dekoration anzeigen', o2.headerDecoration)}
+        <div class="row"><label class="btn tonal">${icon('image', 18)} ${o2.headerImage ? 'Foto ändern' : 'Foto hinzufügen'}<input type="file" accept="image/png,image/jpeg,image/webp" data-in="photo" hidden></label>
+        ${o2.headerImage ? '<button class="btn text" data-act="nophoto">Foto entfernen</button>' : ''}</div>
+      </div></div>`;
+  },
+  mount(p, root) {
+    const stage = $('#stage', root), z = attachZoom(stage); bindZoomButtons(stage, z);
+    const svg = $('.page-inner svg', stage), pr = Store.get(p.id);
+    svg.addEventListener('click', e => {
+      const pt = svgPoint(svg, e), date = plannerDateAt(pr, p.layout, pt.x, pt.y);
+      if (!date) return;
+      const evs = eventsForYear(pr.events, pr.year, pr.options.feb29)[date] || [];
+      UI.modal(`<h2>${esc(dayTitle(date))}</h2><div class="menu">${evs.length ? evs.map(ev => `<button data-act="ev" data-id="${ev.id}">${motifIcon(ev.icon || 'STAR', 22)} ${esc(ev.title)}${ev.yearly ? ' ↻' : ''}</button>`).join('') : '<p class="muted">Keine Termine an diesem Tag.</p>'}
+        <button data-act="add">${icon('plus')} Ereignis hinzufügen</button></div>`, {
+        ev: el => editEvent(pr, pr.events.find(x => x.id === el.dataset.id), () => { UI.closeAll(); UI.refresh(); }),
+        add: () => editEvent(pr, { date, yearly: false, category: 'CUSTOM' }, () => { UI.closeAll(); UI.refresh(); }),
+      }, { sheet: true, noFocus: true });
+    });
+  },
+  on: {
+    settings: (el, p) => UI.go('psettings', { id: p.id }),
+    preview: (el, p) => UI.go('export', { id: p.id, months: [] }),
+    mode: (el, p) => { const pr = Store.get(p.id); pr.options.showEvents = el.dataset.v === '1'; Store.saveProject(pr); UI.refresh(); },
+    style: (el, p) => { const pr = Store.get(p.id); pr.style = el.dataset.v; Store.saveProject(pr); UI.refresh(); },
+    font: (el, p) => { const pr = Store.get(p.id); pr.options.headerFont = el.dataset.v; Store.saveProject(pr); UI.refresh(); },
+    deco: (el, p) => { const pr = Store.get(p.id); pr.options.headerDecoration = el.checked; Store.saveProject(pr); UI.refresh(); },
+    title: (el, p) => { const pr = Store.get(p.id); pr.options.headerTitle = el.value; Store.saveProject(pr); UI.refresh(); },
+    photo: async (el, p) => {
+      const file = el.files[0]; if (!file) return;
+      const pr = Store.get(p.id);
+      try {
+        UI.busy(true, 'Foto wird geladen …');
+        const img = await downscaleImage(file), old = pr.options.headerImage;
+        pr.options.headerImage = await Store.saveImage(img.dataUrl); pr.options.headerImageRatio = img.w / img.h;
+        Store.saveProject(pr); if (old) Store._write('i_' + old, null);
+      } catch (_) { UI.toast('Das Bild konnte nicht geladen werden.'); }
+      finally { UI.busy(false); UI.refresh(); }
+    },
+    nophoto: (el, p) => { const pr = Store.get(p.id), old = pr.options.headerImage; pr.options.headerImage = null; Store.saveProject(pr); if (old) Store._write('i_' + old, null); UI.refresh(); },
+  },
+};
+
+/* --- Kalendereinstellungen --- */
+Screens.psettings = {
+  title: 'Kalendereinstellungen', subtitle: p => Store.get(p.id)?.name || '',
+  render: p => {
+    const pr = Store.get(p.id), o2 = pr.options, col = pr.type === 'COLORING';
+    return `<div class="form">
+      <label class="field"><span>Name des Kalenders</span><input data-in="name" maxlength="60" value="${esc(pr.name)}"></label>
+      <div class="label">Jahr</div>${yearPicker(pr.year)}
+      ${col ? `<div class="label">Ausrichtung</div>${chips('orient', [['PORTRAIT', 'Hochformat'], ['LANDSCAPE', 'Querformat']], pr.orientation)}`
+        : `<div class="label">Papierformat</div>${chips('paper', ['A4', 'A3', 'A2'].map(k => [k, `${k} (${PAPER[k][1]} × ${PAPER[k][0]} mm)`]), pr.paper)}`}
+      <div class="label">Stil</div>${chips('style', STYLES[pr.type], pr.style)}
+      <div class="label">Feiertage</div>${checkRow('hol', 'Feiertage anzeigen', pr.showHolidays)}
+      ${pr.showHolidays ? `<label class="field"><span>Bundesland</span>${stateSelect(pr.state)}</label><div class="muted">Markierungsfarbe für Feiertage</div>${swatches('hcol', ['#F6C9A8','#FCE1CF','#CFE3F5','#D5EDDC','#E4DCF2','#FFF59D','#E0E0E0'], o2.holidayColor)}` : ''}
+      ${col ? `<div class="label">Seitengestaltung</div>${checkRow('cb', 'Kleine Kästchen zum Abhaken', o2.showCheckboxes)}${checkRow('qt', 'Kurzen Spruch unter der Kopfzeile zeigen', o2.showQuotes)}` : ''}
+      <div class="label">Ereignisse</div>${checkRow('nd', 'Namenstage anzeigen (Auswahl)', o2.showNameDays)}
+      <div class="muted">Jährliche Ereignisse vom 29. Februar in Nicht-Schaltjahren:</div>${chips('feb', FEB29, o2.feb29)}</div>`;
+  },
+  on: (() => {
+    const upd = (p, fn) => { const pr = Store.get(p.id); fn(pr); Store.saveProject(pr); UI.refresh(); };
+    const changeYear = (p, y) => {
+      const pr = Store.get(p.id); y = clampYear(y); if (y === pr.year) return UI.refresh();
+      UI.modal(`<h2>Jahr auf ${y} ändern?</h2><p>Sollen einmalige Ereignisse und angepasste Tage ins neue Jahr verschoben oder gelöscht werden? Jährliche Ereignisse bleiben immer erhalten.</p>
+        <div class="row end"><button class="btn text" data-act="modal-close">Abbrechen</button><button class="btn text danger-text" data-act="del">Löschen</button><button class="btn primary" data-act="move">Verschieben</button></div>`, {
+        move: () => { applyYear(pr, y, true); UI.closeModal(); UI.refresh(); },
+        del: async () => { await applyYear(pr, y, false); UI.closeModal(); UI.refresh(); },
+      }, { onClose: () => UI.refresh() });
+    };
+    return {
+      'name:input': (el, p) => { const pr = Store.get(p.id); if (el.value.trim()) { pr.name = el.value.trim(); Store.saveProject(pr); $('.bar-sub').textContent = pr.name; } },
+      year: (el, p) => changeYear(p, el.value), 'year-': (el, p) => changeYear(p, Store.get(p.id).year - 1), 'year+': (el, p) => changeYear(p, Store.get(p.id).year + 1),
+      orient: (el, p) => upd(p, pr => pr.orientation = el.dataset.v), paper: (el, p) => upd(p, pr => pr.paper = el.dataset.v),
+      style: (el, p) => upd(p, pr => pr.style = el.dataset.v), hol: (el, p) => upd(p, pr => pr.showHolidays = el.checked),
+      state: (el, p) => upd(p, pr => pr.state = el.value || null), hcol: (el, p) => upd(p, pr => pr.options.holidayColor = el.dataset.v),
+      cb: (el, p) => upd(p, pr => pr.options.showCheckboxes = el.checked), qt: (el, p) => upd(p, pr => pr.options.showQuotes = el.checked),
+      nd: (el, p) => upd(p, pr => pr.options.showNameDays = el.checked), feb: (el, p) => upd(p, pr => pr.options.feb29 = el.dataset.v),
+    };
+  })(),
+};
+/** Jahreswechsel (Spez. 4.1): Tage/einmalige Ereignisse verschieben oder löschen, jährliche bleiben. */
+async function applyYear(pr, y, move) {
+  const days = {}, drop = [];
+  for (const [k, v] of Object.entries(pr.days)) {
+    const nk = move ? moveToYear(k, y) : null;
+    if (nk) days[nk] = v; else if (v.drawingId) drop.push(v.drawingId);
+  }
+  pr.days = days;
+  pr.events = pr.events.flatMap(e => {
+    if (e.yearly) return [e];
+    if (!move) return [];
+    return [{ ...e, date: moveToYear(e.date, y) || iso(y, 2, 28) }];
+  });
+  pr.year = y; Store.saveProject(pr, true);
+  for (const id of drop) await Store.deleteDrawing(id);
+}
+
+/* --- Vorschau und Export --- */
+Screens.export = {
+  title: 'Vorschau und Export', subtitle: p => Store.get(p.id)?.name || '',
+  async load(p) { await Store.preload(Store.get(p.id)); },
+  render: p => {
+    const pr = Store.get(p.id), col = pr.type === 'COLORING';
+    const months = (p.months || []).slice().sort((a, b) => a - b);
+    const [wmm, hmm] = pageSizeMm(pr.paper, col ? pr.orientation : 'LANDSCAPE');
+    const pages = col ? months.map(m => monthPageSVG(pr, m).svg) : [plannerSVG(pr).svg];
+    const printable = !inClaude();
+    return `<div class="export">
+      ${col ? `<div class="label">Monate</div><div class="chips"><button class="chip ${months.length === 12 ? 'on' : ''}" data-act="all">Ganzes Jahr</button><button class="chip ${!months.length ? 'on' : ''}" data-act="none">Keine</button>
+        ${MONTHS.map((n, i) => `<button class="chip ${months.includes(i + 1) ? 'on' : ''}" data-act="mon" data-v="${i + 1}">${n}</button>`).join('')}</div>` : ''}
+      <div class="label">Druckvorschau</div>
+      ${pages.length ? `<p class="info">Papier: ${pr.paper} ${(col ? pr.orientation : 'LANDSCAPE') === 'LANDSCAPE' ? 'Querformat' : 'Hochformat'} (${wmm} × ${hmm} mm)<br>Seiten: ${pages.length}<br>Ränder: ca. 10 mm auf allen Seiten</p>
+        <p class="muted">Tippe auf eine Seite, um sie zu vergrößern. „JPG“ speichert jede Seite als eigenes Bild (bis 300 dpi).</p>` : '<p class="muted">Bitte mindestens einen Monat auswählen.</p>'}
+      <div class="previews">${pages.map((svg, i) => `<figure><button class="page-thumb big" data-act="zoom" data-i="${i}" aria-label="Seite ${i + 1} vergrößern">${svg}</button><figcaption>Seite ${i + 1}</figcaption></figure>`).join('')}</div>
+      ${!printable ? '<p class="muted center">Zum Drucken: PDF speichern und die Datei drucken.</p>' : ''}
+    </div>
+    <div class="bottom-bar"><button class="btn primary" data-act="pdf" ${pages.length ? '' : 'disabled'}>${icon('save', 18)} PDF</button>
+      <button class="btn primary" data-act="jpg" ${pages.length ? '' : 'disabled'}>${icon('image', 18)} JPG</button>
+      ${printable ? `<button class="btn tonal" data-act="print" ${pages.length ? '' : 'disabled'} aria-label="Drucken">${icon('print', 18)}<span class="hide-xs"> Drucken</span></button>` : ''}
+      ${printable && navigator.canShare ? `<button class="btn tonal" data-act="share" ${pages.length ? '' : 'disabled'} aria-label="Teilen">${icon('share', 18)}<span class="hide-xs"> Teilen</span></button>` : ''}</div>`;
+  },
+  mount(p) {
+    if (p.autoPrint) { p.autoPrint = false; if (!inClaude()) setTimeout(() => Screens.export.on.print(null, p), 400); }
+  },
+  on: {
+    all: (el, p) => { p.months = [1,2,3,4,5,6,7,8,9,10,11,12]; UI.refresh(); },
+    none: (el, p) => { p.months = []; UI.refresh(); },
+    mon: (el, p) => { const m = +el.dataset.v; p.months = p.months.includes(m) ? p.months.filter(x => x !== m) : [...p.months, m]; UI.refresh(); },
+    zoom: (el, p) => zoomViewer(p, +el.dataset.i),
+    pdf: async (el, p) => {
+      const pr = Store.get(p.id);
+      UI.busy(true, 'PDF wird erstellt …');
+      try {
+        const { blob } = await buildPdf(pr, p.months || [], (i, n) => UI.busy(true, `PDF wird erstellt … Seite ${i} von ${n}`));
+        UI.busy(false);
+        await saveFile(pdfFileName(pr, p.months || []), blob);
+        UI.toast('PDF wurde gespeichert.');
+      } catch (e) {
+        UI.busy(false);
+        if (e && e.code === 'declined') return;
+        UI.toast(e && e.code === 'unavailable' ? 'Speichern ist in dieser Ansicht nicht möglich.' : 'Das PDF konnte nicht erstellt oder gespeichert werden.');
+      }
+    },
+    jpg: async (el, p) => {
+      const pr = Store.get(p.id);
+      try {
+        const n = await saveJpgs(pr, p.months || [], (i, total) => UI.busy(true, `Bild ${i} von ${total} wird erstellt …`));
+        UI.busy(false);
+        UI.toast(n === 1 ? 'Bild wurde gespeichert.' : `${n} Bilder wurden gespeichert.`);
+      } catch (e) {
+        UI.busy(false);
+        if (e && e.code === 'declined') return;
+        UI.toast(e && e.code === 'unavailable' ? 'Speichern ist in dieser Ansicht nicht möglich.' : 'Das Bild konnte nicht gespeichert werden.');
+      }
+    },
+    print: (el, p) => printPages(Store.get(p.id), p.months || []),
+    share: async (el, p) => {
+      const pr = Store.get(p.id);
+      try {
+        UI.busy(true, 'PDF wird erstellt …');
+        const { blob } = await buildPdf(pr, p.months || []); UI.busy(false);
+        const file = new File([blob], pdfFileName(pr, p.months || []), { type: 'application/pdf' });
+        if (navigator.canShare({ files: [file] })) await navigator.share({ files: [file], title: pr.name });
+        else UI.toast('Teilen wird von diesem Browser nicht unterstützt.');
+      } catch (e) { UI.busy(false); }
+    },
+  },
+};
+
+/** Vollbild-Vergrößerung einer Seite: Pinch, Mausrad, Ziehen, Doppeltippen, Blättern. */
+function zoomViewer(p, index) {
+  const pr = Store.get(p.id), col = pr.type === 'COLORING', months = (p.months || []).slice().sort((a, b) => a - b);
+  const count = col ? months.length : 1;
+  let i = index, z = null;
+  const page = () => col ? monthPageSVG(pr, months[i]).svg : plannerSVG(pr).svg;
+  const md = UI.modal(`<div class="zoom-top"><button class="icon-btn light" data-act="modal-close" aria-label="Schließen">${icon('close')}</button><span id="zt"></span>
+      <button class="icon-btn light" data-act="zi" aria-label="Vergrößern">${icon('zoomIn')}</button><button class="icon-btn light" data-act="zo" aria-label="Verkleinern">${icon('zoomOut')}</button><button class="icon-btn light" data-act="zr" aria-label="Ganze Seite">${icon('fit')}</button><button class="icon-btn light" data-act="zj" aria-label="Diese Seite als JPG speichern" title="Als JPG speichern">${icon('image')}</button></div>
+    <div class="zoom-view" id="zv"><div class="zoom-inner"></div></div>
+    ${count > 1 ? '<div class="zoom-nav"><button class="btn tonal" data-act="zp">‹ Zurück</button><button class="btn tonal" data-act="zn">Weiter ›</button></div>' : ''}`, {
+    zi: () => z.zoomIn(), zo: () => z.zoomOut(), zr: () => z.reset(),
+    zj: async () => {
+      try {
+        UI.busy(true, 'Bild wird erstellt …');
+        await saveJpgs(pr, col ? [months[i]] : []);
+        UI.busy(false); UI.toast('Bild wurde gespeichert.');
+      } catch (e) { UI.busy(false); if (!e || e.code !== 'declined') UI.toast('Das Bild konnte nicht gespeichert werden.'); }
+    },
+    zp: () => { if (i > 0) { i--; show(); } }, zn: () => { if (i < count - 1) { i++; show(); } },
+  }, { full: true, noFocus: true, sticky: true });
+  md.el.classList.add('dark');
+  const show = () => {
+    $('.zoom-inner', md.el).innerHTML = page();
+    $('#zt', md.el).textContent = `Seite ${i + 1} von ${count}`;
+    z && z.reset();
+  };
+  show();
+  z = attachZoom($('#zv', md.el), { max: 8 });
+}
+
+'use strict';
+/* ColorDays Web – Zeicheneditor (Spez. 8–10). Objekte statt Rasterbild; Autosave; Undo/Redo. */
+
+const TOOLS = [['SELECT','Auswahl'],['PENCIL','Stift'],['ERASER','Radierer'],['LINE','Linie'],['ARROW','Pfeil'],['CIRCLE','Kreis'],['ELLIPSE','Ellipse'],['SQUARE','Quadrat'],['RECT','Rechteck'],['TRIANGLE','Dreieck'],['STAR','Stern'],['HEART','Herz'],['TEXT','Text'],['FILL','Füllen']];
+const SHAPE_TOOLS = ['CIRCLE','ELLIPSE','SQUARE','RECT','TRIANGLE','STAR','HEART'];
+const FILLABLE = ['RECT','ELLIPSE','TRIANGLE','STAR','HEART'];
+const TYPE_LABEL = { PATH: 'Stift', ERASER: 'Radierer', LINE: 'Linie', ARROW: 'Pfeil', RECT: 'Rechteck', ELLIPSE: 'Ellipse', TRIANGLE: 'Dreieck', STAR: 'Stern', HEART: 'Herz', TEXT: 'Text', IMAGE: 'Bild', STICKER: 'Sticker' };
+const toolGlyph = t => {
+  const g = { SELECT: ICON.select, PENCIL: ICON.pencil, ERASER: ICON.eraser, TEXT: ICON.text, FILL: ICON.fill,
+    LINE: '<path d="M5 19L19 5"/>', ARROW: '<path d="M5 19L19 5M19 5h-8M19 5v8"/>', CIRCLE: '<circle cx="12" cy="12" r="8"/>', ELLIPSE: '<ellipse cx="12" cy="12" rx="10" ry="6"/>',
+    SQUARE: '<rect x="5" y="5" width="14" height="14"/>', RECT: '<rect x="2" y="7" width="20" height="10"/>', TRIANGLE: '<path d="M12 4l9 16H3z"/>',
+    STAR: '<path d="M12 3l2.6 6 6.4.4-5 4.1 1.6 6.5L12 16.6 6.4 20l1.6-6.5-5-4.1 6.4-.4z"/>', HEART: '<path d="M12 20s-8-5-8-11a4 4 0 018-1 4 4 0 018 1c0 6-8 11-8 11z"/>' }[t];
+  return `<svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${g}</svg>`;
+};
+
+const Ed = {
+  doc: null, tool: 'PENCIL', color: '#000000', sw: 10, eraser: 48, fillNew: false, sel: null, live: null, undo: [], redo: [],
+  drag: null, svg: null,
+  refreshAll() { refreshEditor(); },
+  selected() { return this.doc && this.doc.elements.find(e => e.id === this.sel) || null; },
+  commit(elements) {
+    this.undo.push(this.doc.elements); if (this.undo.length > 60) this.undo.shift();
+    this.redo = []; this.doc.elements = elements; this.persist(); this.refreshAll();
+  },
+  persist() { Store.saveDrawing(this.doc); },
+  add(el, select) { this.commit([...this.doc.elements, el]); if (select) { this.sel = el.id; this.refreshAll(); } },
+  replace(el) { this.commit(this.doc.elements.map(e => e.id === el.id ? el : e)); },
+};
+
+/* Geometrie mit Rotation */
+const toLocal = (el, x, y) => { const a = -(el.rot || 0) * Math.PI / 180, dx = x - (el.x + el.w / 2), dy = y - (el.y + el.h / 2); return [dx * Math.cos(a) - dy * Math.sin(a), dx * Math.sin(a) + dy * Math.cos(a)]; };
+const toWorld = (el, lx, ly) => { const a = (el.rot || 0) * Math.PI / 180; return [el.x + el.w / 2 + lx * Math.cos(a) - ly * Math.sin(a), el.y + el.h / 2 + lx * Math.sin(a) + ly * Math.cos(a)]; };
+const hitEl = (el, x, y, tol) => { const [lx, ly] = toLocal(el, x, y); return Math.abs(lx) <= el.w / 2 + tol && Math.abs(ly) <= el.h / 2 + tol; };
+const topHit = (x, y, tol) => [...Ed.doc.elements].reverse().find(e => e.type !== 'ERASER' && hitEl(e, x, y, tol));
+const textHeight = (props, w) => Measure.wrap(props.text || '', props.size, fontFamily(props.font), props.bold, w).length * props.size * 1.18 + props.size * 0.2;
+
+Screens.editor = {
+  title: 'Zeichnen',
+  async load(p) {
+    if (!Ed.doc || Ed.doc.id !== p.docId) {
+      const d = await Store.getDrawing(p.docId);
+      Object.assign(Ed, { doc: d ? structuredClone(d) : null, sel: null, live: null, undo: [], redo: [], tool: 'PENCIL' });
+      if (Ed.doc) await Store.ensureImages(drawingImageIds(Ed.doc));
+    }
+  },
+  actions: () => `<button class="icon-btn" data-act="undo" aria-label="Rückgängig" ${Ed.undo.length ? '' : 'disabled'}>${icon('undo')}</button><button class="icon-btn" data-act="redo" aria-label="Wiederholen" ${Ed.redo.length ? '' : 'disabled'}>${icon('redo')}</button><button class="icon-btn" data-act="layers" aria-label="Ebenen">${icon('layers')}</button>`,
+  render: () => {
+    const d = Ed.doc;
+    if (!d) return '<p class="muted">Diese Zeichnung wurde nicht gefunden.</p>';
+    return `<div class="editor">
+      <div class="chips"><button class="chip ${d.mode === 'COLORING' ? 'on' : ''}" data-act="mode" data-v="COLORING">Malvorlage</button><button class="chip ${d.mode === 'COLOR' ? 'on' : ''}" data-act="mode" data-v="COLOR">Farbe</button></div>
+      <div class="ed-stage"><svg id="ed" viewBox="0 0 ${d.width} ${d.height}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Zeichenfläche"><g id="ed-content"></g><g id="ed-overlay"></g></svg></div>
+      <div id="ed-selbar" class="selbar"></div>
+      <div class="ed-tools">${TOOLS.map(([t, l]) => `<button class="tool ${Ed.tool === t ? 'on' : ''}" data-act="tool" data-v="${t}">${toolGlyph(t)}<span>${l}</span></button>`).join('')}
+        <label class="tool">${icon('image')}<span>Bild</span><input type="file" accept="image/png,image/jpeg,image/webp" data-in="img" hidden></label>
+        <button class="tool" data-act="sticker">${icon('sticker')}<span>Sticker</span></button></div>
+      <div id="ed-colors">${swatches('color', PALETTE, Ed.color)}</div>
+      <div class="ed-size row"><span id="ed-size-l">${Ed.tool === 'ERASER' ? 'Radierer' : 'Pinselstärke'}</span>
+        <input type="range" id="ed-size" min="${Ed.tool === 'ERASER' ? 10 : 2}" max="${Ed.tool === 'ERASER' ? 160 : 60}" value="${Ed.tool === 'ERASER' ? Ed.eraser : Ed.sw}" data-in="size" aria-label="Stärke">
+        ${SHAPE_TOOLS.includes(Ed.tool) ? `<button class="chip ${Ed.fillNew ? 'on' : ''}" data-act="fillnew">Füllen</button>` : ''}</div></div>`;
+  },
+  mount() {
+    if (!Ed.doc) return;
+    Ed.svg = $('#ed'); refreshEditor();
+    const svg = Ed.svg;
+    svg.addEventListener('pointerdown', onDown);
+    svg.addEventListener('pointermove', onMove);
+    svg.addEventListener('pointerup', onUp);
+    svg.addEventListener('pointercancel', onUp);
+  },
+  on: {
+    undo: () => { const prev = Ed.undo.pop(); if (!prev) return; Ed.redo.push(Ed.doc.elements); Ed.doc.elements = prev; Ed.sel = null; Ed.persist(); refreshEditor(); },
+    redo: () => { const next = Ed.redo.pop(); if (!next) return; Ed.undo.push(Ed.doc.elements); Ed.doc.elements = next; Ed.sel = null; Ed.persist(); refreshEditor(); },
+    mode: el => { Ed.doc.mode = el.dataset.v; Ed.persist(); UI.refresh(); },
+    tool: el => { Ed.tool = el.dataset.v; if (Ed.tool !== 'SELECT') Ed.sel = null; UI.refresh(); },
+    color: el => { Ed.color = el.dataset.v; if (Ed.doc.mode === 'COLORING') UI.toast('Im Malvorlage-Modus erscheinen alle Linien schwarz. Wechsle zu „Farbe“, um Farben zu sehen.'); $('#ed-colors').innerHTML = swatches('color', PALETTE, Ed.color); },
+    'size:input': el => { if (Ed.tool === 'ERASER') Ed.eraser = +el.value; else Ed.sw = +el.value; },
+    fillnew: () => { Ed.fillNew = !Ed.fillNew; UI.refresh(); },
+    sticker: () => pickDrawing('Sticker', new Date().getMonth() + 1, null, id => {
+      const side = Math.min(Ed.doc.width, Ed.doc.height) * 0.4;
+      Ed.add({ id: uid(), type: 'STICKER', x: (Ed.doc.width - side) / 2, y: (Ed.doc.height - side) / 2, w: side, h: side, rot: 0, props: { sticker: id } }, true);
+      Ed.tool = 'SELECT'; UI.refresh();
+    }),
+    img: async el => {
+      const file = el.files[0]; el.value = ''; if (!file) return;
+      try {
+        UI.busy(true, 'Bild wird geladen …');
+        const im = await downscaleImage(file), id = await Store.saveImage(im.dataUrl);
+        const max = Math.min(Ed.doc.width, Ed.doc.height) * 0.7, s = max / Math.max(im.w, im.h), w = im.w * s, h = im.h * s;
+        Ed.add({ id: uid(), type: 'IMAGE', x: (Ed.doc.width - w) / 2, y: (Ed.doc.height - h) / 2, w, h, rot: 0, props: { img: id, iw: im.w, ih: im.h, crop: [0, 0, 1, 1] } }, true);
+        Ed.tool = 'SELECT';
+      } catch (_) { UI.toast('Das Bild konnte nicht geladen werden.'); }
+      finally { UI.busy(false); UI.refresh(); }
+    },
+    layers: () => layersDialog(),
+    's-del': () => { Ed.commit(Ed.doc.elements.filter(e => e.id !== Ed.sel)); Ed.sel = null; refreshEditor(); },
+    's-copy': () => { const s = Ed.selected(); if (s) Ed.add({ ...structuredClone(s), id: uid(), x: s.x + 40, y: s.y + 40 }, true); },
+    's-front': () => moveLayer(Ed.sel, 1), 's-back': () => moveLayer(Ed.sel, -1),
+    's-color': () => { const s = Ed.selected(); if (s) Ed.replace({ ...s, props: { ...s.props, stroke: Ed.color } }); },
+    's-fill': () => { const s = Ed.selected(); if (s) Ed.replace({ ...s, props: { ...s.props, fill: Ed.color } }); },
+    's-nofill': () => { const s = Ed.selected(); if (s) Ed.replace({ ...s, props: { ...s.props, fill: null } }); },
+    's-text': () => { const s = Ed.selected(); if (s) textDialog(s); },
+    's-crop': () => { const s = Ed.selected(); if (s) cropDialog(s); },
+  },
+};
+
+function moveLayer(id, delta) {
+  const list = [...Ed.doc.elements], i = list.findIndex(e => e.id === id); if (i < 0) return;
+  const j = Math.max(0, Math.min(list.length - 1, i + delta)); if (i === j) return;
+  const [el] = list.splice(i, 1); list.splice(j, 0, el); Ed.commit(list);
+}
+
+function refreshEditor() {
+  if (!Ed.svg) return;
+  const d = Ed.doc, live = Ed.live, inDoc = live && d.elements.some(e => e.id === live.id);
+  // Ein bewegtes Objekt wird an seiner Ebene gezeigt, ein neues obenauf.
+  $('#ed-content').innerHTML = inDoc ? docContentSVG({ ...d, elements: d.elements.map(e => e.id === live.id ? live : e) })
+    : docContentSVG(d, { extra: live || null });
+  const sel = inDoc ? live : Ed.selected(), ov = $('#ed-overlay');
+  const scale = Ed.svg.getScreenCTM() ? Ed.svg.getScreenCTM().a : 1, px = v => v / (scale || 1);
+  ov.innerHTML = '';
+  if (sel && Ed.tool === 'SELECT') {
+    const c = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => toWorld(sel, a * sel.w / 2, b * sel.h / 2));
+    const top = toWorld(sel, 0, -sel.h / 2), rot = toWorld(sel, 0, -sel.h / 2 - px(36)), rs = toWorld(sel, sel.w / 2, sel.h / 2);
+    ov.innerHTML = `<polygon points="${c.map(p => p.join(',')).join(' ')}" fill="none" stroke="#3D5A80" stroke-width="${px(2)}" stroke-dasharray="${px(8)} ${px(6)}"/>
+      <line x1="${top[0]}" y1="${top[1]}" x2="${rot[0]}" y2="${rot[1]}" stroke="#3D5A80" stroke-width="${px(2)}"/>
+      <circle cx="${rot[0]}" cy="${rot[1]}" r="${px(12)}" fill="#fff" stroke="#3D5A80" stroke-width="${px(3)}"/>
+      <rect x="${rs[0] - px(11)}" y="${rs[1] - px(11)}" width="${px(22)}" height="${px(22)}" fill="#fff" stroke="#3D5A80" stroke-width="${px(3)}"/>`;
+  }
+  const bar = $('#ed-selbar'), s = Ed.selected();
+  bar.innerHTML = s ? [['s-del', 'trash', 'Löschen'], ['s-copy', 'copy', 'Kopieren'], ['s-front', 'front', 'Nach vorn'], ['s-back', 'back2', 'Nach hinten'], ['s-color', 'palette', 'Farbe übernehmen'],
+    ...(FILLABLE.includes(s.type) ? [['s-fill', 'fill', 'Füllen'], ['s-nofill', 'close', 'Füllung entfernen']] : []),
+    ...(s.type === 'TEXT' ? [['s-text', 'edit', 'Text bearbeiten']] : []), ...(s.type === 'IMAGE' ? [['s-crop', 'crop', 'Zuschneiden']] : [])]
+    .map(([a, ic, l]) => `<button class="icon-btn" data-act="${a}" title="${l}" aria-label="${l}">${icon(ic)}</button>`).join('') : '';
+  const ub = $('[data-act=undo]'), rb = $('[data-act=redo]');
+  if (ub) ub.disabled = !Ed.undo.length; if (rb) rb.disabled = !Ed.redo.length;
+}
+
+/* ---------- Gesten ---------- */
+function docPt(e) { const p = svgPoint(Ed.svg, e); return [p.x, p.y]; }
+function tolDoc(pxv) { const m = Ed.svg.getScreenCTM(); return pxv / (m ? m.a : 1); }
+
+function onDown(e) {
+  if (e.button > 0) return;
+  Ed.svg.setPointerCapture(e.pointerId);
+  const [x, y] = docPt(e);
+  Ed.drag = { x0: x, y0: y, sx: e.clientX, sy: e.clientY, moved: false, mode: null, el: null, pts: [x, y] };
+  const t = Ed.tool;
+  if (t === 'PENCIL' || t === 'ERASER') Ed.drag.mode = 'DRAW';
+  else if (t === 'SELECT' || t === 'TEXT' || t === 'FILL') {
+    const sel = Ed.selected(), tol = tolDoc(20);
+    if (t === 'SELECT' && sel) {
+      const rs = toWorld(sel, sel.w / 2, sel.h / 2), ro = toWorld(sel, 0, -sel.h / 2 - tolDoc(36));
+      if (Math.hypot(rs[0] - x, rs[1] - y) <= tol * 1.6) { Ed.drag.mode = 'RESIZE'; Ed.drag.el = sel; return; }
+      if (Math.hypot(ro[0] - x, ro[1] - y) <= tol * 1.6) { Ed.drag.mode = 'ROTATE'; Ed.drag.el = sel; return; }
+    }
+    const hit = topHit(x, y, tol);
+    if (hit && t === 'SELECT') { Ed.drag.mode = 'MOVE'; Ed.drag.el = hit; Ed.sel = hit.id; refreshEditor(); }
+  } else Ed.drag.mode = 'SHAPE';
+}
+
+function onMove(e) {
+  const d = Ed.drag; if (!d) return;
+  if (!d.moved && Math.hypot(e.clientX - d.sx, e.clientY - d.sy) < 4 && d.mode !== 'DRAW') return;
+  d.moved = true;
+  const [x, y] = docPt(e);
+  switch (d.mode) {
+    case 'DRAW': {
+      const n = d.pts.length;
+      if (Math.hypot(x - d.pts[n - 2], y - d.pts[n - 1]) >= 2) d.pts.push(x, y);
+      Ed.live = strokeEl(d.pts); break;
+    }
+    case 'SHAPE': Ed.live = shapeEl(d.x0, d.y0, x, y); break;
+    case 'MOVE': Ed.live = { ...d.el, x: d.el.x + x - d.x0, y: d.el.y + y - d.y0 }; break;
+    case 'RESIZE': {
+      const el = d.el, [lx, ly] = toLocal(el, x, y);
+      let w = Math.max(Math.abs(lx) * 2, 16), h = Math.max(Math.abs(ly) * 2, 16);
+      if (el.type === 'TEXT') h = textHeight(el.props, w);
+      else if (el.type === 'IMAGE' || el.type === 'STICKER') { h = w * el.h / el.w; }
+      Ed.live = { ...el, x: el.x + el.w / 2 - w / 2, y: el.y + el.h / 2 - h / 2, w, h }; break;
+    }
+    case 'ROTATE': {
+      const el = d.el; let a = Math.atan2(y - (el.y + el.h / 2), x - (el.x + el.w / 2)) * 180 / Math.PI + 90;
+      for (const snap of [-90, 0, 90, 180, 270, 360]) if (Math.abs(a - snap) < 4) a = snap;
+      Ed.live = { ...el, rot: ((a % 360) + 360) % 360 }; break;
+    }
+    default: return;
+  }
+  refreshEditor();
+}
+
+function onUp(e) {
+  const d = Ed.drag; Ed.drag = null; if (!d) return;
+  const [x, y] = docPt(e);
+  if (!d.moved) { // Tippen
+    Ed.live = null;
+    const t = Ed.tool, tol = tolDoc(20);
+    if (t === 'TEXT') { const hit = [...Ed.doc.elements].reverse().find(el => el.type === 'TEXT' && hitEl(el, x, y, tol)); return textDialog(hit || null, x, y); }
+    if (t === 'FILL') {
+      const hit = topHit(x, y, tol);
+      if (!hit || !FILLABLE.includes(hit.type)) return UI.toast('Füllen funktioniert bei Formen (Kreis, Rechteck, Dreieck, Stern, Herz).');
+      return Ed.replace({ ...hit, props: { ...hit.props, fill: Ed.color } });
+    }
+    if (t === 'PENCIL' || t === 'ERASER') return Ed.add(strokeEl([x, y]), false);
+    Ed.sel = (topHit(x, y, tol) || {}).id || null; refreshEditor(); return;
+  }
+  const live = Ed.live; Ed.live = null;
+  if (!live) return refreshEditor();
+  if (d.mode === 'DRAW') Ed.add(live, false);
+  else if (d.mode === 'SHAPE') { if (live.w >= 16 || live.h >= 16) { Ed.add(live, true); Ed.tool = 'SELECT'; UI.refresh(); } else refreshEditor(); }
+  else Ed.replace(live);
+}
+
+function strokeEl(pts) {
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (let i = 0; i < pts.length; i += 2) { minX = Math.min(minX, pts[i]); maxX = Math.max(maxX, pts[i]); minY = Math.min(minY, pts[i + 1]); maxY = Math.max(maxY, pts[i + 1]); }
+  const w = Math.max(maxX - minX, 1), h = Math.max(maxY - minY, 1), eraser = Ed.tool === 'ERASER';
+  const norm = []; for (let i = 0; i < pts.length; i += 2) norm.push(+((pts[i] - minX) / w).toFixed(4), +((pts[i + 1] - minY) / h).toFixed(4));
+  if (pts.length === 2) return { id: uid(), type: eraser ? 'ERASER' : 'PATH', x: pts[0] - 0.5, y: pts[1] - 0.5, w: 1, h: 1, rot: 0, props: { stroke: Ed.color, sw: eraser ? Ed.eraser : Ed.sw, pts: [0.5, 0.5] } };
+  return { id: (Ed.live && Ed.live.id) || uid(), type: eraser ? 'ERASER' : 'PATH', x: minX, y: minY, w, h, rot: 0, props: { stroke: Ed.color, sw: eraser ? Ed.eraser : Ed.sw, pts: norm } };
+}
+function shapeEl(x0, y0, x, y) {
+  let dx = x - x0, dy = y - y0;
+  if (Ed.tool === 'CIRCLE' || Ed.tool === 'SQUARE') { const s = Math.max(Math.abs(dx), Math.abs(dy)); dx = dx < 0 ? -s : s; dy = dy < 0 ? -s : s; }
+  const l = Math.min(x0, x0 + dx), t = Math.min(y0, y0 + dy), w = Math.max(Math.abs(dx), 1), h = Math.max(Math.abs(dy), 1);
+  const type = { LINE: 'LINE', ARROW: 'ARROW', CIRCLE: 'ELLIPSE', ELLIPSE: 'ELLIPSE', SQUARE: 'RECT', RECT: 'RECT', TRIANGLE: 'TRIANGLE', STAR: 'STAR', HEART: 'HEART' }[Ed.tool];
+  const pts = (type === 'LINE' || type === 'ARROW') ? [(x0 - l) / w, (y0 - t) / h, (x0 + dx - l) / w, (y0 + dy - t) / h] : undefined;
+  return { id: (Ed.live && Ed.live.id) || uid(), type, x: l, y: t, w, h, rot: 0,
+    props: { stroke: Ed.color, sw: Ed.sw, fill: Ed.fillNew && FILLABLE.includes(type) ? Ed.color : null, pts } };
+}
+
+/* ---------- Dialoge ---------- */
+function textDialog(existing, x, y) {
+  const p0 = existing ? existing.props : { text: '', font: 'fredoka', size: 110, bold: false, align: 'CENTER' };
+  const st = { font: p0.font, size: p0.size, bold: p0.bold, align: p0.align };
+  const md = UI.modal(`<h2>${existing ? 'Text bearbeiten' : 'Text hinzufügen'}</h2>
+    <label class="field"><span>Text</span><textarea id="tx" rows="2" maxlength="120" placeholder="z. B. Alles Gute!">${esc(p0.text)}</textarea></label>
+    <div class="label">Schriftart</div><div class="chips" id="tx-fonts">${FONTS.map(([id, l, f]) => `<button class="chip ${id === st.font ? 'on' : ''}" style="font-family:'${f}'" data-act="tf" data-v="${id}">${l}</button>`).join('')}</div>
+    <div class="label">Schriftgröße: <span id="tx-sz">${st.size}</span></div><input type="range" id="tx-size" min="30" max="320" value="${st.size}">
+    <label class="check"><input type="checkbox" id="tx-bold" ${st.bold ? 'checked' : ''}><span>Fett</span></label>
+    <div class="chips">${[['LEFT', 'Links'], ['CENTER', 'Mitte'], ['RIGHT', 'Rechts']].map(([v, l]) => `<button class="chip ${v === st.align ? 'on' : ''}" data-act="ta" data-v="${v}">${l}</button>`).join('')}</div>
+    <div class="row end"><button class="btn text" data-act="modal-close">Abbrechen</button><button class="btn primary" data-act="ok">Speichern</button></div>`, {
+    tf: el => { st.font = el.dataset.v; $$('[data-act=tf]', md.el).forEach(b => b.classList.toggle('on', b === el)); },
+    ta: el => { st.align = el.dataset.v; $$('[data-act=ta]', md.el).forEach(b => b.classList.toggle('on', b === el)); },
+    ok: () => {
+      const text = $('#tx').value; if (!text.trim()) return;
+      st.size = +$('#tx-size').value; st.bold = $('#tx-bold').checked;
+      const props = { ...(existing ? existing.props : { stroke: Ed.color }), text, font: st.font, size: st.size, bold: st.bold, align: st.align };
+      UI.closeModal();
+      if (existing) { const h = textHeight(props, existing.w); Ed.replace({ ...existing, props, y: existing.y + existing.h / 2 - h / 2, h }); }
+      else {
+        const w = Ed.doc.width * 0.8, h = textHeight(props, w);
+        Ed.add({ id: uid(), type: 'TEXT', x: x - w / 2, y: y - h / 2, w, h, rot: 0, props }, true);
+        Ed.tool = 'SELECT'; UI.refresh();
+      }
+    },
+  });
+  $('#tx-size', md.el).addEventListener('input', e => $('#tx-sz', md.el).textContent = e.target.value);
+}
+
+function layersDialog() {
+  const body = () => {
+    const items = Ed.doc.elements.map((e, i) => [e, i]).filter(([e]) => e.type !== 'ERASER').reverse();
+    return items.length ? items.map(([e]) => `<div class="layer ${e.id === Ed.sel ? 'on' : ''}"><button class="grow text-left" data-act="l-sel" data-id="${e.id}">${TYPE_LABEL[e.type]}${e.type === 'TEXT' ? ' „' + esc(e.props.text.slice(0, 14)) + '“' : ''}</button>
+      <button class="icon-btn" data-act="l-up" data-id="${e.id}" aria-label="Nach vorn">${icon('up')}</button><button class="icon-btn" data-act="l-down" data-id="${e.id}" aria-label="Nach hinten">${icon('down')}</button><button class="icon-btn" data-act="l-del" data-id="${e.id}" aria-label="Löschen">${icon('trash')}</button></div>`).join('')
+      : '<p class="muted">Noch keine Objekte.</p>';
+  };
+  const md = UI.modal(`<h2>Ebenen</h2><div id="ly">${body()}</div><div class="row end"><button class="btn primary" data-act="modal-close">Schließen</button></div>`, {
+    'l-sel': el => { Ed.sel = el.dataset.id; Ed.tool = 'SELECT'; UI.closeModal(); UI.refresh(); },
+    'l-up': el => { moveLayer(el.dataset.id, 1); $('#ly', md.el).innerHTML = body(); },
+    'l-down': el => { moveLayer(el.dataset.id, -1); $('#ly', md.el).innerHTML = body(); },
+    'l-del': el => { Ed.commit(Ed.doc.elements.filter(e => e.id !== el.dataset.id)); if (Ed.sel === el.dataset.id) Ed.sel = null; refreshEditor(); $('#ly', md.el).innerHTML = body(); },
+  });
+}
+
+function cropDialog(el) {
+  const c = el.props.crop || [0, 0, 1, 1];
+  const r = (id, v) => `<input type="range" id="${id}" min="0" max="100" value="${Math.round(v * 100)}">`;
+  UI.modal(`<h2>Zuschneiden</h2>
+    <div class="label">Links</div>${r('cl', c[0])}<div class="label">Rechts</div>${r('cr', 1 - c[2])}
+    <div class="label">Oben</div>${r('ct', c[1])}<div class="label">Unten</div>${r('cb', 1 - c[3])}
+    <div class="row end"><button class="btn text" data-act="reset">Zurücksetzen</button><button class="btn primary" data-act="ok">Übernehmen</button></div>`, {
+    reset: () => { UI.closeModal(); applyCrop(el, 0, 0, 1, 1); },
+    ok: () => {
+      const v = id => +$('#' + id).value / 100;
+      let l = v('cl'), rr = 1 - v('cr'), t = v('ct'), b = 1 - v('cb');
+      if (rr - l < 0.05) rr = l + 0.05; if (b - t < 0.05) b = t + 0.05;
+      UI.closeModal(); applyCrop(el, l, t, Math.min(rr, 1), Math.min(b, 1));
+    },
+  }, { noFocus: true });
+}
+function applyCrop(el, l, t, r, b) {
+  const nh = el.w * ((b - t) * (el.props.ih || 1)) / ((r - l) * (el.props.iw || 1));
+  Ed.replace({ ...el, y: el.y + el.h / 2 - nh / 2, h: nh, props: { ...el.props, crop: [l, t, r, b] } });
+}
+
+(async () => {
+  Catalog.build();
+  await Store.init();
+  await Settings.load();
+  try { await document.fonts.ready; } catch (_) {}
+  UI.start();
+})();
+</script>
+</body>
+</html>
